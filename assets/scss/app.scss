@@ -5,7 +5,9 @@
 }
 
 .screen {
-    @apply tw-bg-red-500;
+    
+    background: rgb(50,84,184);
+    background: radial-gradient(circle, rgba(50,84,184,1) 0%, rgba(78,95,201,1) 29%, rgba(72,118,218,1) 81%, rgba(53,135,255,1) 100%);
     width: 100vw;
     height: 100vh;
     max-height: 100vh;
@@ -16,11 +18,10 @@
     flex-direction: column;
 }
 
-body .container {
+body .obj-container {
     margin: 0 auto;
     display: inline-block;
     position: relative;
-    max-height: 80%;
     max-width: 80%;
     overflow: hidden;
 
@@ -57,19 +58,23 @@ body .container {
                 display: inline-block;
                 position: absolute;
                 z-index: 8;
-                width: 150px;
+                width: 120px;
                 max-width: 150px;
+
+                &:hover {
+                    @apply tw-z-30;
+                }
 
                 & > .panel-container {
                     & > .header {
                         width: 100%;
-                        @apply tw-bg-yellow-400 tw-px-4 tw-py-2 tw-text-indigo-800 tw-font-semibold tw-text-center tw-overflow-ellipsis tw-truncate;
+                        @apply tw-bg-yellow-400 tw-px-2 tw-py-1 tw-text-indigo-800 tw-font-semibold tw-text-center tw-overflow-ellipsis tw-truncate tw-text-xs;
                     }
                     & > .content {
                         position: relative;
                         overflow: hidden;
-                        @apply tw-text-gray-100 tw-text-center;
-                        padding: .6rem .8rem;
+                        @apply tw-text-gray-100 tw-text-center tw-text-xs;
+                        padding: .2rem .4rem;
                     }
                     &::after {
                         @apply tw-bg-gray-200;
@@ -147,8 +152,8 @@ body .container {
             padding: 1rem 1rem;
 
             & button {
-                @apply tw-rounded tw-bg-blue-400 hover:tw-bg-blue-600 tw-text-gray-100;
-                padding: 1rem .6rem;
+                @apply tw-rounded tw-bg-blue-400 hover:tw-bg-blue-600 tw-text-gray-100 tw-text-xs;
+                padding: .8rem .4rem;
             }
         }
     }

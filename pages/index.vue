@@ -1,6 +1,7 @@
 /* eslint-disable vue/no-v-html */
 <template>
-  <div class="screen">
+  <div class="screen" @scroll="onWindowScroll">
+    <div id="line" class="tw-z-20" />
     <div class="controls">
       <div class="group">
         <div class="header">
@@ -13,7 +14,13 @@
             </div>
             <div class="tw-w-1/2">
               <label class="flex items-center space-x-3">
-                <input v-model="controls.showPanel" type="checkbox" name="checked-demo" class="form-tick appearance-none h-6 w-6 border border-gray-300 rounded-md checked:bg-blue-600 checked:border-transparent focus:outline-none">
+                <input
+                  v-model="controls.showPanel"
+                  type="checkbox"
+                  name="checked-demo"
+                  class="form-tick appearance-none h-6 w-6 border border-gray-300 rounded-md checked:bg-blue-600 checked:border-transparent focus:outline-none"
+                  @change="saveOption"
+                >
                 <span class="text-gray-900 font-medium">Enable</span>
               </label>
             </div>
@@ -31,14 +38,67 @@
                 max="2"
                 step="0.05"
                 value="0.5"
+                @change="saveOption"
+              >
+            </div>
+          </div>
+          <div class="tw-flex tw-w-full">
+            <div class="tw-w-1/2">
+              Obj X
+            </div>
+            <div class="tw-w-1/2 tw-flex">
+              <input
+                v-model="controls.objX"
+                class="rounded-lg overflow-hidden appearance-none bg-gray-400 tw-w-full"
+                type="range"
+                min="-1920"
+                max="1920"
+                step="0.1"
+                value="0"
+                @change="saveOption"
+              >
+            </div>
+          </div>
+          <div class="tw-flex tw-w-full">
+            <div class="tw-w-1/2">
+              Obj Y
+            </div>
+            <div class="tw-w-1/2 tw-flex">
+              <input
+                v-model="controls.objY"
+                class="rounded-lg overflow-hidden appearance-none bg-gray-400 tw-w-full"
+                type="range"
+                min="-1920"
+                max="1920"
+                step="0.1"
+                value="0"
+                @change="saveOption"
               >
             </div>
           </div>
         </div>
       </div>
+      <div class="group">
+        <div class="header">
+          Components
+        </div>
+        <div class="content">
+          <ul class="tw-list-disc tw-ml-4">
+            <li
+              v-for="(item, i) in components"
+              :key="i"
+              class="tw-cursor-pointer hover:tw-text-blue-400"
+              :class="{ 'tw-text-blue-500': (componentSelected !== null && item.name === componentSelected.name) }"
+              @click="componentClicked(item)"
+            >
+              {{ item.name }}
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
-    <div class="container" :style="{ transform: `scale(${controls.objScale})` }">
-      <img src="img/machine/overview.png" class="overview">
+    <div class="obj-container" :style="{ transform: `scale(${controls.objScale}) translate(${controls.objX}px, ${controls.objY}px)` }">
+      <img src="img/machine/all.png" class="overview">
       <div class="layer-components">
         <div class="components">
           <img
@@ -47,6 +107,8 @@
             :key="i"
             :src="`img/machine/${item.onImgShow(item)}.png`"
             class="component"
+            :title="item.name"
+            :alt="item.name"
             @click="componentClicked(item)"
           >
         </div>
@@ -75,7 +137,7 @@
               {{ item.text }}
             </button>
           </div>
-          <button @click="componentSelected = null">
+          <button @click="componentOnClose(componentSelected)">
             Close
           </button>
         </div>
@@ -86,7 +148,9 @@
 
 <script>
 import {
+  onBeforeMount,
   onMounted,
+  onUnmounted,
   reactive,
   ref
 } from '@nuxtjs/composition-api'
@@ -95,21 +159,22 @@ export default {
   setup () {
     const controls = reactive({
       showPanel: true,
-      objScale: 1
+      objScale: 1,
+      objX: 0,
+      objY: 0
     })
     const componentSelected = ref(null)
     const components = reactive([
       {
         type: 'motor',
-        name: 'motor_1',
+        name: 'mto1',
         state: {
-          active: false,
-          auto: false
+          active: false
         },
         meta: {
-          img: 'motor',
+          img: 'MTO1',
           position: {
-            x: 538, y: 404
+            x: 615, y: 312
           }
         },
         panel: (item) => {
@@ -117,34 +182,34 @@ export default {
             <div class="header">${item.name}</div>
             <div class="content">
               <div>${(item.state.active) ? 'Active' : 'Nonactive'}</div>
-              <div>Auto : ${(item.state.auto) ? 'On' : 'Off'}</div>
             </div>
           `
         },
         menu: (item) => {
           return [
-            { type: 'button', name: 'toggle', text: (item.state.active ? 'Turn Off' : 'Turn On'), onClick: (item) => { item.state.active = !item.state.active } },
-            { type: 'button', name: 'auto', text: (item.state.auto ? 'Disactive Auto' : 'Active Auto'), onClick: (item) => { item.state.auto = !item.state.auto } }
+            { type: 'button', name: 'toggle', text: (item.state.active ? 'Turn Off' : 'Turn On'), onClick: (item) => { item.state.active = !item.state.active } }
           ]
         },
-        onImgShow: item => (item.state.active) ? `${item.meta.img}_active` : `${item.meta.img}`
+        onImgShow: item => (item.state.active) ? `${item.meta.img}_Run` : `${item.meta.img}_Alarm`
       },
       {
         type: 'motor',
-        name: 'motor_2_3000rpm',
+        name: 'mto2',
         state: {
-          active: true
+          active: false
         },
         meta: {
-          img: 'motor',
+          img: 'MTO2',
           position: {
-            x: 826, y: 540
+            x: 822, y: 387
           }
         },
         panel: (item) => {
           return `
             <div class="header">${item.name}</div>
-            <div class="content">${(item.state.active) ? 'Active' : 'Nonactive'}</div>
+            <div class="content">
+              <div>${(item.state.active) ? 'Active' : 'Nonactive'}</div>
+            </div>
           `
         },
         menu: (item) => {
@@ -152,24 +217,26 @@ export default {
             { type: 'button', name: 'toggle', text: (item.state.active ? 'Turn Off' : 'Turn On'), onClick: (item) => { item.state.active = !item.state.active } }
           ]
         },
-        onImgShow: item => (item.state.active) ? `${item.meta.img}_active` : `${item.meta.img}`
+        onImgShow: item => (item.state.active) ? `${item.meta.img}_Run` : `${item.meta.img}_Alarm`
       },
       {
         type: 'motor',
-        name: 'motor_small_3_1000rpm',
+        name: 'mto3',
         state: {
-          active: true
+          active: false
         },
         meta: {
-          img: 'motor_small',
+          img: 'MTO3',
           position: {
-            x: 1424, y: 478
+            x: 928, y: 433
           }
         },
         panel: (item) => {
           return `
             <div class="header">${item.name}</div>
-            <div class="content">${(item.state.active) ? 'Active' : 'Nonactive'}</div>
+            <div class="content">
+              <div>${(item.state.active) ? 'Active' : 'Nonactive'}</div>
+            </div>
           `
         },
         menu: (item) => {
@@ -177,16 +244,162 @@ export default {
             { type: 'button', name: 'toggle', text: (item.state.active ? 'Turn Off' : 'Turn On'), onClick: (item) => { item.state.active = !item.state.active } }
           ]
         },
-        onImgShow: item => (item.state.active) ? `${item.meta.img}_active` : `${item.meta.img}`
+        onImgShow: item => (item.state.active) ? `${item.meta.img}_Run` : `${item.meta.img}_Alarm`
+      },
+      {
+        type: 'motor',
+        name: 'mto4',
+        state: {
+          active: false
+        },
+        meta: {
+          img: 'MTO4',
+          position: {
+            x: 1052, y: 479
+          }
+        },
+        panel: (item) => {
+          return `
+            <div class="header">${item.name}</div>
+            <div class="content">
+              <div>${(item.state.active) ? 'Active' : 'Nonactive'}</div>
+            </div>
+          `
+        },
+        menu: (item) => {
+          return [
+            { type: 'button', name: 'toggle', text: (item.state.active ? 'Turn Off' : 'Turn On'), onClick: (item) => { item.state.active = !item.state.active } }
+          ]
+        },
+        onImgShow: item => (item.state.active) ? `${item.meta.img}_Run` : `${item.meta.img}_Alarm`
+      },
+      {
+        type: 'motor',
+        name: 'bw02',
+        state: {
+          active: false
+        },
+        meta: {
+          img: 'BW02',
+          position: {
+            x: 1212, y: 801
+          }
+        },
+        panel: (item) => {
+          return `
+            <div class="header">${item.name}</div>
+            <div class="content">
+              <div>${(item.state.active) ? 'Active' : 'Nonactive'}</div>
+            </div>
+          `
+        },
+        menu: (item) => {
+          return [
+            { type: 'button', name: 'toggle', text: (item.state.active ? 'Turn Off' : 'Turn On'), onClick: (item) => { item.state.active = !item.state.active } }
+          ]
+        },
+        onImgShow: item => (item.state.active) ? `${item.meta.img}_Run` : `${item.meta.img}_Alarm`
+      },
+      {
+        type: 'motor',
+        name: 'bw01',
+        state: {
+          active: false
+        },
+        meta: {
+          img: 'BW01',
+          position: {
+            x: 1256, y: 753
+          }
+        },
+        panel: (item) => {
+          return `
+            <div class="header">${item.name}</div>
+            <div class="content">
+              <div>${(item.state.active) ? 'Active' : 'Nonactive'}</div>
+            </div>
+          `
+        },
+        menu: (item) => {
+          return [
+            { type: 'button', name: 'toggle', text: (item.state.active ? 'Turn Off' : 'Turn On'), onClick: (item) => { item.state.active = !item.state.active } }
+          ]
+        },
+        onImgShow: item => (item.state.active) ? `${item.meta.img}_Run` : `${item.meta.img}_Alarm`
       }
     ])
     let timerRezise
 
+    const getOffset = (el) => {
+      const rect = el.getBoundingClientRect()
+      return {
+        left: rect.left + window.pageXOffset,
+        top: rect.top + window.pageYOffset,
+        width: rect.width || el.offsetWidth,
+        height: rect.height || el.offsetHeight
+      }
+    }
+    const adjustLine = (div1, div2, color, thickness) => {
+      const off1 = getOffset(div1)
+      const off2 = getOffset(div2)
+      // bottom right
+      const x1 = off1.left + (off1.width / 2)
+      const y1 = off1.top + (off1.height / 2)
+      // top right
+      const x2 = window.innerWidth / 2
+      const y2 = off2.top
+      // distance
+      const length = Math.sqrt(((x2 - x1) * (x2 - x1)) + ((y2 - y1) * (y2 - y1)))
+      // center
+      const cx = ((x1 + x2) / 2) - (length / 2)
+      const cy = ((y1 + y2) / 2) - (thickness / 2)
+      // angle
+      const angle = Math.atan2((y1 - y2), (x1 - x2)) * (180 / Math.PI)
+      // make hr
+      const htmlLine = "<div style='padding:0px; margin:0px; height:" +
+        thickness + 'px; background-color:' + color +
+        '; line-height:1px; position:fixed; left:' + cx +
+        'px; top:' + cy + 'px; width:' + length +
+        'px; -moz-transform:rotate(' + angle +
+        'deg); -webkit-transform:rotate(' + angle + 'deg); -o-transform:rotate(' + angle +
+        'deg); -ms-transform:rotate(' + angle + 'deg); transform:rotate(' + angle + "deg);' />"
+
+      // awe
+      document.querySelector('#line').innerHTML = htmlLine
+    }
+
+    const componentOnClose = (item) => {
+      document.querySelector('#line').innerHTML = ''
+      componentSelected.value = null
+    }
+
+    const saveOption = () => {
+      localStorage.setItem('controls', JSON.stringify(controls))
+    }
+
+    const onWindowScroll = function (e) {
+      const add = (e.deltaY < 0) ? -25 : 25
+      controls.objY = parseFloat(controls.objY) + add
+      saveOption()
+    }
+
+    onBeforeMount(() => {
+      document.addEventListener('mousewheel', onWindowScroll)
+    })
+
     onMounted(() => {
+      if (localStorage.getItem('controls') !== null) {
+        const a = JSON.parse(localStorage.getItem('controls'))
+        Object.entries(a).forEach((item) => {
+          const [key, value] = item
+          controls[key] = value
+        })
+      }
       const overview = document.querySelector('img.overview')
       const overviewOriginal = 1920
       clearInterval(timerRezise)
       timerRezise = setInterval(() => {
+        // components ui generate pos
         components.forEach((e) => {
           // component
           const overviewResult = overview.clientWidth
@@ -204,19 +417,48 @@ export default {
           if (controls.showPanel) {
             const panelGap = 35
             const panel = document.querySelector(`#panel-${e.name}`)
-            panel.style.top = `${clientY}px`
-            panel.style.left = `${(clientX - (panel.clientWidth + panelGap))}px`
+            const panelY = (clientY)
+            const panelX = (clientX - (panel.clientWidth + panelGap))
+
+            // let safePos = true
+            // while (safePos) {
+            //   components.forEach((a) => {
+            //     panel.querySelector('.header').innerHTML = `${panelY} - ${panelY + panel.clientHeight}`
+            //     const aDom = document.querySelector(`#panel-${a.name}`)
+            //     const aPos = aDom.getBoundingClientRect()
+            //     if (panelY >= aPos.y && panelY <= aPos.y + aDom.clientHeight) {
+            //       panelY += aDom.clientHeight
+            //       safePos = true
+            //     } else {
+            //       safePos = false
+            //     }
+            //   })
+            // }
+
+            panel.style.top = `${panelY}px`
+            panel.style.left = `${panelX}px`
           }
         })
       }, 50)
     })
 
+    onUnmounted(() => {
+      document.removeEventListener('mousewheel', onWindowScroll)
+    })
+
     return {
       components,
       controls,
+      saveOption,
       componentSelected,
+      componentOnClose,
+      onWindowScroll,
       componentClicked: (item) => {
         const menuDiv = document.querySelector('div.menu')
+
+        if (typeof componentSelected.value !== 'undefined' && componentSelected.value !== null) {
+          componentOnClose(componentSelected.value)
+        }
 
         componentSelected.value = item
         if (typeof item.onClick !== 'undefined') {
@@ -230,12 +472,27 @@ export default {
           duration: 500
         })
 
-        // setTimeout(() => )
+        setTimeout(() => {
+          adjustLine(
+            document.querySelector(`#component-${item.name}`),
+            document.querySelector('div.menu .content'),
+            '#dddddd', 2
+          )
+        }, 500)
       },
       togglePanel: () => {
         controls.showPanel = !controls.showPanel
+        console.log(adjustLine)
       }
     }
   }
 }
 </script>
+
+<style>
+#line{
+  position:absolute;
+  width:1px;
+  background-color:red;
+}
+</style>
