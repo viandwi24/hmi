@@ -1,13 +1,29 @@
+body {
+    background: rgb(50,84,184);
+    background: radial-gradient(circle, rgba(50,84,184,1) 0%, rgba(78,95,201,1) 29%, rgba(72,118,218,1) 81%, rgba(53,135,255,1) 100%);
+}
+
 .btn-overlay {
     position: fixed;
     top: 0;
     left: 0;
 }
 
+.page {
+    @apply tw-flex tw-flex-col;
+    height: 100vh;
+    width: 100vw;
+}
+
+.navbar {
+    @apply tw-bg-gray-200 tw-w-full tw-p-4 tw-text-center tw-shadow-lg tw-text-gray-800;
+
+    & > .header {
+        @apply tw-font-semibold tw-text-xl;
+    }
+}
+
 .screen {
-    
-    background: rgb(50,84,184);
-    background: radial-gradient(circle, rgba(50,84,184,1) 0%, rgba(78,95,201,1) 29%, rgba(72,118,218,1) 81%, rgba(53,135,255,1) 100%);
     width: 100vw;
     height: 100vh;
     max-height: 100vh;
@@ -96,7 +112,7 @@ body .obj-container {
 .controls {
     @apply tw-shadow;
     z-index: 20;
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     display: block;
@@ -146,7 +162,7 @@ body .obj-container {
             padding: .2rem .4rem;
         }
         & > .content {
-            @apply tw-shadow-lg tw-rounded-sm tw-flex tw-space-x-2;
+            @apply tw-shadow-lg tw-rounded-sm tw-flex tw-space-x-2 tw-justify-center;
             background: rgba($color: #000000, $alpha: .8);
             border: 1px solid theme('colors.gray.100');
             padding: 1rem 1rem;
