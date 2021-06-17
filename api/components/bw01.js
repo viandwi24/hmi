@@ -54,7 +54,7 @@ export default {
             type: 'display',
             name: 'display_alarm_1',
             render: item => `
-              <div class="tw-flex tw-flex-col">
+              <div class="display-alarm">
                 <div>
                   <div class="badge-box ${(item.state.alarm_1) ? 'red' : ''}"></div> Circuit Breaker
                 </div>

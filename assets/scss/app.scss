@@ -336,6 +336,11 @@ body .obj-container {
               }
             }
 
+            & .display-alarm {
+              display: flex;
+              flex-direction: column;
+            }
+
             & button {
                 @apply tw-rounded tw-bg-blue-400 hover:tw-bg-blue-600 tw-text-gray-100 tw-text-xs;
                 padding: .8rem .4rem;
