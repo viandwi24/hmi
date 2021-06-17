@@ -52,15 +52,15 @@ export default {
     '@nuxtjs/axios'
   ],
 
-  // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {},
-
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     filenames: {
       chunk: ({ isDev }) => isDev ? '[name].js' : '[chunkhash].js'
     }
   },
+
+  // Axios module configuration: https://go.nuxtjs.dev/config-axios
+  axios: {},
 
   // router
   router: {
