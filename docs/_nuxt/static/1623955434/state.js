@@ -1,0 +1,1 @@
+window.__NUXT__=(function(a){return {staticAssetsBase:"\u002Fhmi\u002F_nuxt\u002Fstatic\u002F1623955434",layout:"default",error:a,serverRendered:true,routePath:"\u002F",config:{_app:{basePath:"\u002Fhmi\u002F",assetsPath:"\u002Fhmi\u002F_nuxt\u002F",cdnURL:a}},globalRefs:{}}}(null));

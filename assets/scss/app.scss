@@ -61,14 +61,6 @@ body .obj-container {
                 z-index: 10;
             }
         }
-    }
-
-    & > .layer-panels {
-        position: absolute;
-        top: 0;
-        display: block;
-        width: 100%;
-        height: 100%;
 
         & > .panels {
             & > .panel {
@@ -76,9 +68,12 @@ body .obj-container {
                 background: rgba($color: #000000, $alpha: .8);
                 display: inline-block;
                 position: absolute;
-                z-index: 8;
-                width: 70px;
-                max-width: 70px;
+                z-index: 12;
+                width: 60px;
+                max-width: 60px;
+                border-top-left-radius: 5px;
+                border-bottom-left-radius: 5px;
+                border-bottom-right-radius: 5px;
 
                 &:hover {
                     @apply tw-z-30;
@@ -87,8 +82,9 @@ body .obj-container {
                 & > .panel-container {
                     & > .header {
                         @apply tw-bg-yellow-400 tw-text-indigo-800 tw-font-semibold tw-text-center tw-overflow-ellipsis tw-truncate tw-text-xs;
-                        font-size: 9px;
+                        font-size: 8px;
                         width: 100%;
+                        border-top-left-radius: 5px;
                     }
                     & > .content {
                         @apply tw-text-gray-100 tw-text-center tw-text-xs;;
@@ -105,14 +101,36 @@ body .obj-container {
                         content: " ";
                         display: block;
                         position: absolute;
-                        width: 30px;
+                        width: 40px;
                         height: 1px;
                         top: -1px;
-                        right: -30px;
+                        right: -40px;
                     }
                 }
 
+                &.right {
+                  border-top-left-radius: 0;
+                  border-top-right-radius: 5px;
+                  & > .panel-container {
+                    & > .header {
+                      border-top-left-radius: 0;
+                      border-top-right-radius: 5px;
+                    }
+                    &::after {
+                        @apply tw-bg-gray-200;
+                        content: " ";
+                        display: block;
+                        position: absolute;
+                        width: 30px;
+                        height: 1px;
+                        top: -1px;
+                        left: -30px;
+                    }
+                  }
+                }
+
                 &.panel-level {
+                  border-top-right-radius: 5px;
                   overflow: hidden;
                   padding: 2px;
                   // border: none;
@@ -143,6 +161,10 @@ body .obj-container {
                     overflow: hidden;
                     border: 1px solid white;
                     margin: 0 auto;
+                    border-top-left-radius: 2px;
+                    border-bottom-left-radius: 2px;
+                    border-bottom-right-radius: 2px;
+                    border-top-right-radius: 2px;
 
                     & > .progress-bar {
                       position: absolute;
@@ -196,17 +218,8 @@ body .obj-container {
     background: rgba($color: #000000, $alpha: .8);
     border: 1px solid theme('colors.gray.100');
 
-    &.danger {
-      border: 1px solid theme('colors.red.400');
-      & > .group {
-        & > * {
-            @apply tw-text-sm;
-        }
-        & > .header {
-            border-top: 1px solid theme('colors.red.400');
-            border-bottom: 2px solid theme('colors.red.600');
-        }
-      }
+    &.lg {
+      width: 250px;
     }
 
     &.left {
@@ -217,25 +230,62 @@ body .obj-container {
       right: 0;
     }
 
-    & > .group {
-        & > * {
-            @apply tw-text-sm;
-        }
-        & > .header {
-            @apply tw-text-gray-100 tw-bg-gray-800;
-            border-bottom: 2px solid theme('colors.blue.600');
-            border-top: 1px solid theme('colors.gray.100');
-            padding: .2rem .8rem;
-            cursor: pointer;
+    &.bottom {
+      top: initial;
+      bottom: 0;
+    }
 
-            &::before {
-                // content: "⮀";
-            }
+    &.danger {
+      border: 1px solid theme('colors.red.400');
+      .controls-container {
+        & > .group {
+          & > * {
+              @apply tw-text-sm;
+          }
+          & > .header {
+              border-top: 1px solid theme('colors.red.400');
+              border-bottom: 2px solid theme('colors.red.600');
+          }
         }
-        & > .content {
-            @apply tw-text-gray-100;
-            padding: .4rem .8rem;
-        }
+      }
+    }
+
+    .controls-container {
+      position: relative;
+
+      & > .group {
+          & > * {
+              @apply tw-text-sm;
+          }
+          & > .header {
+              @apply tw-text-gray-100 tw-bg-gray-800;
+              border-bottom: 2px solid theme('colors.blue.600');
+              border-top: 1px solid theme('colors.gray.100');
+              padding: .2rem .8rem;
+              cursor: pointer;
+
+              &::before {
+                  // content: "⮀";
+              }
+          }
+          & > .content {
+              @apply tw-text-gray-100;
+              padding: .4rem .8rem;
+          }
+      }
+
+      & > .toggle {
+        @apply tw-text-xs tw-px-2 tw-py-1 tw-cursor-pointer;
+        background: rgba($color: #000000, $alpha: .8);
+        border: 1px solid theme('colors.gray.200');
+        color: theme('colors.gray.200');
+        display: inline-block;
+        position: absolute;
+        right: 0;
+        top: 0;
+        height: 25px;
+        transform: rotate(-90deg) translate(-26px, 52px);
+      }
     }
 }
 
