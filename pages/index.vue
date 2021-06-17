@@ -2,13 +2,27 @@
 <template>
   <div class="page">
     <div class="navbar">
-      <div class="header">
-        INDOFOOD CBP - PENGOLAHAN LIMBAH AIR
+      <img src="img/logo.png" alt="Logo" class="header tw-inline-block tw-mt-2">
+      <div class="page-title">
+        Page 01 - Overview Waste Water Treatment Plant
+      </div>
+      <div class="menu tw-flex tw-flex-row tw-space-x-2 tw-text-gray-200">
+        <div>
+          <font-awesome-icon :icon="['fas', 'user']" class="tw-text-4xl" />
+        </div>
+        <div class="tw-text-left">
+          <div class="tw-text-sm">
+            Username
+          </div>
+          <div class="tw-text-xs">
+            Engineer
+          </div>
+        </div>
       </div>
     </div>
     <div :key="renderComponent" class="screen tw-relative tw-flex-1" @scroll="onWindowScroll">
-      <div id="line" class="tw-z-20" />
-      <div class="controls">
+      <div id="line-spotlight" class="tw-z-20" />
+      <div class="controls left">
         <div class="group">
           <div class="header">
             Controls
@@ -21,7 +35,24 @@
               <div class="tw-w-1/2">
                 <label class="flex items-center space-x-3">
                   <input
-                    v-model="controls.showPanel"
+                    v-model="controls.showPanelInfo"
+                    type="checkbox"
+                    name="checked-demo"
+                    class="form-tick appearance-none h-6 w-6 border border-gray-300 rounded-md checked:bg-blue-600 checked:border-transparent focus:outline-none"
+                    @change="saveOption"
+                  >
+                  <span class="text-gray-900 font-medium">Enable</span>
+                </label>
+              </div>
+            </div>
+            <div class="tw-flex tw-w-full">
+              <div class="tw-w-1/2">
+                Panel Comp.
+              </div>
+              <div class="tw-w-1/2">
+                <label class="flex items-center space-x-3">
+                  <input
+                    v-model="controls.showPanelComponent"
                     type="checkbox"
                     name="checked-demo"
                     class="form-tick appearance-none h-6 w-6 border border-gray-300 rounded-md checked:bg-blue-600 checked:border-transparent focus:outline-none"
@@ -112,6 +143,53 @@
             </ul>
           </div>
         </div>
+        <div class="group">
+          <div class="header">
+            Testing
+          </div>
+          <div class="content tw-space-y-1">
+            <div class="tw-flex tw-w-full">
+              <div class="tw-w-1/2">
+                Send Alarm
+              </div>
+              <div class="tw-w-1/2 tw-flex">
+                <button class="tw-bg-gray-200 hover:tw-bg-gray-300 tw-text-gray-800 tw-p-1 tw-rounded-sm tw-text-xs" @click="toggleAlarm">
+                  Toggle
+                </button>
+              </div>
+            </div>
+            <div class="tw-flex tw-w-full">
+              <div class="tw-w-1/2">
+                Ch. lvl
+              </div>
+              <div class="tw-w-1/2 tw-flex">
+                <button class="tw-bg-gray-200 hover:tw-bg-gray-300 tw-text-gray-800 tw-p-1 tw-rounded-sm tw-text-xs" @click="toggleChLvl">
+                  Toggle
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div v-if="componentsHaveAlarm.length > 0" class="controls right danger">
+        <div class="group">
+          <div class="header">
+            <font-awesome-icon :icon="['fas', 'exclamation-triangle']" class="tw-mx-1 tw-text-red-400" />
+            <span class="tw-text-red-400">ALARM!!!</span>
+          </div>
+          <div class="content">
+            <ul class="tw-list-disc tw-ml-4">
+              <li
+                v-for="(item, i) in componentsHaveAlarm"
+                :key="i"
+                class="tw-cursor-pointer tw-text-red-400"
+                @click="componentClicked(item)"
+              >
+                {{ item.name }}
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
       <div class="obj-container" :style="{ transform: `scale(${controls.objScale}) translate(${controls.objX}px, ${controls.objY}px)` }">
         <img src="img/machine/all.png" class="overview">
@@ -119,9 +197,10 @@
           <div class="components">
             <img
               v-for="(item, i) in components"
-              :id="`component-${item.name}`"
+              :id="`component-${item.id}`"
               :key="i"
-              :src="`img/machine/${item.onImgShow(item)}.png`"
+              :src="`img/machine/${(item.onImgShow(item) == null) ? (item.meta.defaultImg) : item.onImgShow(item)}.png`"
+              :style="{ 'opacity': (item.onImgShow(item) == null ? 0 : 1) }"
               class="component"
               :title="item.name"
               :alt="item.name"
@@ -130,32 +209,77 @@
           </div>
         </div>
         <div class="layer-panels">
-          <div v-if="controls.showPanel" class="panels">
+          <div v-if="controls.showPanelComponent" class="panels">
             <div
               v-for="(item, i) in components"
-              :id="`panel-${item.name}`"
+              :id="`panel-${item.id}`"
               :key="i"
               class="panel"
             >
               <div class="panel-container" v-html="item.panel(item)" />
             </div>
           </div>
+          <div v-if="controls.showPanelInfo" class="panels">
+            <div
+              v-for="(item, i) in panels"
+              :id="`panel-${item.id}`"
+              :key="i"
+              class="panel"
+              :class="`panel-${item.type}`"
+            >
+              <div v-if="item.type == 'default'" class="panel-container" v-html="item.panel(item, components, this)" />
+              <div v-else-if="item.type == 'level'" class="tw-relative">
+                <div class="panel-container">
+                  <div class="percentage">
+                    {{ item.state.percent }}%
+                  </div>
+                  <div class="progress">
+                    <div class="progress-bar" :style="{ height: `${item.state.percent}%` }" />
+                  </div>
+                  <div>lvl</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="menu">
         <div v-if="componentSelected != null" class="menu-container">
-          <div class="header">
-            {{ componentSelected.name }}
-          </div>
           <div class="content">
-            <div v-for="(item, i) in componentSelected.menu(componentSelected)" :key="i">
-              <button v-if="item.type == 'button'" @click="item.onClick(componentSelected, item)">
-                {{ item.text }}
-              </button>
+            <div class="tw-w-full">
+              <div v-for="(group, i) in componentSelected.menu(componentSelected)" :key="i" class="group">
+                <div class="group-title">
+                  {{ group.name }}
+                </div>
+                <div class="group-content">
+                  <div v-for="(item, j) in group.child" :key="j" :class="(typeof group.class == 'undefined' ? '' : group.class)">
+                    <button v-if="item.type == 'button'" :class="item.class" :disabled="item.disable" @click="item.onClick(componentSelected, item)">
+                      <font-awesome-icon v-if="item.icon" :icon="item.icon" class="tw-mx-1" />
+                      <span>{{ item.text }}</span>
+                    </button>
+                    <div v-else-if="item.type == 'display'">
+                      <div v-html="item.render(componentSelected)" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="group">
+                <div class="group-title">
+                  Description
+                </div>
+                <div class="group-content">
+                  {{ componentSelected.description }} / {{ componentSelected.name }}
+                </div>
+              </div>
+              <div class="group">
+                <div class="group-content tw-mt-4">
+                  <button class="red" @click="componentOnClose(componentSelected)">
+                    <font-awesome-icon :icon="['fas', 'times']" class="tw-mx-1" />
+                    <span>Close</span>
+                  </button>
+                </div>
+              </div>
             </div>
-            <button @click="componentOnClose(componentSelected)">
-              Close
-            </button>
           </div>
         </div>
       </div>
@@ -165,6 +289,7 @@
 
 <script>
 import {
+  computed,
   onBeforeMount,
   onMounted,
   onUnmounted,
@@ -172,10 +297,14 @@ import {
   ref
 } from '@nuxtjs/composition-api'
 
+import componentMT021 from '@/api/components/mto21.js'
+import componentMT022 from '@/api/components/mto22.js'
+
 export default {
   setup () {
     const controls = reactive({
-      showPanel: true,
+      showPanelInfo: true,
+      showPanelComponent: true,
       objScale: 1,
       objX: 0,
       objY: 0
@@ -189,196 +318,42 @@ export default {
     }
     const componentSelected = ref(null)
     const components = reactive([
+      componentMT021,
+      componentMT022
+    ])
+
+    const panels = reactive([
       {
-        type: 'motor',
-        name: 'mto1',
+        type: 'level',
+        id: 'bak',
         state: {
-          active: false
+          percent: 30
         },
         meta: {
-          img: 'MTO1',
           position: {
-            x: 615, y: 312
+            x: 400,
+            y: 150
           }
         },
         panel: (item) => {
           return `
-            <div class="header">${item.name}</div>
             <div class="content">
-              <div>${(item.state.active) ? 'Active' : 'Nonactive'}</div>
+              Test aja
             </div>
           `
-        },
-        menu: (item) => {
-          return [
-            { type: 'button', name: 'toggle', text: (item.state.active ? 'Turn Off' : 'Turn On'), onClick: (item) => { item.state.active = !item.state.active } }
-          ]
-        },
-        onImgShow: item => (item.state.active) ? `${item.meta.img}_Run` : `${item.meta.img}_Alarm`
-      },
-      {
-        type: 'motor',
-        name: 'mto2',
-        state: {
-          active: false
-        },
-        meta: {
-          img: 'MTO2',
-          position: {
-            x: 821, y: 388
-          }
-        },
-        panel: (item) => {
-          return `
-            <div class="header">${item.name}</div>
-            <div class="content">
-              <div>${(item.state.active) ? 'Active' : 'Nonactive'}</div>
-            </div>
-          `
-        },
-        menu: (item) => {
-          return [
-            { type: 'button', name: 'toggle', text: (item.state.active ? 'Turn Off' : 'Turn On'), onClick: (item) => { item.state.active = !item.state.active } }
-          ]
-        },
-        onImgShow: item => (item.state.active) ? `${item.meta.img}_Run` : `${item.meta.img}_Alarm`
-      },
-      {
-        type: 'motor',
-        name: 'mto3',
-        state: {
-          active: false
-        },
-        meta: {
-          img: 'MTO3',
-          position: {
-            x: 928, y: 433
-          }
-        },
-        panel: (item) => {
-          return `
-            <div class="header">${item.name}</div>
-            <div class="content">
-              <div>${(item.state.active) ? 'Active' : 'Nonactive'}</div>
-            </div>
-          `
-        },
-        menu: (item) => {
-          return [
-            { type: 'button', name: 'toggle', text: (item.state.active ? 'Turn Off' : 'Turn On'), onClick: (item) => { item.state.active = !item.state.active } }
-          ]
-        },
-        onImgShow: item => (item.state.active) ? `${item.meta.img}_Run` : `${item.meta.img}_Alarm`
-      },
-      {
-        type: 'motor',
-        name: 'mto4',
-        state: {
-          active: false
-        },
-        meta: {
-          img: 'MTO4',
-          position: {
-            x: 1052, y: 479
-          }
-        },
-        panel: (item) => {
-          return `
-            <div class="header">${item.name}</div>
-            <div class="content">
-              <div>${(item.state.active) ? 'Active' : 'Nonactive'}</div>
-            </div>
-          `
-        },
-        menu: (item) => {
-          return [
-            { type: 'button', name: 'toggle', text: (item.state.active ? 'Turn Off' : 'Turn On'), onClick: (item) => { item.state.active = !item.state.active } }
-          ]
-        },
-        onImgShow: item => (item.state.active) ? `${item.meta.img}_Run` : `${item.meta.img}_Alarm`
-      },
-      {
-        type: 'motor',
-        name: 'bw02',
-        state: {
-          active: false
-        },
-        meta: {
-          img: 'BW02',
-          position: {
-            x: 1210, y: 800
-          }
-        },
-        panel: (item) => {
-          return `
-            <div class="header">${item.name}</div>
-            <div class="content">
-              <div>${(item.state.active) ? 'Active' : 'Nonactive'}</div>
-            </div>
-          `
-        },
-        menu: (item) => {
-          return [
-            { type: 'button', name: 'toggle', text: (item.state.active ? 'Turn Off' : 'Turn On'), onClick: (item) => { item.state.active = !item.state.active } }
-          ]
-        },
-        onImgShow: item => (item.state.active) ? `${item.meta.img}_Run` : `${item.meta.img}_Alarm`
-      },
-      {
-        type: 'motor',
-        name: 'bw01',
-        state: {
-          active: false
-        },
-        meta: {
-          img: 'BW01',
-          position: {
-            x: 1256, y: 753
-          }
-        },
-        panel: (item) => {
-          return `
-            <div class="header">${item.name}</div>
-            <div class="content">
-              <div>${(item.state.active) ? 'Active' : 'Nonactive'}</div>
-            </div>
-          `
-        },
-        menu: (item) => {
-          return [
-            { type: 'button', name: 'toggle', text: (item.state.active ? 'Turn Off' : 'Turn On'), onClick: (item) => { item.state.active = !item.state.active } }
-          ]
-        },
-        onImgShow: item => (item.state.active) ? `${item.meta.img}_Run` : `${item.meta.img}_Alarm`
-      },
-      {
-        type: 'container',
-        name: 'tangki_penampung',
-        state: {
-          level: 80
-        },
-        meta: {
-          img: 'tangki',
-          position: {
-            x: 461, y: 124
-          }
-        },
-        panel: (item) => {
-          return `
-            <div class="header">${item.name}</div>
-            <div class="content">
-              <div>Level : ${(item.state.level)}%</div>
-            </div>
-          `
-        },
-        menu: (item) => {
-          return [
-            // { type: 'button', name: 'toggle', text: (item.state.active ? 'Turn Off' : 'Turn On'), onClick: (item) => { item.state.active = !item.state.active } }
-          ]
-        },
-        onImgShow: item => `${item.meta.img}`
+        }
       }
     ])
+
+    const componentsHaveAlarm = computed(() => {
+      const result = []
+      components.forEach((item) => {
+        if (item.checkAlarm(item)) {
+          result.push(item)
+        }
+      })
+      return result
+    })
 
     const getOffset = (el) => {
       const rect = el.getBoundingClientRect()
@@ -415,11 +390,11 @@ export default {
         'deg); -ms-transform:rotate(' + angle + 'deg); transform:rotate(' + angle + "deg);' />"
 
       // awe
-      document.querySelector('#line').innerHTML = htmlLine
+      document.querySelector('#line-spotlight').innerHTML = htmlLine
     }
 
     const componentOnClose = (item) => {
-      document.querySelector('#line').innerHTML = ''
+      document.querySelector('#line-spotlight').innerHTML = ''
       componentSelected.value = null
     }
 
@@ -465,11 +440,11 @@ export default {
         const overview = document.querySelector('img.overview')
         const overviewOriginal = 1920
         timerRezise = setInterval(() => {
+          const overviewResult = overview.clientWidth
           // components ui generate pos
           components.forEach((e) => {
             // component
-            const overviewResult = overview.clientWidth
-            const a = document.querySelector(`#component-${e.name}`)
+            const a = document.querySelector(`#component-${e.id}`)
             const clientOriginal = (typeof a.dataset.originalWidth === 'undefined') ? a.clientWidth : a.dataset.originalWidth
             const clientResult = (overviewResult * clientOriginal) / overviewOriginal
             const clientX = (overviewResult * e.meta.position.x) / overviewOriginal
@@ -480,9 +455,12 @@ export default {
             a.style.left = `${clientX}px`
 
             // panel
-            if (controls.showPanel) {
+            if (controls.showPanelComponent) {
               const panelGap = 35
-              const panel = document.querySelector(`#panel-${e.name}`)
+              const panel = document.querySelector(`#panel-${e.id}`)
+              // const lineWidth = 30
+              // const panelLineToComponent = document.querySelector(`#panel-${e.name} .panel-container::`)
+              // console.log(panelLineToComponent.clientWidth)
               const panelY = (clientY)
               const panelX = (clientX - (panel.clientWidth + panelGap))
               panel.style.top = `${panelY}px`
@@ -490,9 +468,22 @@ export default {
             }
           })
 
+          // panels ui generate pos
+          if (controls.showPanelInfo) {
+            panels.forEach((e) => {
+              const panel = document.querySelector(`#panel-${e.id}`)
+              const clientOriginal = (typeof panel.dataset.originalWidth === 'undefined') ? panel.clientWidth : panel.dataset.originalWidth
+              const panelX = (overviewResult * e.meta.position.x) / overviewOriginal
+              const panelY = (overviewResult * e.meta.position.y) / overviewOriginal
+              panel.style.top = `${panelY}px`
+              panel.style.left = `${panelX}px`
+              panel.dataset.originalWidth = clientOriginal
+            })
+          }
+
           if (componentSelected.value !== null) {
             adjustLine(
-              document.querySelector(`#component-${componentSelected.value.name}`),
+              document.querySelector(`#component-${componentSelected.value.id}`),
               document.querySelector('div.menu .content'),
               '#dddddd', 1
             )
@@ -501,6 +492,34 @@ export default {
       } catch (error) {
         console.log('ane dah')
       }
+    }
+
+    const componentClicked = (item) => {
+      const menuDiv = document.querySelector('div.menu')
+
+      if (typeof componentSelected.value !== 'undefined' && componentSelected.value !== null) {
+        componentOnClose(componentSelected.value)
+      }
+
+      componentSelected.value = item
+      if (typeof item.onClick !== 'undefined') {
+        item.onClick(item)
+      }
+
+      menuDiv.animate([
+        { opacity: 0, transform: 'translateY(120px)' },
+        { opacity: 1, transform: 'translateY(0px)' }
+      ], {
+        duration: 500
+      })
+
+      setTimeout(() => {
+        adjustLine(
+          document.querySelector(`#component-${item.id}`),
+          document.querySelector('div.menu .content'),
+          '#dddddd', 2
+        )
+      }, 500)
     }
 
     onMounted(() => {
@@ -513,6 +532,7 @@ export default {
       }
       clearInterval(timerRezise)
       runTimerUiRender()
+      // componentClicked(components[0])
     })
 
     onUnmounted(() => {
@@ -521,8 +541,31 @@ export default {
       document.removeEventListener('keyup', onWindowKeyUp)
     })
 
+    const toggleAlarm = () => {
+      components.forEach((component, i) => {
+        Object.keys(component.state).forEach(function (key) {
+          const item = component.state[key]
+          if (key.includes('alarm')) {
+            if (typeof item === 'boolean') {
+              components[i].state[key] = !item
+            }
+          }
+        })
+      })
+    }
+
+    const toggleChLvl = () => {
+      panels.forEach((panel, i) => {
+        if (panel.type === 'level') {
+          panel.state.percent = (panel.state.percent === 30) ? 80 : 30
+        }
+      })
+    }
+
     return {
       components,
+      componentsHaveAlarm,
+      panels,
       renderComponent,
       forceRerender,
       controls,
@@ -530,44 +573,22 @@ export default {
       componentSelected,
       componentOnClose,
       onWindowScroll,
-      componentClicked: (item) => {
-        const menuDiv = document.querySelector('div.menu')
-
-        if (typeof componentSelected.value !== 'undefined' && componentSelected.value !== null) {
-          componentOnClose(componentSelected.value)
-        }
-
-        componentSelected.value = item
-        if (typeof item.onClick !== 'undefined') {
-          item.onClick(item)
-        }
-
-        menuDiv.animate([
-          { opacity: 0, transform: 'translateY(120px)' },
-          { opacity: 1, transform: 'translateY(0px)' }
-        ], {
-          duration: 500
-        })
-
-        setTimeout(() => {
-          adjustLine(
-            document.querySelector(`#component-${item.name}`),
-            document.querySelector('div.menu .content'),
-            '#dddddd', 2
-          )
-        }, 500)
+      componentClicked,
+      togglePanelInfo: () => {
+        controls.showPanelInfo = !controls.showPanelInfo
       },
-      togglePanel: () => {
-        controls.showPanel = !controls.showPanel
-        console.log(adjustLine)
-      }
+      togglePanelComponent: () => {
+        controls.showPanelComponent = !controls.showPanelComponent
+      },
+      toggleAlarm,
+      toggleChLvl
     }
   }
 }
 </script>
 
 <style>
-#line{
+#line-spotlight{
   position:absolute;
   width:1px;
   background-color:red;

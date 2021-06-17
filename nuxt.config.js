@@ -1,5 +1,8 @@
 export default {
   target: 'static',
+  server: {
+    host: '0.0.0.0'
+  },
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -39,7 +42,8 @@ export default {
     // https://go.nuxtjs.dev/eslint
     '@nuxtjs/eslint-module',
     '@nuxtjs/composition-api/module',
-    '@nuxtjs/tailwindcss'
+    '@nuxtjs/tailwindcss',
+    '@nuxtjs/fontawesome'
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -53,5 +57,21 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+    filenames: {
+      chunk: ({ isDev }) => isDev ? '[name].js' : '[chunkhash].js'
+    }
+  },
+
+  // router
+  router: {
+    base: '/hmi/'
+  },
+
+  // fontawesome
+  fontawesome: {
+    icons: {
+      solid: true,
+      brands: true
+    }
   }
 }

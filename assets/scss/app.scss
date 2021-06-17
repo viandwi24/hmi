@@ -16,10 +16,13 @@ body {
 }
 
 .navbar {
-    @apply tw-bg-gray-200 tw-w-full tw-p-4 tw-text-center tw-shadow-lg tw-text-gray-800;
+    @apply tw-bg-blue-800 tw-w-full tw-p-4 tw-text-center tw-shadow-lg tw-text-gray-800 tw-flex tw-justify-between;
 
     & > .header {
-        @apply tw-font-semibold tw-text-xl;
+      @apply tw-font-semibold tw-text-xl tw-text-gray-100 tw-self-center;
+    }
+    & > .page-title {
+      @apply tw-font-semibold tw-text-xl tw-text-gray-100 tw-self-center;
     }
 }
 
@@ -69,13 +72,13 @@ body .obj-container {
 
         & > .panels {
             & > .panel {
-                @apply tw-border-2 tw-border-gray-200;
+                @apply tw-border tw-border-gray-200;
                 background: rgba($color: #000000, $alpha: .8);
                 display: inline-block;
                 position: absolute;
                 z-index: 8;
-                width: 120px;
-                max-width: 150px;
+                width: 70px;
+                max-width: 70px;
 
                 &:hover {
                     @apply tw-z-30;
@@ -83,14 +86,19 @@ body .obj-container {
 
                 & > .panel-container {
                     & > .header {
+                        @apply tw-bg-yellow-400 tw-text-indigo-800 tw-font-semibold tw-text-center tw-overflow-ellipsis tw-truncate tw-text-xs;
+                        font-size: 9px;
                         width: 100%;
-                        @apply tw-bg-yellow-400 tw-px-2 tw-py-1 tw-text-indigo-800 tw-font-semibold tw-text-center tw-overflow-ellipsis tw-truncate tw-text-xs;
                     }
                     & > .content {
+                        @apply tw-text-gray-100 tw-text-center tw-text-xs;;
                         position: relative;
                         overflow: hidden;
-                        @apply tw-text-gray-100 tw-text-center tw-text-xs;
-                        padding: .2rem .4rem;
+                        padding: .1rem .2rem;
+                        font-size: 7px;
+                        & > div {
+                          line-height: 1.2;
+                        }
                     }
                     &::after {
                         @apply tw-bg-gray-200;
@@ -98,10 +106,78 @@ body .obj-container {
                         display: block;
                         position: absolute;
                         width: 30px;
-                        height: 2px;
-                        top: -2px;
+                        height: 1px;
+                        top: -1px;
                         right: -30px;
                     }
+                }
+
+                &.panel-level {
+                  overflow: hidden;
+                  padding: 2px;
+                  // border: none;
+                  // background: none;
+                  width: auto;
+                  position: relative;
+                  color: theme('colors.gray.100');
+                  border-color: rgba($color: #f3f4f6, $alpha: .7  );
+
+                  & .percentage {
+                    margin: 0 auto;
+                    padding-left: 1px;
+                    font-size: 6px;
+                  }
+
+                  & .panel-container {
+                    display: flex;
+                    flex-direction: column;
+                    font-size: 8px;
+                    text-align: center;
+                  }
+
+                  & .progress {
+                    background: theme('colors.gray.200');
+                    height: 40px;
+                    width: 9px;
+                    position: relative;
+                    overflow: hidden;
+                    border: 1px solid white;
+                    margin: 0 auto;
+
+                    & > .progress-bar {
+                      position: absolute;
+                      bottom: 0;
+                      left: 0;
+                      width: 100%;
+                      background: theme('colors.yellow.500');
+                    }
+                  }
+
+                  // & .panel-container {
+                  //   position: absolute;
+                  //   top: -43px;
+                  //   left: -28px;
+                  //   -webkit-transform: rotate(-90deg); /* Chrome, Safari, Opera */
+                  //   transform: rotate(-90deg);
+                  //   width: 70px;
+                  //   height: 15px;
+                  //   background: rgba($color: #000000, $alpha: .5);
+                  //   @apply tw-border tw-border-gray-200;
+
+                  //   & > .progress-bar {
+                  //     width: 80%;
+                  //     height: 100%;
+                  //     box-shadow: inset 0px 4px 99px theme('colors.yellow.400');
+                  //   }
+                  //   & > .content {
+                  //     font-size: 8px;
+                  //     padding: 0;
+                  //   }
+                  //   &::after {
+                  //     content: none;
+                  //     display: none;
+                  //   }
+                  // }
                 }
             }
         }
@@ -114,14 +190,33 @@ body .obj-container {
     z-index: 20;
     position: absolute;
     top: 0;
-    left: 0;
     display: block;
     width: 200px;
-    margin-left: .4rem;
-    margin-top: .4rem;
+    margin: .4rem;
     background: rgba($color: #000000, $alpha: .8);
     border: 1px solid theme('colors.gray.100');
-    
+
+    &.danger {
+      border: 1px solid theme('colors.red.400');
+      & > .group {
+        & > * {
+            @apply tw-text-sm;
+        }
+        & > .header {
+            border-top: 1px solid theme('colors.red.400');
+            border-bottom: 2px solid theme('colors.red.600');
+        }
+      }
+    }
+
+    &.left {
+      left: 0;
+    }
+
+    &.right {
+      right: 0;
+    }
+
     & > .group {
         & > * {
             @apply tw-text-sm;
@@ -134,7 +229,7 @@ body .obj-container {
             cursor: pointer;
 
             &::before {
-                content: "⮀";
+                // content: "⮀";
             }
         }
         & > .content {
@@ -144,7 +239,7 @@ body .obj-container {
     }
 }
 
-.menu {
+.screen .menu {
     z-index: 20;
     position: fixed;
     bottom: 0;
@@ -154,6 +249,7 @@ body .obj-container {
     @apply tw-justify-center;
 
     & > .menu-container {
+        max-width: 100%;
         margin-bottom: 1rem;
         & > .header {
             @apply tw-bg-gray-800 tw-inline-block tw-rounded-sm tw-text-xs tw-text-gray-100;
@@ -162,14 +258,65 @@ body .obj-container {
             padding: .2rem .4rem;
         }
         & > .content {
-            @apply tw-shadow-lg tw-rounded-sm tw-flex tw-space-x-2 tw-justify-center;
+            @apply tw-shadow-lg tw-rounded-sm tw-space-x-2 tw-justify-center;
             background: rgba($color: #000000, $alpha: .8);
             border: 1px solid theme('colors.gray.100');
             padding: 1rem 1rem;
+            max-width: 100%;
+            overflow-x: auto;
+
+            & > div {
+              @apply tw-flex tw-flex-row tw-space-x-8 tw-divide-x;
+            }
+
+            & .group {
+              @apply tw-flex tw-flex-col tw-pl-8 tw-pb-1;
+              display: inline-block;
+
+              & > .group-title {
+                @apply tw-text-gray-100 tw-mb-1;
+              }
+
+              & > .group-content {
+                @apply tw-text-gray-100 tw-flex tw-flex-row tw-space-x-2;
+              }
+
+              &:nth-child(1) {
+                @apply tw-pl-0;
+              }
+            }
 
             & button {
                 @apply tw-rounded tw-bg-blue-400 hover:tw-bg-blue-600 tw-text-gray-100 tw-text-xs;
                 padding: .8rem .4rem;
+
+                &.fixed {
+                  @apply tw-w-full;
+                }
+
+                &.green {
+                  @apply tw-bg-green-400;
+                }
+
+                &.red {
+                  @apply tw-bg-red-400;
+                }
+
+                &:disabled {
+                  @apply tw-bg-gray-400 tw-cursor-not-allowed;
+                }
+            }
+
+            & .badge-box {
+              display: inline-block;
+              content: "";
+              width: 12px;
+              height: 12px;
+              border: 1px solid white;
+
+              &.red {
+                background: red;
+              }
             }
         }
     }
