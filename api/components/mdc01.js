@@ -33,8 +33,8 @@ export default {
       {
         name: 'Control',
         child: [
-          { type: 'button', name: 'button_start', class: 'green', text: 'Start', icon: ['fas', 'play'], disable: (item.state.active || item.state.auto), onClick: (item) => { item.state.active = !item.state.active } },
-          { type: 'button', name: 'button_stop', class: 'red', text: 'Stop', icon: ['fas', 'stop'], disable: (!item.state.active || item.state.auto), onClick: (item) => { item.state.active = !item.state.active } }
+          { type: 'button', name: 'button_start', class: 'icon green', text: '', icon: ['fas', 'play'], disable: (item.state.active || item.state.auto), onClick: (item) => { item.state.active = !item.state.active } },
+          { type: 'button', name: 'button_stop', class: 'icon red', text: '', icon: ['fas', 'stop'], disable: (!item.state.active || item.state.auto), onClick: (item) => { item.state.active = !item.state.active } }
         ]
       },
       {

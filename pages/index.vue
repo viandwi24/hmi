@@ -6,16 +6,30 @@
       <div class="page-title">
         Page 01 - Overview Waste Water Treatment Plant
       </div>
-      <div class="actions tw-flex tw-flex-row tw-space-x-2 tw-text-gray-200">
-        <div>
-          <font-awesome-icon :icon="['fas', 'user']" class="tw-text-4xl" />
-        </div>
-        <div class="tw-text-left">
-          <div class="tw-text-sm">
-            Username
+      <div class="actions">
+        <div class="item">
+          <img src="img/menu/Item View.svg" class="tw-mt-2">
+          <div>
+            Item View
           </div>
-          <div class="tw-text-xs">
-            Engineer
+        </div>
+        <div class="item" :class="`${(componentsHaveAlarm.length > 0) ? 'red' : ''}`">
+          <img src="img/menu/Alarm.svg">
+          <div>
+            Alarm
+          </div>
+        </div>
+        <div class="tw-flex tw-flex-row tw-space-x-2 tw-text-gray-200 tw-h-full tw-self-center">
+          <div class="tw-self-center">
+            <font-awesome-icon :icon="['fas', 'user']" class="tw-text-4xl tw-self-center" />
+          </div>
+          <div class="tw-text-left tw-self-center">
+            <div class="tw-text-sm">
+              Username
+            </div>
+            <div class="tw-text-xs">
+              Engineer
+            </div>
           </div>
         </div>
       </div>
@@ -273,7 +287,7 @@
               :id="`panel-${item.id}`"
               :key="i"
               class="panel"
-              :class="`panel-${item.type}`"
+              :class="`panel-${item.type} ${(typeof item.meta.direction != 'undefined' ? item.meta.direction : '')} ${(typeof item.class != 'undefined' ? item.class : '')}`"
             >
               <div v-if="item.type == 'default'" class="panel-container" v-html="item.panel(item, components, this)" />
               <div v-else-if="item.type == 'level'" class="tw-relative">
@@ -332,33 +346,13 @@
           </div>
         </div>
         <div v-else class="nav-container">
-          <div class="item">
+          <div v-for="(item, i) in footerMenu" :key="i" class="item">
             <div class="item-content">
               <div class="item-icon">
-                <font-awesome-icon :icon="['fas', 'bars']" class="tw-mx-1" />
+                <img :src="`img/menu/${item.icon}.svg`">
               </div>
               <div class="item-text">
-                Overview
-              </div>
-            </div>
-          </div>
-          <div class="item">
-            <div class="item-content">
-              <div class="item-icon">
-                <font-awesome-icon :icon="['fas', 'caravan']" class="tw-mx-1" />
-              </div>
-              <div class="item-text">
-                Page 1
-              </div>
-            </div>
-          </div>
-          <div class="item">
-            <div class="item-content">
-              <div class="item-icon">
-                <font-awesome-icon :icon="['fas', 'motorcycle']" class="tw-mx-1" />
-              </div>
-              <div class="item-text">
-                Page 2
+                {{ item.text }}
               </div>
             </div>
           </div>
@@ -469,11 +463,81 @@ export default {
             x: 400,
             y: 150
           }
+        }
+      },
+      {
+        type: 'default',
+        id: 'debit_inlet',
+        state: {
+          flow: 250,
+          totalizer: 25000
+        },
+        meta: {
+          position: {
+            x: 636,
+            y: 264
+          },
+          direction: 'top'
         },
         panel: (item) => {
           return `
+            <div class="header">Debit Inlet</div>
             <div class="content">
-              Test aja
+              <div class="tw-mb-1">Flow ${item.state.flow}L/h</div>
+              <div>Totalizer</div>
+              <div>${item.state.totalizer}</>
+            </div>
+          `
+        }
+      },
+      {
+        type: 'default',
+        id: 'debit_outlet',
+        state: {
+          flow: 250,
+          totalizer: 25000
+        },
+        meta: {
+          position: {
+            x: 1377,
+            y: 519
+          },
+          direction: 'top'
+        },
+        panel: (item) => {
+          return `
+            <div class="header">Debit Outlet</div>
+            <div class="content">
+              <div class="tw-mb-1">Flow ${item.state.flow}L/h</div>
+              <div>Totalizer</div>
+              <div>${item.state.totalizer}</>
+            </div>
+          `
+        }
+      },
+      {
+        type: 'default',
+        id: 'ph_meter',
+        state: {
+          meter_text: 'Ideal',
+          meter: 6
+        },
+        meta: {
+          position: {
+            x: 730,
+            y: 307
+            // x: 665,
+            // y: 307
+          },
+          direction: 'top'
+        },
+        class: 'no-line',
+        panel: (item) => {
+          return `
+            <div class="header">pH Meter</div>
+            <div class="content">
+              <div>${item.state.meter_text}</>
+              <div class="tw-text-lg">${item.state.meter}</>
             </div>
           `
         }
@@ -642,17 +706,10 @@ export default {
             a.style.width = `${clientResult}px`
             a.style.top = `${clientY}px`
             a.style.left = `${clientX}px`
-
-            // wae
-            // a.addEventListener('mousedown', imgClick)
-
             // panel
             if (controls.showPanelComponent) {
               const panelGap = 35
               const panel = document.querySelector(`#panel-${e.id}`)
-              // const lineWidth = 30
-              // const panelLineToComponent = document.querySelector(`#panel-${e.name} .panel-container::`)
-              // console.log(panelLineToComponent.clientWidth)
               let panelY = 0
               let panelX = 0
               if (panel.classList.contains('right')) {
@@ -666,6 +723,12 @@ export default {
               // awe
               panel.style.top = `${panelY}px`
               panel.style.left = `${panelX}px`
+
+              // ada
+              // const defaultScale = 1
+              // let scale = ((defaultScale) - Math.abs(defaultScale - controls.objScale))
+              // scale = (scale < 0.8) ? 0.8 : scale
+              // panel.style.transform = `scale(${scale})`
             }
           })
 
@@ -679,6 +742,13 @@ export default {
               panel.style.top = `${panelY}px`
               panel.style.left = `${panelX}px`
               panel.dataset.originalWidth = clientOriginal
+              if (panel.classList.contains('top')) {
+                panel.style.top = `${(panelY - (getOffset(panel).height + 95))}px`
+                panel.style.left = `${(panelX - (panel.clientWidth / 2))}px`
+              } else if (panel.classList.contains('bottom')) {
+                panel.style.top = `${(panelY + (panel.clientHeight + 50))}px`
+                panel.style.left = `${(panelX - (panel.clientWidth / 2))}px`
+              }
             })
           }
 
@@ -847,7 +917,37 @@ export default {
       }
     }
 
+    // menu footer
+    const footerMenu = reactive([
+      {
+        id: 'footer-menu-1',
+        text: 'Overview',
+        icon: 'Overview'
+      },
+      {
+        id: 'footer-menu-2',
+        text: 'Submersible',
+        icon: 'Submersible'
+      },
+      {
+        id: 'footer-menu-3',
+        text: 'Input Data',
+        icon: 'Input Data'
+      },
+      {
+        id: 'footer-menu-4',
+        text: 'Report',
+        icon: 'Report'
+      },
+      {
+        id: 'footer-menu-5',
+        text: 'Access Lvl',
+        icon: 'Access Level'
+      }
+    ])
+
     return {
+      footerMenu,
       components,
       componentsHaveAlarm,
       panels,
