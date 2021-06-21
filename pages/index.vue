@@ -2,7 +2,7 @@
 <template>
   <div class="page">
     <div class="navbar">
-      <img src="img/logo.png" alt="Logo" class="header tw-inline-block tw-mt-2">
+      <img src="img/logo.png" alt="Logo" class="header tw-inline-block tw-mt-1">
       <div class="page-title">
         Page 01 - Overview Waste Water Treatment Plant
       </div>
@@ -202,18 +202,35 @@
         <div class="controls-container">
           <div class="group">
             <div class="header tw-text-center">
-              Data Swapantau Outlet Ipal
+              Data Swapantau Ipal
             </div>
             <div class="content">
               <table class="tw-w-full tw-table-auto">
+                <tr>
+                  <th class="tw-text-left">
+                    Name
+                  </th>
+                  <th class="tw-text-left">
+                    Inlet
+                  </th>
+                  <th class="tw-text-left">
+                    Outlet
+                  </th>
+                  <th class="tw-text-right">
+                    Unit
+                  </th>
+                </tr>
                 <tr v-for="(item, i) in dataSwapantau" :key="i" class="tw-cursor-pointer hover:tw-text-gray-800 hover:tw-bg-gray-200" @click="changeDataSwap(i)">
-                  <td width="60%">
+                  <td width="50%">
                     {{ item.text }}
                   </td>
                   <td width="20%">
-                    {{ item.value }}
+                    {{ item.inlet }}
                   </td>
                   <td width="20%">
+                    {{ item.outlet }}
+                  </td>
+                  <td width="10%" class="tw-text-right">
                     {{ item.unit }}
                   </td>
                 </tr>
@@ -274,7 +291,9 @@
           </div>
         </div>
       </div>
-      <div class="menu">
+    </div>
+    <div class="footer">
+      <div class="footer-container">
         <div v-if="componentSelected != null" class="menu-container">
           <div class="content">
             <div class="tw-w-full">
@@ -304,11 +323,42 @@
               </div>
               <div class="group">
                 <div class="group-content tw-mt-4">
-                  <button class="red" @click="componentOnClose(componentSelected)">
+                  <button class="icon red" @click="componentOnClose(componentSelected)">
                     <font-awesome-icon :icon="['fas', 'times']" class="tw-mx-1" />
-                    <span>Close</span>
                   </button>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div v-else class="nav-container">
+          <div class="item">
+            <div class="item-content">
+              <div class="item-icon">
+                <font-awesome-icon :icon="['fas', 'bars']" class="tw-mx-1" />
+              </div>
+              <div class="item-text">
+                Overview
+              </div>
+            </div>
+          </div>
+          <div class="item">
+            <div class="item-content">
+              <div class="item-icon">
+                <font-awesome-icon :icon="['fas', 'caravan']" class="tw-mx-1" />
+              </div>
+              <div class="item-text">
+                Page 1
+              </div>
+            </div>
+          </div>
+          <div class="item">
+            <div class="item-content">
+              <div class="item-icon">
+                <font-awesome-icon :icon="['fas', 'motorcycle']" class="tw-mx-1" />
+              </div>
+              <div class="item-text">
+                Page 2
               </div>
             </div>
           </div>
@@ -344,55 +394,64 @@ export default {
       {
         id: 'cod',
         text: 'COD',
-        value: 100,
+        inlet: 0,
+        outlet: 100,
         unit: 'mg/l'
       },
       {
         id: 'bod',
         text: 'BOD',
-        value: 44.54,
+        inlet: 0,
+        outlet: 44.54,
         unit: 'mg/l'
       },
       {
         id: 'tss',
         text: 'TSS',
-        value: 80.84,
+        inlet: 0,
+        outlet: 80.84,
         unit: 'mg/l'
       },
       {
         id: 'ph',
         text: 'pH',
-        value: '6 - 9',
+        inlet: 0,
+        outlet: '6 - 9',
         unit: '-'
       },
       {
         id: 'oil',
         text: 'Lemak Minyak',
-        value: 2.82,
+        inlet: 0,
+        outlet: 2.82,
         unit: 'mg/l'
       },
       {
         id: 'amonia',
         text: 'Amonia',
-        value: 10,
+        inlet: 0,
+        outlet: 10,
         unit: 'mg/l'
       },
       {
         id: 'fe',
         text: 'Fe',
-        value: 3,
+        inlet: 0,
+        outlet: 3,
         unit: 'mg/l'
       },
       {
         id: 'cu',
         text: 'Cu',
-        value: 1,
+        inlet: 0,
+        outlet: 1,
         unit: 'mg/l'
       },
       {
         id: 'coliform',
         text: 'Total Coliform',
-        value: 3000,
+        inlet: 0,
+        outlet: 3000,
         unit: '/100mm'
       }
     ])
@@ -444,35 +503,49 @@ export default {
       componentMCT01
     ])
     const componentOnClose = (item) => {
-      document.querySelector('#line-spotlight').innerHTML = ''
-      componentSelected.value = null
-    }
-    const componentClicked = (item) => {
-      const menuDiv = document.querySelector('div.menu')
-
-      if (typeof componentSelected.value !== 'undefined' && componentSelected.value !== null) {
-        componentOnClose(componentSelected.value)
-      }
-
-      componentSelected.value = item
-      if (typeof item.onClick !== 'undefined') {
-        item.onClick(item)
-      }
-
+      const menuDiv = document.querySelector('div.footer')
       menuDiv.animate([
-        { opacity: 0, transform: 'translateY(120px)' },
-        { opacity: 1, transform: 'translateY(0px)' }
+        { opacity: 1, transform: 'translateY(0px)' },
+        { opacity: 0, transform: 'translateY(120px)' }
       ], {
         duration: 500
       })
-
       setTimeout(() => {
-        adjustLine(
-          document.querySelector(`#component-${item.id}`),
-          document.querySelector('div.menu .content'),
-          '#dddddd', 2
-        )
-      }, 500)
+        document.querySelector('#line-spotlight').innerHTML = ''
+        componentSelected.value = null
+        menuDiv.animate([
+          { opacity: 0, transform: 'translateY(120px)' },
+          { opacity: 1, transform: 'translateY(0px)' }
+        ], {
+          duration: 500
+        })
+      }, 400)
+    }
+    const componentClicked = (item) => {
+      const menuDiv = document.querySelector('div.footer')
+
+      // if (typeof componentSelected.value !== 'undefined' && componentSelected.value !== null) {
+      //   componentOnClose(componentSelected.value)
+      // }
+
+      menuDiv.animate([
+        { opacity: 1, transform: 'translateY(0px)' },
+        { opacity: 0, transform: 'translateY(120px)' }
+      ], {
+        duration: 500
+      })
+      setTimeout(() => {
+        componentSelected.value = item
+        if (typeof item.onClick !== 'undefined') {
+          item.onClick(item)
+        }
+        menuDiv.animate([
+          { opacity: 0, transform: 'translateY(120px)' },
+          { opacity: 1, transform: 'translateY(0px)' }
+        ], {
+          duration: 500
+        })
+      }, 400)
     }
     const componentsHaveAlarm = computed(() => {
       const result = []
@@ -614,13 +687,13 @@ export default {
               const componentSpot = componentSelected.value.meta.componentSpot
               adjustLine(
                 componentSpot,
-                document.querySelector('div.menu .content'),
+                document.querySelector('div.footer'),
                 '#dddddd', 1
               )
             } else {
               adjustLine(
                 document.querySelector(`#component-${componentSelected.value.id}`),
-                document.querySelector('div.menu .content'),
+                document.querySelector('div.footer'),
                 '#dddddd', 1
               )
             }
