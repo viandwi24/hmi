@@ -1,7 +1,7 @@
 <!doctype html>
 <html data-n-head-ssr lang="en" data-n-head="%7B%22lang%22:%7B%22ssr%22:%22en%22%7D%7D">
   <head >
-    <title>hmi</title><meta data-n-head="ssr" charset="utf-8"><meta data-n-head="ssr" name="viewport" content="width=device-width, initial-scale=1"><meta data-n-head="ssr" data-hid="description" name="description" content=""><base href="/hmi/"><link data-n-head="ssr" rel="icon" type="image/x-icon" href="/favicon.ico"><link rel="preload" href="/hmi/_nuxt/9ffc396.js" as="script"><link rel="preload" href="/hmi/_nuxt/019ca8e8eb34268d5ceb.js" as="script"><link rel="preload" href="/hmi/_nuxt/ab550ab792d7d01ccfec.js" as="script"><link rel="preload" href="/hmi/_nuxt/d6ab547cbe3a14ce4b2a.js" as="script"><link rel="preload" href="/hmi/_nuxt/15a940684cf2aaab9a1c.js" as="script"><style data-vue-ssr-id="15bbe95e:0 54b08540:0 54037e9e:0 54c2559c:0 a57b151a:0 1239d49d:0 bad8e090:0">.svg-inline--fa,svg:not(:root).svg-inline--fa{
+    <title>hmi</title><meta data-n-head="ssr" charset="utf-8"><meta data-n-head="ssr" name="viewport" content="width=device-width, initial-scale=1"><meta data-n-head="ssr" data-hid="description" name="description" content=""><base href="/hmi/"><link data-n-head="ssr" rel="icon" type="image/x-icon" href="/favicon.ico"><link rel="preload" href="/hmi/_nuxt/660f15d.js" as="script"><link rel="preload" href="/hmi/_nuxt/73b125736fc14e6bb5d0.js" as="script"><link rel="preload" href="/hmi/_nuxt/d513693314f57e7ce378.js" as="script"><link rel="preload" href="/hmi/_nuxt/33547e50b049ac34ff16.js" as="script"><link rel="preload" href="/hmi/_nuxt/d987ed3af00dee0e7a54.js" as="script"><style data-vue-ssr-id="15bbe95e:0 54b08540:0 54037e9e:0 54c2559c:0 a57b151a:0 bad8e090:0">.svg-inline--fa,svg:not(:root).svg-inline--fa{
   overflow:visible
 }
 
@@ -980,9 +980,25 @@ video {
   margin-left:calc(0.5rem * calc(1 - var(--tw-space-x-reverse)));
 }
 
+.tw-appearance-none{
+  -webkit-appearance:none;
+     -moz-appearance:none;
+          appearance:none;
+}
+
 .tw-bg-gray-200{
   --tw-bg-opacity:1;
   background-color:rgba(229, 231, 235, var(--tw-bg-opacity));
+}
+
+.tw-bg-gray-300{
+  --tw-bg-opacity:1;
+  background-color:rgba(209, 213, 219, var(--tw-bg-opacity));
+}
+
+.tw-bg-blue-500{
+  --tw-bg-opacity:1;
+  background-color:rgba(59, 130, 246, var(--tw-bg-opacity));
 }
 
 .hover\:tw-bg-gray-200:hover{
@@ -995,8 +1011,26 @@ video {
   background-color:rgba(209, 213, 219, var(--tw-bg-opacity));
 }
 
+.hover\:tw-bg-blue-700:hover{
+  --tw-bg-opacity:1;
+  background-color:rgba(29, 78, 216, var(--tw-bg-opacity));
+}
+
+.tw-border-gray-300{
+  --tw-border-opacity:1;
+  border-color:rgba(209, 213, 219, var(--tw-border-opacity));
+}
+
 .tw-rounded-sm{
   border-radius:0.125rem;
+}
+
+.tw-rounded{
+  border-radius:0.25rem;
+}
+
+.tw-border{
+  border-width:1px;
 }
 
 .tw-cursor-pointer{
@@ -1015,12 +1049,24 @@ video {
   flex-direction:row;
 }
 
+.tw-flex-col{
+  flex-direction:column;
+}
+
 .tw-self-center{
   align-self:center;
 }
 
+.tw-justify-center{
+  justify-content:center;
+}
+
 .tw-flex-1{
   flex:1 1 0%;
+}
+
+.tw-font-bold{
+  font-weight:700;
 }
 
 .tw-h-full{
@@ -1047,6 +1093,10 @@ video {
   line-height:2.5rem;
 }
 
+.tw-leading-tight{
+  line-height:1.25;
+}
+
 .tw-list-disc{
   list-style-type:disc;
 }
@@ -1054,6 +1104,16 @@ video {
 .tw-mx-1{
   margin-left:0.25rem;
   margin-right:0.25rem;
+}
+
+.tw-my-20{
+  margin-top:5rem;
+  margin-bottom:5rem;
+}
+
+.tw-mx-40{
+  margin-left:10rem;
+  margin-right:10rem;
 }
 
 .tw-mt-1{
@@ -1076,8 +1136,47 @@ video {
   margin-left:1rem;
 }
 
+.focus\:tw-outline-none:focus{
+  outline:2px solid transparent;
+  outline-offset:2px;
+}
+
+.tw-overflow-hidden{
+  overflow:hidden;
+}
+
 .tw-p-1{
   padding:0.25rem;
+}
+
+.tw-py-2{
+  padding-top:0.5rem;
+  padding-bottom:0.5rem;
+}
+
+.tw-px-3{
+  padding-left:0.75rem;
+  padding-right:0.75rem;
+}
+
+.tw-py-4{
+  padding-top:1rem;
+  padding-bottom:1rem;
+}
+
+.tw-px-4{
+  padding-left:1rem;
+  padding-right:1rem;
+}
+
+.tw-px-6{
+  padding-left:1.5rem;
+  padding-right:1.5rem;
+}
+
+.tw-px-8{
+  padding-left:2rem;
+  padding-right:2rem;
 }
 
 .tw-pl-4{
@@ -1090,6 +1189,16 @@ video {
 
 *{
   --tw-shadow:0 0 #0000;
+}
+
+.tw-shadow{
+  --tw-shadow:0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.tw-shadow-lg{
+  --tw-shadow:0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
 *{
@@ -1117,9 +1226,24 @@ video {
   text-align:right;
 }
 
+.tw-text-white{
+  --tw-text-opacity:1;
+  color:rgba(255, 255, 255, var(--tw-text-opacity));
+}
+
+.tw-text-gray-100{
+  --tw-text-opacity:1;
+  color:rgba(243, 244, 246, var(--tw-text-opacity));
+}
+
 .tw-text-gray-200{
   --tw-text-opacity:1;
   color:rgba(229, 231, 235, var(--tw-text-opacity));
+}
+
+.tw-text-gray-700{
+  --tw-text-opacity:1;
+  color:rgba(55, 65, 81, var(--tw-text-opacity));
 }
 
 .tw-text-gray-800{
@@ -1769,9 +1893,25 @@ video {
   margin-left:calc(0.5rem * calc(1 - var(--tw-space-x-reverse)));
 }
 
+.tw-appearance-none{
+  -webkit-appearance:none;
+     -moz-appearance:none;
+          appearance:none;
+}
+
 .tw-bg-gray-200{
   --tw-bg-opacity:1;
   background-color:rgba(229, 231, 235, var(--tw-bg-opacity));
+}
+
+.tw-bg-gray-300{
+  --tw-bg-opacity:1;
+  background-color:rgba(209, 213, 219, var(--tw-bg-opacity));
+}
+
+.tw-bg-blue-500{
+  --tw-bg-opacity:1;
+  background-color:rgba(59, 130, 246, var(--tw-bg-opacity));
 }
 
 .hover\:tw-bg-gray-200:hover{
@@ -1784,8 +1924,26 @@ video {
   background-color:rgba(209, 213, 219, var(--tw-bg-opacity));
 }
 
+.hover\:tw-bg-blue-700:hover{
+  --tw-bg-opacity:1;
+  background-color:rgba(29, 78, 216, var(--tw-bg-opacity));
+}
+
+.tw-border-gray-300{
+  --tw-border-opacity:1;
+  border-color:rgba(209, 213, 219, var(--tw-border-opacity));
+}
+
 .tw-rounded-sm{
   border-radius:0.125rem;
+}
+
+.tw-rounded{
+  border-radius:0.25rem;
+}
+
+.tw-border{
+  border-width:1px;
 }
 
 .tw-cursor-pointer{
@@ -1804,12 +1962,24 @@ video {
   flex-direction:row;
 }
 
+.tw-flex-col{
+  flex-direction:column;
+}
+
 .tw-self-center{
   align-self:center;
 }
 
+.tw-justify-center{
+  justify-content:center;
+}
+
 .tw-flex-1{
   flex:1 1 0%;
+}
+
+.tw-font-bold{
+  font-weight:700;
 }
 
 .tw-h-full{
@@ -1836,6 +2006,10 @@ video {
   line-height:2.5rem;
 }
 
+.tw-leading-tight{
+  line-height:1.25;
+}
+
 .tw-list-disc{
   list-style-type:disc;
 }
@@ -1843,6 +2017,16 @@ video {
 .tw-mx-1{
   margin-left:0.25rem;
   margin-right:0.25rem;
+}
+
+.tw-my-20{
+  margin-top:5rem;
+  margin-bottom:5rem;
+}
+
+.tw-mx-40{
+  margin-left:10rem;
+  margin-right:10rem;
 }
 
 .tw-mt-1{
@@ -1865,8 +2049,47 @@ video {
   margin-left:1rem;
 }
 
+.focus\:tw-outline-none:focus{
+  outline:2px solid transparent;
+  outline-offset:2px;
+}
+
+.tw-overflow-hidden{
+  overflow:hidden;
+}
+
 .tw-p-1{
   padding:0.25rem;
+}
+
+.tw-py-2{
+  padding-top:0.5rem;
+  padding-bottom:0.5rem;
+}
+
+.tw-px-3{
+  padding-left:0.75rem;
+  padding-right:0.75rem;
+}
+
+.tw-py-4{
+  padding-top:1rem;
+  padding-bottom:1rem;
+}
+
+.tw-px-4{
+  padding-left:1rem;
+  padding-right:1rem;
+}
+
+.tw-px-6{
+  padding-left:1.5rem;
+  padding-right:1.5rem;
+}
+
+.tw-px-8{
+  padding-left:2rem;
+  padding-right:2rem;
 }
 
 .tw-pl-4{
@@ -1879,6 +2102,16 @@ video {
 
 *{
   --tw-shadow:0 0 #0000;
+}
+
+.tw-shadow{
+  --tw-shadow:0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.tw-shadow-lg{
+  --tw-shadow:0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
 *{
@@ -1906,9 +2139,24 @@ video {
   text-align:right;
 }
 
+.tw-text-white{
+  --tw-text-opacity:1;
+  color:rgba(255, 255, 255, var(--tw-text-opacity));
+}
+
+.tw-text-gray-100{
+  --tw-text-opacity:1;
+  color:rgba(243, 244, 246, var(--tw-text-opacity));
+}
+
 .tw-text-gray-200{
   --tw-text-opacity:1;
   color:rgba(229, 231, 235, var(--tw-text-opacity));
+}
+
+.tw-text-gray-700{
+  --tw-text-opacity:1;
+  color:rgba(55, 65, 81, var(--tw-text-opacity));
 }
 
 .tw-text-gray-800{
@@ -2048,6 +2296,8 @@ body{
 }
 
 .navbar{
+  height:74.3px;
+  min-height:74.3px;
   --tw-bg-opacity:1;
   background-color:rgba(30, 64, 175, var(--tw-bg-opacity));
   display:flex;
@@ -2119,6 +2369,11 @@ body{
 .navbar .actions>.item.red{
   --tw-bg-opacity:1;
   background-color:rgba(239, 68, 68, var(--tw-bg-opacity))
+}
+
+.navbar .actions>.item.selected{
+  --tw-bg-opacity:1;
+  background-color:rgba(79, 70, 229, var(--tw-bg-opacity))
 }
 
 .navbar .actions>.item.clicked{
@@ -2700,56 +2955,18 @@ body .obj-container>.layer-components>.panels .panel.panel-level .progress>.prog
 .nuxt-progress-failed{
   background-color:red
 }
-html{
-  font-family:"Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-  font-size:16px;
-  word-spacing:1px;
-  -ms-text-size-adjust:100%;
-  -webkit-text-size-adjust:100%;
-  -moz-osx-font-smoothing:grayscale;
-  -webkit-font-smoothing:antialiased;
-  box-sizing:border-box
-}
-*,:after,:before{
-  box-sizing:border-box;
-  margin:0
-}
-.button--green{
-  display:inline-block;
-  border-radius:4px;
-  border:1px solid #3b8070;
-  color:#3b8070;
-  text-decoration:none;
-  padding:10px 30px
-}
-.button--green:hover{
-  color:#fff;
-  background-color:#3b8070
-}
-.button--grey{
-  display:inline-block;
-  border-radius:4px;
-  border:1px solid #35495e;
-  color:#35495e;
-  text-decoration:none;
-  padding:10px 30px;
-  margin-left:15px
-}
-.button--grey:hover{
-  color:#fff;
-  background-color:#35495e
-}
 #line-spotlight{
   position:absolute;
   width:1px;
   background-color:red
-}</style><link rel="preload" href="/hmi/_nuxt/static/1624445463/state.js" as="script"><link rel="preload" href="/hmi/_nuxt/static/1624445463/payload.js" as="script"><link rel="preload" href="/hmi/_nuxt/static/1624445463/manifest.js" as="script">
+}</style><link rel="preload" href="/hmi/_nuxt/static/1624473194/state.js" as="script"><link rel="preload" href="/hmi/_nuxt/static/1624473194/payload.js" as="script"><link rel="preload" href="/hmi/_nuxt/static/1624473194/manifest.js" as="script">
   </head>
   <body >
     <div data-server-rendered="true" id="__nuxt"><!----><div id="__layout"><div><div class="page"><div class="navbar"><img src="img/logo.png" alt="Logo" class="header tw-inline-block tw-mt-1"> <div class="page-title">
-      Page 02
-      - Overview Waste Water Treatment Plant
-    </div> <div class="menu"><div class="actions"><div class="item"><img src="img/menu/Item View.svg" class="tw-mt-2"> <div>
+      Page 01
+      - Overview
+      Waste Water Treatment Plant
+    </div> <div class="menu"><div class="actions"><div class="item clicked selected"><img src="img/menu/Item View.svg" class="tw-mt-2"> <div>
             Item View
           </div></div> <div class="item clicked"><img src="img/menu/Alarm.svg"> <div>
             Alarm
@@ -2887,77 +3104,77 @@ html{
                   3000
                 </td> <td width="10%" class="tw-text-right">
                   /100mm
-                </td></tr></table></div></div></div></div> <div class="obj-container" style="transform:scale(1) translate(0px, 0px);"><!----> <img src="img/machine/submersible.png" class="overview"> <div class="layer-components"><div class="components"><div style="visibility:hidden;"><img id="component-vlv01" src="img/machine/VLV01_Run.png" title="VLV01" alt="VLV01" class="component" style="opacity:0;"></div><div style="visibility:hidden;"><img id="component-vlv02" src="img/machine/VLV02_Run.png" title="VLV02" alt="VLV02" class="component" style="opacity:0;"></div><div style="visibility:hidden;"><img id="component-mto21" src="img/machine/MTO21_Run.png" title="M.TO21" alt="M.TO21" class="component" style="opacity:0;"></div><div style="visibility:hidden;"><img id="component-mto22" src="img/machine/MTO22_Run.png" title="M.TO22" alt="M.TO22" class="component" style="opacity:0;"></div><div style="visibility:hidden;"><img id="component-mto23" src="img/machine/MTO23_Run.png" title="M.TO23" alt="M.TO23" class="component" style="opacity:0;"></div><div style="visibility:hidden;"><img id="component-mto24" src="img/machine/MTO24_Run.png" title="M.TO24" alt="M.TO24" class="component" style="opacity:0;"></div><div style="visibility:hidden;"><img id="component-mdc01" src="img/machine/MDC01_Run.png" title="M.DC01" alt="M.DC01" class="component" style="opacity:0;"></div><div style="visibility:hidden;"><img id="component-mct01" src="img/machine/MCT01_Run.png" title="M.CT01" alt="M.CT01" class="component" style="opacity:0;"></div><div style="visibility:visible;"><img id="component-msb06" src="img/machine/MSB06_Run.png" title="M.SB06" alt="M.SB06" class="component" style="opacity:1;"></div></div> <div class="panels"><div id="panel-vlv01" class="panel right" style="visibility:hidden;"><div class="panel-container">
+                </td></tr></table></div></div></div></div> <div class="obj-container" style="transform:scale(1) translate(0px, 0px);"><img src="img/machine/all.png" class="overview"> <!----> <div class="layer-components"><div class="components"><div style="visibility:visible;"><img id="component-vlv01" src="img/machine/VLV01_Run.png" title="VLV01" alt="VLV01" class="component" style="opacity:0;"></div><div style="visibility:visible;"><img id="component-vlv02" src="img/machine/VLV02_Run.png" title="VLV02" alt="VLV02" class="component" style="opacity:0;"></div><div style="visibility:visible;"><img id="component-mto21" src="img/machine/MTO21_Run.png" title="M.TO21" alt="M.TO21" class="component" style="opacity:0;"></div><div style="visibility:visible;"><img id="component-mto22" src="img/machine/MTO22_Run.png" title="M.TO22" alt="M.TO22" class="component" style="opacity:0;"></div><div style="visibility:visible;"><img id="component-mto23" src="img/machine/MTO23_Run.png" title="M.TO23" alt="M.TO23" class="component" style="opacity:0;"></div><div style="visibility:visible;"><img id="component-mto24" src="img/machine/MTO24_Run.png" title="M.TO24" alt="M.TO24" class="component" style="opacity:0;"></div><div style="visibility:visible;"><img id="component-mdc01" src="img/machine/MDC01_Run.png" title="M.DC01" alt="M.DC01" class="component" style="opacity:0;"></div><div style="visibility:visible;"><img id="component-mct01" src="img/machine/MCT01_Run.png" title="M.CT01" alt="M.CT01" class="component" style="opacity:0;"></div><div style="visibility:hidden;"><img id="component-msb06" src="img/machine/MSB06_Run.png" title="M.SB06" alt="M.SB06" class="component" style="opacity:1;"></div></div> <div class="panels"><div id="panel-vlv01" class="panel right" style="visibility:visible;"><div class="panel-container">
       <div class="header">VLV01</div>
       <div class="content">
         <div>Close</div>
         <div>Manual</div>
       </div>
-    </div></div><div id="panel-vlv02" class="panel" style="visibility:hidden;"><div class="panel-container">
+    </div></div><div id="panel-vlv02" class="panel" style="visibility:visible;"><div class="panel-container">
       <div class="header">VLV02</div>
       <div class="content">
         <div>Close</div>
         <div>Manual</div>
       </div>
-    </div></div><div id="panel-mto21" class="panel" style="visibility:hidden;"><div class="panel-container">
+    </div></div><div id="panel-mto21" class="panel" style="visibility:visible;"><div class="panel-container">
       <div class="header">M.TO21</div>
       <div class="content">
         <div>Off</div>
         <div>Manual</div>
       </div>
-    </div></div><div id="panel-mto22" class="panel" style="visibility:hidden;"><div class="panel-container">
+    </div></div><div id="panel-mto22" class="panel" style="visibility:visible;"><div class="panel-container">
       <div class="header">M.TO22</div>
       <div class="content">
         <div>Off</div>
         <div>Manual</div>
       </div>
-    </div></div><div id="panel-mto23" class="panel" style="visibility:hidden;"><div class="panel-container">
+    </div></div><div id="panel-mto23" class="panel" style="visibility:visible;"><div class="panel-container">
       <div class="header">M.TO23</div>
       <div class="content">
         <div>Off</div>
         <div>Manual</div>
       </div>
-    </div></div><div id="panel-mto24" class="panel" style="visibility:hidden;"><div class="panel-container">
+    </div></div><div id="panel-mto24" class="panel" style="visibility:visible;"><div class="panel-container">
       <div class="header">M.TO24</div>
       <div class="content">
         <div>Off</div>
         <div>Manual</div>
       </div>
-    </div></div><div id="panel-mdc01" class="panel" style="visibility:hidden;"><div class="panel-container">
+    </div></div><div id="panel-mdc01" class="panel" style="visibility:visible;"><div class="panel-container">
       <div class="header">M.DC01</div>
       <div class="content">
         <div>Off</div>
         <div>Manual</div>
       </div>
-    </div></div><div id="panel-mct01" class="panel right" style="visibility:hidden;"><div class="panel-container">
+    </div></div><div id="panel-mct01" class="panel right" style="visibility:visible;"><div class="panel-container">
       <div class="header">M.CT01</div>
       <div class="content">
         <div>Off</div>
         <div>Manual</div>
       </div>
-    </div></div><div id="panel-msb06" class="panel" style="visibility:visible;"><div class="panel-container">
+    </div></div><div id="panel-msb06" class="panel" style="visibility:hidden;"><div class="panel-container">
       <div class="header">M.SB06</div>
       <div class="content">
         <div>Running</div>
         <div>Manual</div>
       </div>
-    </div></div></div> <div class="panels"><div><div id="panel-bak" class="panel panel-level  "><div class="tw-relative"><div class="panel-container"><div class="percentage">
+    </div></div></div> <div class="panels"><div><div id="panel-bak" class="panel panel-level  " style="display:none;"><div class="tw-relative"><div class="panel-container"><div class="percentage">
                     30%
-                  </div> <div class="progress"><div class="progress-bar" style="height:30%;"></div></div> <div>lvl</div></div></div></div></div><div><div id="panel-debit_inlet" class="panel panel-default top " style="display:none;"><div class="panel-container">
+                  </div> <div class="progress"><div class="progress-bar" style="height:30%;"></div></div> <div>lvl</div></div></div></div></div><div><div id="panel-debit_inlet" class="panel panel-default top "><div class="panel-container">
             <div class="header">Debit Inlet</div>
             <div class="content">
               <div class="tw-mb-1">Flow 250L/h</div>
               <div>Totalizer</div>
               <div>25000</>
             </div>
-          </div></div></div><div><div id="panel-debit_outlet" class="panel panel-default top " style="display:none;"><div class="panel-container">
+          </div></div></div><div><div id="panel-debit_outlet" class="panel panel-default top "><div class="panel-container">
             <div class="header">Debit Outlet</div>
             <div class="content">
               <div class="tw-mb-1">Flow 250L/h</div>
               <div>Totalizer</div>
               <div>25000</>
             </div>
-          </div></div></div><div><div id="panel-ph_meter" class="panel panel-default top no-line" style="display:none;"><div class="panel-container">
+          </div></div></div><div><div id="panel-ph_meter" class="panel panel-default top no-line"><div class="panel-container">
             <div class="header">pH Meter</div>
             <div class="content">
               <div>Ideal</>
@@ -2973,6 +3190,6 @@ html{
               Report
             </div></div></div><div class="item"><div class="item-content"><div class="item-icon"><img src="img/menu/Access Level.svg"></div> <div class="item-text">
               Access Lvl
-            </div></div></div></div></div></div></div></div></div></div><script defer src="/hmi/_nuxt/static/1624445463/state.js"></script><script src="/hmi/_nuxt/9ffc396.js" defer></script><script src="/hmi/_nuxt/15a940684cf2aaab9a1c.js" defer></script><script src="/hmi/_nuxt/019ca8e8eb34268d5ceb.js" defer></script><script src="/hmi/_nuxt/ab550ab792d7d01ccfec.js" defer></script><script src="/hmi/_nuxt/d6ab547cbe3a14ce4b2a.js" defer></script>
+            </div></div></div></div></div></div></div></div></div></div><script defer src="/hmi/_nuxt/static/1624473194/state.js"></script><script src="/hmi/_nuxt/660f15d.js" defer></script><script src="/hmi/_nuxt/d987ed3af00dee0e7a54.js" defer></script><script src="/hmi/_nuxt/73b125736fc14e6bb5d0.js" defer></script><script src="/hmi/_nuxt/d513693314f57e7ce378.js" defer></script><script src="/hmi/_nuxt/33547e50b049ac34ff16.js" defer></script>
   </body>
 </html>

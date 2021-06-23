@@ -17,6 +17,8 @@ body {
 }
 
 .navbar {
+    height: 74.3px;
+    min-height: 74.3px;
     @apply tw-bg-blue-800 tw-w-full tw-px-4 tw-py-2 tw-text-center tw-shadow-lg tw-text-gray-800 tw-flex tw-justify-between;
 
     & > .header {
@@ -45,6 +47,10 @@ body {
 
         &.red {
           @apply tw-bg-red-500;
+        }
+
+        &.selected {
+          @apply tw-bg-indigo-600;
         }
 
         &.clicked {

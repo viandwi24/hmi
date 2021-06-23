@@ -5,11 +5,12 @@
       <img src="img/logo.png" alt="Logo" class="header tw-inline-block tw-mt-1">
       <div class="page-title">
         Page 0{{ (activePage == 'overview' ? '1' : '2') }}
-        - Overview Waste Water Treatment Plant
+        - {{ (activePage == 'overview' ? 'Overview' : 'Submersible') }}
+        Waste Water Treatment Plant
       </div>
       <div class="menu">
         <div class="actions">
-          <div class="item">
+          <div class="item clicked" :class="`${(controls.showPanelInfo || controls.showPanelComponent) ? 'selected' : ''}`" @click="() => { controls.showPanelInfo = !controls.showPanelInfo; controls.showPanelComponent = !controls.showPanelComponent; }">
             <img src="img/menu/Item View.svg" class="tw-mt-2">
             <div>
               Item View
@@ -395,7 +396,8 @@ import {
   onMounted,
   onUnmounted,
   reactive,
-  ref
+  ref,
+  useContext
 } from '@nuxtjs/composition-api'
 
 import componentMT021 from '@/api/components/mto21.js'
@@ -410,6 +412,7 @@ import componentMSB06 from '@/api/components/msb06.js'
 
 export default {
   setup () {
+    const { app, route } = useContext()
     // menu footer
     const resetUi = () => {
       // components.forEach((e) => {
@@ -446,6 +449,7 @@ export default {
         text: 'Input Data',
         icon: 'Input Data',
         onClick: () => {
+          app.router.push('/input-data')
           // activePage.value = 'input-data'
         }
       },
@@ -454,6 +458,7 @@ export default {
         text: 'Report',
         icon: 'Report',
         onClick: () => {
+          app.router.push('/report')
           // activePage.value = 'report'
         }
       },
@@ -462,6 +467,7 @@ export default {
         text: 'Access Lvl',
         icon: 'Access Level',
         onClick: () => {
+          app.router.push('/access-level')
           // activePage.value = 'access-level'
         }
       }
@@ -477,8 +483,8 @@ export default {
       objY: 0
     })
     const showAlarmPanel = ref(false)
-    const activePage = ref('submersible')
-    // const activePage = ref('overview')
+    // const activePage = ref('submersible')
+    const activePage = ref('overview')
 
     // data
     const dataSwapantau = reactive([
@@ -956,8 +962,14 @@ export default {
       } else {
         saveOption()
       }
+
+      if (typeof route.value.query.page !== 'undefined') {
+        activePage.value = route.value.query.page
+      }
     })
     onUnmounted(() => {
+      forceRerender()
+      clearTimeout(timerRezise)
       document.removeEventListener('mousewheel', onWindowScroll)
       document.removeEventListener('keydown', onWindowKeyDown)
       document.removeEventListener('keyup', onWindowKeyUp)
@@ -1051,11 +1063,12 @@ export default {
       controls.showPanelComponent = !controls.showPanelComponent
     }
     const changeDataSwap = (i) => {
-      const item = dataSwapantau[i]
-      const newValue = prompt(`Masukan data ${item.text} (satuan ${item.unit})`, item.value)
-      if (newValue != null && newValue) {
-        dataSwapantau[i].value = newValue
-      }
+      app.router.push('/input-data')
+      // const item = dataSwapantau[i]
+      // const newValue = prompt(`Masukan data ${item.text} (satuan ${item.unit})`, item.value)
+      // if (newValue != null && newValue) {
+      //   dataSwapantau[i].value = newValue
+      // }
     }
 
     return {

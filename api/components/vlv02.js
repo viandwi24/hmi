@@ -6,7 +6,6 @@ export default {
   state: {
     open: false,
     alarm_1: false,
-    alarm_2: false,
     auto: false
   },
   meta: {
@@ -46,10 +45,7 @@ export default {
             render: item => `
               <div class="display">
                 <div class="display_text">
-                  <div class="badge-box ${(item.state.alarm_1) ? 'red' : ''}"></div> Circuit Breaker
-                </div>
-                <div class="display_text">
-                  <div class="badge-box ${(item.state.alarm_2) ? 'red' : ''}"></div> Disconnected
+                  <div class="badge-box ${(item.state.alarm_1) ? 'red' : ''}"></div> Feedback Failure
                 </div>
               </div>
             `,
