@@ -4,22 +4,25 @@
     <div class="navbar">
       <img src="img/logo.png" alt="Logo" class="header tw-inline-block tw-mt-1">
       <div class="page-title">
-        Page 01 - Overview Waste Water Treatment Plant
+        Page 0{{ (activePage == 'overview' ? '1' : '2') }}
+        - Overview Waste Water Treatment Plant
       </div>
-      <div class="actions">
-        <div class="item">
-          <img src="img/menu/Item View.svg" class="tw-mt-2">
-          <div>
-            Item View
+      <div class="menu">
+        <div class="actions">
+          <div class="item">
+            <img src="img/menu/Item View.svg" class="tw-mt-2">
+            <div>
+              Item View
+            </div>
+          </div>
+          <div class="item clicked" :class="`${(componentsHaveAlarm.length > 0) ? 'red' : ''}`" @click="showAlarmPanel = !showAlarmPanel">
+            <img src="img/menu/Alarm.svg">
+            <div>
+              Alarm
+            </div>
           </div>
         </div>
-        <div class="item" :class="`${(componentsHaveAlarm.length > 0) ? 'red' : ''}`">
-          <img src="img/menu/Alarm.svg">
-          <div>
-            Alarm
-          </div>
-        </div>
-        <div class="tw-flex tw-flex-row tw-space-x-2 tw-text-gray-200 tw-h-full tw-self-center">
+        <div class="tw-flex tw-flex-row tw-space-x-2 tw-text-gray-200 tw-h-full tw-self-center tw-pl-4">
           <div class="tw-self-center">
             <font-awesome-icon :icon="['fas', 'user']" class="tw-text-4xl tw-self-center" />
           </div>
@@ -34,7 +37,7 @@
         </div>
       </div>
     </div>
-    <div :key="renderComponent" class="screen tw-relative tw-flex-1" @scroll="onWindowScroll">
+    <div :key="renderComponent" class="screen tw-relative tw-flex-1">
       <div id="line-spotlight" class="tw-z-20" />
       <div class="controls left">
         <div class="controls-container">
@@ -190,7 +193,7 @@
           </div>
         </div>
       </div>
-      <div v-if="componentsHaveAlarm.length > 0" class="controls right danger">
+      <div v-if="showAlarmPanel" class="controls right danger">
         <div class="controls-container">
           <div class="group">
             <div class="header">
@@ -198,6 +201,9 @@
               <span class="tw-text-red-400">ALARM!!!</span>
             </div>
             <div class="content">
+              <div v-if="componentsHaveAlarm.length == 0">
+                None Component Have Alarm.
+              </div>
               <ul class="tw-list-disc tw-ml-4">
                 <li
                   v-for="(item, i) in componentsHaveAlarm"
@@ -254,27 +260,43 @@
         </div>
       </div>
       <div class="obj-container" :style="{ transform: `scale(${controls.objScale}) translate(${controls.objX}px, ${controls.objY}px)` }">
-        <img src="img/machine/all.png" class="overview">
+        <img v-if="activePage == 'overview'" src="img/machine/all.png" class="overview">
+        <img v-if="activePage == 'submersible'" src="img/machine/submersible.png" class="overview">
         <div class="layer-components">
           <div class="components">
-            <img
+            <div
               v-for="(item, i) in components"
-              :id="`component-${item.id}`"
               :key="i"
-              :src="`img/machine/${(item.onImgShow(item) == null) ? (item.meta.defaultImg) : item.onImgShow(item)}.png`"
-              :style="{ 'opacity': (item.onImgShow(item) == null ? 0 : 1) }"
-              class="component"
-              :class="{ 'active': (componentSelected != null && componentSelected.id === item.id) }"
-              :title="item.name"
-              :alt="item.name"
-              @click="componentClicked(item)"
+              :style="{
+                'visibility': (
+                  (typeof item.meta.page !== 'undefined') ? (item.meta.page === activePage ? 'visible' : 'hidden') : (activePage == 'overview' ? 'visible' : 'hidden')
+                )
+              }"
             >
+              <img
+                :id="`component-${item.id}`"
+                :src="`img/machine/${(item.onImgShow(item) == null) ? (item.meta.defaultImg) : item.onImgShow(item)}.png`"
+                :style="{
+                  'opacity': (item.onImgShow(item) == null ? 0 : 1)
+                }"
+                class="component"
+                :class="{ 'active': (componentSelected != null && componentSelected.id === item.id) }"
+                :title="item.name"
+                :alt="item.name"
+                @click="(typeof item.meta.componentSpot == 'undefined') ? componentClicked(item) : () => {}"
+              >
+            </div>
           </div>
           <div v-if="controls.showPanelComponent" class="panels">
             <div
               v-for="(item, i) in components"
               :id="`panel-${item.id}`"
               :key="i"
+              :style="{
+                'visibility': (
+                  (typeof item.meta.page !== 'undefined') ? (item.meta.page === activePage ? 'visible' : 'hidden') : (activePage == 'overview' ? 'visible' : 'hidden')
+                )
+              }"
               class="panel"
               :class="{ 'right': (typeof item.meta.panel != 'undefined' && item.meta.panel.position == 'right') }"
             >
@@ -284,21 +306,25 @@
           <div v-if="controls.showPanelInfo" class="panels">
             <div
               v-for="(item, i) in panels"
-              :id="`panel-${item.id}`"
               :key="i"
-              class="panel"
-              :class="`panel-${item.type} ${(typeof item.meta.direction != 'undefined' ? item.meta.direction : '')} ${(typeof item.class != 'undefined' ? item.class : '')}`"
             >
-              <div v-if="item.type == 'default'" class="panel-container" v-html="item.panel(item, components, this)" />
-              <div v-else-if="item.type == 'level'" class="tw-relative">
-                <div class="panel-container">
-                  <div class="percentage">
-                    {{ item.state.percent }}%
+              <div
+                :id="`panel-${item.id}`"
+                class="panel"
+                :class="`panel-${item.type} ${(typeof item.meta.direction != 'undefined' ? item.meta.direction : '')} ${(typeof item.class != 'undefined' ? item.class : '')}`"
+                :style="`${(typeof item.meta.page !== 'undefined' ? (item.meta.page === activePage ? '' : 'display: none;') : (activePage == 'overview' ? '' : 'display: none;') )}`"
+              >
+                <div v-if="item.type == 'default'" class="panel-container" v-html="item.panel(item, components, this)" />
+                <div v-else-if="item.type == 'level'" class="tw-relative">
+                  <div class="panel-container">
+                    <div class="percentage">
+                      {{ item.state.percent }}%
+                    </div>
+                    <div class="progress">
+                      <div class="progress-bar" :style="{ height: `${item.state.percent}%` }" />
+                    </div>
+                    <div>lvl</div>
                   </div>
-                  <div class="progress">
-                    <div class="progress-bar" :style="{ height: `${item.state.percent}%` }" />
-                  </div>
-                  <div>lvl</div>
                 </div>
               </div>
             </div>
@@ -347,7 +373,7 @@
         </div>
         <div v-else class="nav-container">
           <div v-for="(item, i) in footerMenu" :key="i" class="item">
-            <div class="item-content">
+            <div class="item-content" @click="item.onClick(item)">
               <div class="item-icon">
                 <img :src="`img/menu/${item.icon}.svg`">
               </div>
@@ -380,9 +406,80 @@ import componentMDC01 from '@/api/components/mdc01.js'
 import componentMCT01 from '@/api/components/mct01.js'
 import componentVLV01 from '@/api/components/vlv01.js'
 import componentVLV02 from '@/api/components/vlv02.js'
+import componentMSB06 from '@/api/components/msb06.js'
 
 export default {
   setup () {
+    // menu footer
+    const resetUi = () => {
+      // components.forEach((e) => {
+      //   try {
+      //     const a = document.querySelector(`#component-${e.id}`)
+      //     if (typeof a.dataset.originalWidth !== 'undefined') {
+      //       delete a.dataset.originalWidth
+      //     }
+      //   } catch (error) {
+      //   }
+      // })
+    }
+    const footerMenu = reactive([
+      {
+        id: 'footer-menu-1',
+        text: 'Overview',
+        icon: 'Overview',
+        onClick: () => {
+          activePage.value = 'overview'
+          resetUi()
+        }
+      },
+      {
+        id: 'footer-menu-2',
+        text: 'Submersible',
+        icon: 'Submersible',
+        onClick: () => {
+          activePage.value = 'submersible'
+          resetUi()
+        }
+      },
+      {
+        id: 'footer-menu-3',
+        text: 'Input Data',
+        icon: 'Input Data',
+        onClick: () => {
+          // activePage.value = 'input-data'
+        }
+      },
+      {
+        id: 'footer-menu-4',
+        text: 'Report',
+        icon: 'Report',
+        onClick: () => {
+          // activePage.value = 'report'
+        }
+      },
+      {
+        id: 'footer-menu-5',
+        text: 'Access Lvl',
+        icon: 'Access Level',
+        onClick: () => {
+          // activePage.value = 'access-level'
+        }
+      }
+    ])
+
+    // controls
+    const controls = reactive({
+      showControl: true,
+      showPanelInfo: true,
+      showPanelComponent: true,
+      objScale: 1,
+      objX: 0,
+      objY: 0
+    })
+    const showAlarmPanel = ref(false)
+    const activePage = ref('submersible')
+    // const activePage = ref('overview')
+
     // data
     const dataSwapantau = reactive([
       {
@@ -462,7 +559,8 @@ export default {
           position: {
             x: 400,
             y: 150
-          }
+          },
+          page: 'submersible'
         }
       },
       {
@@ -545,14 +643,6 @@ export default {
     ])
 
     // components
-    const controls = reactive({
-      showControl: true,
-      showPanelInfo: true,
-      showPanelComponent: true,
-      objScale: 1,
-      objX: 0,
-      objY: 0
-    })
     const componentSelected = ref(null)
     const components = reactive([
       componentVLV01,
@@ -564,7 +654,9 @@ export default {
       componentMT024,
 
       componentMDC01,
-      componentMCT01
+      componentMCT01,
+
+      componentMSB06
     ])
     const componentOnClose = (item) => {
       const menuDiv = document.querySelector('div.footer')
@@ -600,6 +692,12 @@ export default {
       })
       setTimeout(() => {
         componentSelected.value = item
+        if (typeof componentSelected.value.meta.page !== 'undefined') {
+          activePage.value = componentSelected.value.meta.page
+        } else {
+          activePage.value = 'overview'
+        }
+        resetUi()
         if (typeof item.onClick !== 'undefined') {
           item.onClick(item)
         }
@@ -693,83 +791,124 @@ export default {
         const overview = document.querySelector('img.overview')
         const overviewOriginal = 1920
         timerRezise = setInterval(() => {
-          const overviewResult = overview.clientWidth
-          // components ui generate pos
-          components.forEach((e) => {
-            // component
-            const a = document.querySelector(`#component-${e.id}`)
-            const clientOriginal = (typeof a.dataset.originalWidth === 'undefined') ? a.clientWidth : a.dataset.originalWidth
-            const clientResult = (overviewResult * clientOriginal) / overviewOriginal
-            const clientX = (overviewResult * e.meta.position.x) / overviewOriginal
-            const clientY = (overviewResult * e.meta.position.y) / overviewOriginal
-            a.dataset.originalWidth = clientOriginal
-            a.style.width = `${clientResult}px`
-            a.style.top = `${clientY}px`
-            a.style.left = `${clientX}px`
-            // panel
-            if (controls.showPanelComponent) {
-              const panelGap = 35
-              const panel = document.querySelector(`#panel-${e.id}`)
-              let panelY = 0
-              let panelX = 0
-              if (panel.classList.contains('right')) {
-                panelY = (clientY)
-                panelX = (clientX + (panelGap))
-              } else {
-                panelY = (clientY)
-                panelX = (clientX - (panel.clientWidth + panelGap))
+          try {
+            const overviewResult = overview.clientWidth
+            // components ui generate pos
+            components.forEach((e) => {
+              // component
+              const a = document.querySelector(`#component-${e.id}`)
+              const clientOriginal = (typeof a.dataset.originalWidth === 'undefined') ? a.clientWidth : a.dataset.originalWidth
+              const clientResult = (overviewResult * clientOriginal) / overviewOriginal
+              const clientX = (overviewResult * e.meta.position.x) / overviewOriginal
+              const clientY = (overviewResult * e.meta.position.y) / overviewOriginal
+              a.dataset.originalWidth = clientOriginal
+              a.style.width = `${clientResult}px`
+              a.style.top = `${clientY}px`
+              a.style.left = `${clientX}px`
+              // spot
+              if (typeof e.meta.componentSpot !== 'undefined') {
+                const componentSpot = e.meta.componentSpot
+                const componentDom = document.querySelector(`#component-${e.id}`)
+                if (typeof componentDom !== 'undefined') {
+                  if (componentDom.parentElement.lastElementChild.id !== 'spot') {
+                    const b = document.createElement('div')
+                    b.style.display = 'block'
+                    b.style.position = 'absolute'
+                    b.style.opacity = 0
+                    b.style.background = 'red'
+                    b.style.zIndex = '99'
+                    b.style.width = `${componentSpot.size.w}px`
+                    b.style.height = `${componentSpot.size.h}px`
+                    b.style.top = 0
+                    b.style.left = 0
+                    b.id = 'spot'
+                    b.addEventListener('click', () => componentClicked(e))
+                    componentDom.parentElement.appendChild(b)
+                  } else {
+                    const spotDom = componentDom.parentElement.lastElementChild
+                    const clientOriginal = (typeof spotDom.dataset.originalWidth === 'undefined') ? spotDom.clientWidth : spotDom.dataset.originalWidth
+                    const panelX = (overviewResult * componentSpot.position.x) / overviewOriginal
+                    const panelY = (overviewResult * componentSpot.position.y) / overviewOriginal
+                    spotDom.style.top = `${panelY}px`
+                    spotDom.style.left = `${panelX}px`
+                    const sizeW = (overviewResult * componentSpot.size.w) / overviewOriginal
+                    const sizeH = (overviewResult * componentSpot.size.h) / overviewOriginal
+                    spotDom.style.width = `${sizeW}px`
+                    spotDom.style.height = `${sizeH}px`
+                    spotDom.dataset.originalWidth = clientOriginal
+                  }
+                }
               }
 
-              // awe
-              panel.style.top = `${panelY}px`
-              panel.style.left = `${panelX}px`
+              // panel
+              if (controls.showPanelComponent) {
+                const panelGap = 35
+                const panel = document.querySelector(`#panel-${e.id}`)
+                let panelY = 0
+                let panelX = 0
+                if (panel.classList.contains('right')) {
+                  panelY = (clientY)
+                  panelX = (clientX + (panelGap))
+                } else {
+                  panelY = (clientY)
+                  panelX = (clientX - (panel.clientWidth + panelGap))
+                }
 
-              // ada
-              // const defaultScale = 1
-              // let scale = ((defaultScale) - Math.abs(defaultScale - controls.objScale))
-              // scale = (scale < 0.8) ? 0.8 : scale
-              // panel.style.transform = `scale(${scale})`
-            }
-          })
+                // awe
+                panel.style.top = `${panelY}px`
+                panel.style.left = `${panelX}px`
 
-          // panels ui generate pos
-          if (controls.showPanelInfo) {
-            panels.forEach((e) => {
-              const panel = document.querySelector(`#panel-${e.id}`)
-              const clientOriginal = (typeof panel.dataset.originalWidth === 'undefined') ? panel.clientWidth : panel.dataset.originalWidth
-              const panelX = (overviewResult * e.meta.position.x) / overviewOriginal
-              const panelY = (overviewResult * e.meta.position.y) / overviewOriginal
-              panel.style.top = `${panelY}px`
-              panel.style.left = `${panelX}px`
-              panel.dataset.originalWidth = clientOriginal
-              if (panel.classList.contains('top')) {
-                panel.style.top = `${(panelY - (getOffset(panel).height + 95))}px`
-                panel.style.left = `${(panelX - (panel.clientWidth / 2))}px`
-              } else if (panel.classList.contains('bottom')) {
-                panel.style.top = `${(panelY + (panel.clientHeight + 50))}px`
-                panel.style.left = `${(panelX - (panel.clientWidth / 2))}px`
+                // ada
+                // const defaultScale = 1
+                // let scale = ((defaultScale) - Math.abs(defaultScale - controls.objScale))
+                // scale = (scale < 0.8) ? 0.8 : scale
+                // panel.style.transform = `scale(${scale})`
               }
             })
-          }
 
-          if (componentSelected.value !== null) {
-            if (typeof componentSelected.value.meta.componentSpot !== 'undefined') {
-              const componentSpot = componentSelected.value.meta.componentSpot
-              adjustLine(
-                componentSpot,
-                document.querySelector('div.footer'),
-                '#dddddd', 1
-              )
-            } else {
-              adjustLine(
-                document.querySelector(`#component-${componentSelected.value.id}`),
-                document.querySelector('div.footer'),
-                '#dddddd', 1
-              )
+            // panels ui generate pos
+            if (controls.showPanelInfo) {
+              panels.forEach((e) => {
+                const panel = document.querySelector(`#panel-${e.id}`)
+                if (typeof panel === 'undefined') {
+                  return
+                }
+                const clientOriginal = (typeof panel.dataset.originalWidth === 'undefined') ? panel.clientWidth : panel.dataset.originalWidth
+                const panelX = (overviewResult * e.meta.position.x) / overviewOriginal
+                const panelY = (overviewResult * e.meta.position.y) / overviewOriginal
+                panel.style.top = `${panelY}px`
+                panel.style.left = `${panelX}px`
+                panel.dataset.originalWidth = clientOriginal
+                if (panel.classList.contains('top')) {
+                  panel.style.top = `${(panelY - (getOffset(panel).height + 95))}px`
+                  panel.style.left = `${(panelX - (panel.clientWidth / 2))}px`
+                } else if (panel.classList.contains('bottom')) {
+                  panel.style.top = `${(panelY + (panel.clientHeight + 50))}px`
+                  panel.style.left = `${(panelX - (panel.clientWidth / 2))}px`
+                }
+              })
             }
+
+            if (componentSelected.value !== null) {
+              if (typeof componentSelected.value.meta.componentSpot !== 'undefined') {
+                const componentDom = document.querySelector(`#component-${componentSelected.value.id}`)
+                adjustLine(
+                  componentDom.parentElement.lastElementChild,
+                  document.querySelector('div.footer'),
+                  '#dddddd', 1
+                )
+              } else {
+                adjustLine(
+                  document.querySelector(`#component-${componentSelected.value.id}`),
+                  document.querySelector('div.footer'),
+                  '#dddddd', 1
+                )
+              }
+            }
+          } catch (errTwo) {
           }
         }, 50)
-      } catch (error) {
+      } catch (errOne) {
         console.log('ane dah')
       }
     }
@@ -841,6 +980,8 @@ export default {
           }
         })
       })
+      // components[1].state.alarm_1 = !components[1].state.alarm_1
+      // setTimeout(() => console.log(componentSelected), 1000)
     }
     const toggleChLvl = () => {
       panels.forEach((panel, i) => {
@@ -917,36 +1058,9 @@ export default {
       }
     }
 
-    // menu footer
-    const footerMenu = reactive([
-      {
-        id: 'footer-menu-1',
-        text: 'Overview',
-        icon: 'Overview'
-      },
-      {
-        id: 'footer-menu-2',
-        text: 'Submersible',
-        icon: 'Submersible'
-      },
-      {
-        id: 'footer-menu-3',
-        text: 'Input Data',
-        icon: 'Input Data'
-      },
-      {
-        id: 'footer-menu-4',
-        text: 'Report',
-        icon: 'Report'
-      },
-      {
-        id: 'footer-menu-5',
-        text: 'Access Lvl',
-        icon: 'Access Level'
-      }
-    ])
-
     return {
+      activePage,
+      showAlarmPanel,
       footerMenu,
       components,
       componentsHaveAlarm,

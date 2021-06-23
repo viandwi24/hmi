@@ -1,21 +1,31 @@
 export default {
   type: 'motor',
-  id: 'mdc01',
-  name: 'M.DC01',
-  description: 'Motor DECANBOX',
+  id: 'msb06',
+  name: 'M.SB06',
+  description: 'Motor SUMERSIBLE',
   state: {
-    active: false,
+    active: true,
     alarm_1: false,
     alarm_2: false,
     auto: false
   },
   meta: {
-    defaultImg: 'MDC01_Run',
-    img: 'MDC01',
+    defaultImg: 'MSB06_Run',
+    img: 'MSB06',
     position: {
-      x: 1206, y: 529
+      x: 531.13, y: 413
     },
-    page: 'overview'
+    componentSpot: {
+      position: {
+        x: 1710,
+        y: 434
+      },
+      size: {
+        w: 30,
+        h: 53
+      }
+    },
+    page: 'submersible'
   },
   checkAlarm: (item) => {
     return (item.state.alarm_1 || item.state.alarm_2)

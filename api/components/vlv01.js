@@ -15,6 +15,16 @@ export default {
     position: {
       x: 669, y: 255
     },
+    componentSpot: {
+      position: {
+        x: 671,
+        y: 256
+      },
+      size: {
+        w: 26,
+        h: 24
+      }
+    },
     panel: {
       position: 'right'
     }
@@ -36,8 +46,8 @@ export default {
       {
         name: 'Control',
         child: [
-          { type: 'button', name: 'button_start', class: 'icon green', text: '', icon: ['fas', 'play'], disable: (item.state.active || item.state.auto), onClick: (item) => { item.state.active = !item.state.active } },
-          { type: 'button', name: 'button_stop', class: 'icon red', text: '', icon: ['fas', 'stop'], disable: (!item.state.active || item.state.auto), onClick: (item) => { item.state.active = !item.state.active } }
+          { type: 'button', name: 'button_start', class: 'icon green', text: '', icon: ['fas', 'play'], disable: (item.state.open || item.state.auto), onClick: (item) => { item.state.open = !item.state.open } },
+          { type: 'button', name: 'button_stop', class: 'icon red', text: '', icon: ['fas', 'stop'], disable: (!item.state.open || item.state.auto), onClick: (item) => { item.state.open = !item.state.open } }
         ]
       },
       {

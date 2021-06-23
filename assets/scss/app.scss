@@ -26,12 +26,17 @@ body {
       @apply tw-font-semibold tw-text-xl tw-text-gray-100 tw-self-center;
     }
 
+    & .menu {
+      @apply tw-flex tw-flex-row tw-space-x-4 tw-divide-x tw-divide-blue-500;
+    }
+
     & .actions {
       @apply tw-flex tw-flex-row tw-space-x-4;
       & > .item {
         @apply tw-text-center tw-rounded tw-p-2 tw-text-gray-100;
         background-color: rgba(37, 99, 235, 1);
         font-size: 10px;
+
         & > img {
           display: inline-block;
         }
@@ -40,6 +45,20 @@ body {
 
         &.red {
           @apply tw-bg-red-500;
+        }
+
+        &.clicked {
+          @apply tw-cursor-pointer;
+
+          &:hover {
+            @apply tw-bg-blue-700;
+          }
+
+          &.red {
+            &:hover {
+              @apply tw-bg-red-600;
+            }
+          }
         }
       }
     }
@@ -75,14 +94,14 @@ body .obj-container {
         height: 100%;
 
         & > .components {
-            & > .component {
+            & .component {
                 position: absolute;
                 z-index: 10;
             }
         }
 
         & > .panels {
-            & > .panel {
+            & .panel {
                 @apply tw-border tw-border-gray-200;
                 background: rgba($color: #000000, $alpha: .8);
                 display: inline-block;
@@ -98,7 +117,7 @@ body .obj-container {
                     @apply tw-z-30;
                 }
 
-                & > .panel-container {
+                & .panel-container {
                     & > .header {
                         @apply tw-bg-yellow-400 tw-text-indigo-800 tw-font-semibold tw-text-center tw-overflow-ellipsis tw-truncate tw-text-xs;
                         font-size: 8px;
@@ -130,7 +149,7 @@ body .obj-container {
                 &.top {
                   border-top-left-radius: 5px;
                   border-top-right-radius: 5px;
-                  & > .panel-container {
+                  & .panel-container {
                     & > .header {
                       border-top-left-radius: 5px;
                       border-top-right-radius: 5px;
@@ -154,7 +173,7 @@ body .obj-container {
                 &.bottom {
                   border-top-left-radius: 5px;
                   border-top-right-radius: 5px;
-                  & > .panel-container {
+                  & .panel-container {
                     & > .header {
                       border-top-left-radius: 5px;
                       border-top-right-radius: 5px;
@@ -178,7 +197,7 @@ body .obj-container {
                 &.right {
                   border-top-left-radius: 0;
                   border-top-right-radius: 5px;
-                  & > .panel-container {
+                  & .panel-container {
                     & > .header {
                       border-top-left-radius: 0;
                       border-top-right-radius: 5px;
@@ -197,7 +216,7 @@ body .obj-container {
                 }
 
                 &.no-line {
-                  & > .panel-container {
+                  & .panel-container {
                     &::after {
                       content: unset;
                       display: none;
