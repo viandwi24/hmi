@@ -15,6 +15,16 @@ export default {
     position: {
       x: 1206, y: 529
     },
+    componentSpot: {
+      position: {
+        x: 1204,
+        y: 532
+      },
+      size: {
+        w: 38,
+        h: 30
+      }
+    },
     page: 'overview'
   },
   checkAlarm: (item) => {

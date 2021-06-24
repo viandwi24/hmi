@@ -650,6 +650,21 @@ export default {
         }
       },
       {
+        type: 'level',
+        id: 'iceas',
+        state: {
+          percent: 30
+        },
+        meta: {
+          position: {
+            x: 941,
+            y: 366
+          },
+          direction: 'top',
+          page: 'overview'
+        }
+      },
+      {
         type: 'default',
         id: 'debit_inlet',
         state: {
@@ -1093,15 +1108,13 @@ export default {
                     const spotW = (overviewResult * componentSpot.size.w) / overviewOriginal
                     const spotH = (overviewResult * componentSpot.size.h) / overviewOriginal
                     // const spotDom = componentDom.parentElement.lastElementChild
-                    // if (panel.classList.contains('right')) {
-                    //   panelY = (spotX)
-                    //   panelX = (spotY + (panelGap))
-                    // } else {
-                    //   panelY = (clientY)
-                    //   panelX = (clientX - (panel.clientWidth + panelGap))
-                    // }
-                    panelY = (spotY + (spotH / 2))
-                    panelX = (spotX + ((spotW / 2) + panelGap))
+                    if (panel.classList.contains('right')) {
+                      panelY = (spotY + (spotH / 2))
+                      panelX = (spotX + ((spotW / 2) + panelGap))
+                    } else {
+                      panelY = (spotY + (spotH / 2))
+                      panelX = (spotX + ((spotW / 2)) - (panel.clientWidth + panelGap + 10))
+                    }
                   }
                 }
 
