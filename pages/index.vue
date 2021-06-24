@@ -758,9 +758,9 @@ export default {
         meta: {
           position: {
             x: 560,
-            y: 460
+            y: 370
           },
-          direction: 'bottom-left',
+          direction: 'bottom-left large',
           page: 'overview'
         }
       },
