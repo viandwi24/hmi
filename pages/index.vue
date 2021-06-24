@@ -219,7 +219,7 @@
           </div>
         </div>
       </div>
-      <div class="controls lg bottom left">
+      <div class="controls lg bottom left data-swapantau" @click="toggleDataSwap">
         <div class="controls-container">
           <div class="group">
             <div class="header tw-text-center">
@@ -264,6 +264,25 @@
         <img v-if="activePage == 'overview'" src="img/machine/all.png" class="overview">
         <img v-if="activePage == 'submersible'" src="img/machine/submersible.png" class="overview">
         <div class="layer-components">
+          <div class="area-name">
+            <div
+              v-for="(item, i) in areasName"
+              :id="`area-${item.id}`"
+              :key="i"
+              :class="(typeof item.meta.direction != 'undefined' ? item.meta.direction : 'bottom-left')"
+            >
+              <div
+                class="area-container"
+                :style="{
+                  'visibility': (
+                    (typeof item.meta.page !== 'undefined') ? (item.meta.page === activePage ? 'visible' : 'hidden') : (activePage == 'overview' ? 'visible' : 'hidden')
+                  )
+                }"
+              >
+                {{ item.text }}
+              </div>
+            </div>
+          </div>
           <div class="components">
             <div
               v-for="(item, i) in components"
@@ -480,7 +499,8 @@ export default {
       showPanelComponent: true,
       objScale: 1,
       objX: 0,
-      objY: 0
+      objY: 0,
+      showDataSwap: true
     })
     const showAlarmPanel = ref(false)
     // const activePage = ref('submersible')
@@ -563,10 +583,41 @@ export default {
         },
         meta: {
           position: {
-            x: 400,
-            y: 150
+            x: 445,
+            y: 237
           },
-          page: 'submersible'
+          direction: 'top',
+          page: 'overview'
+        }
+      },
+      {
+        type: 'level',
+        id: 'costic',
+        state: {
+          percent: 80
+        },
+        meta: {
+          position: {
+            x: 697,
+            y: 152
+          },
+          direction: 'bottom',
+          page: 'overview'
+        }
+      },
+      {
+        type: 'level',
+        id: 'decan-box',
+        state: {
+          percent: 80
+        },
+        meta: {
+          position: {
+            x: 1305,
+            y: 335
+          },
+          direction: 'bottom',
+          page: 'overview'
         }
       },
       {
@@ -628,14 +679,14 @@ export default {
         },
         meta: {
           position: {
-            x: 730,
+            x: 690,
             y: 307
             // x: 665,
             // y: 307
           },
-          direction: 'top'
+          direction: 'bottom'
         },
-        class: 'no-line',
+        // class: 'no-line',
         panel: (item) => {
           return `
             <div class="header">pH Meter</div>
@@ -644,6 +695,116 @@ export default {
               <div class="tw-text-lg">${item.state.meter}</>
             </div>
           `
+        }
+      }
+    ])
+    const areasName = reactive([
+      {
+        id: 'tanki',
+        text: 'Tangki Penampung',
+        meta: {
+          position: {
+            x: 445,
+            y: 237
+          },
+          direction: 'bottom-left',
+          page: 'overview'
+        }
+      },
+      {
+        id: 'oil-sludge',
+        text: 'Oil Sludge',
+        meta: {
+          position: {
+            x: 519,
+            y: 338
+          },
+          direction: 'bottom-left',
+          page: 'overview'
+        }
+      },
+      {
+        id: 'influent',
+        text: 'Influent',
+        meta: {
+          position: {
+            x: 560,
+            y: 380
+          },
+          direction: 'bottom-left',
+          page: 'overview'
+        }
+      },
+      {
+        id: 'pre-react',
+        text: 'Pre React',
+        meta: {
+          position: {
+            x: 647,
+            y: 406
+          },
+          direction: 'bottom-left',
+          page: 'overview'
+        }
+      },
+      {
+        id: 'iceas',
+        text: 'Iceas',
+        meta: {
+          position: {
+            x: 881,
+            y: 513
+          },
+          direction: 'bottom-left',
+          page: 'overview'
+        }
+      },
+      {
+        id: 'costic',
+        text: 'Costic',
+        meta: {
+          position: {
+            x: 697,
+            y: 142
+          },
+          direction: 'top-right',
+          page: 'overview'
+        }
+      },
+      {
+        id: 'kultur',
+        text: 'Kultur',
+        meta: {
+          position: {
+            x: 1481,
+            y: 588
+          },
+          direction: 'top-right large',
+          page: 'overview'
+        }
+      },
+      {
+        id: 'decan-box',
+        text: 'Decan Box',
+        meta: {
+          position: {
+            x: 1305,
+            y: 435
+          },
+          direction: 'top-right large',
+          page: 'overview'
+        }
+      },
+      {
+        id: 'holding',
+        text: 'Holding',
+        meta: {
+          position: {
+            x: 1239,
+            y: 560
+          },
+          direction: 'top-left extra-large',
+          page: 'overview'
         }
       }
     ])
@@ -799,6 +960,32 @@ export default {
         timerRezise = setInterval(() => {
           try {
             const overviewResult = overview.clientWidth
+
+            // areas name
+            areasName.forEach((e) => {
+              const area = document.querySelector(`#area-${e.id}`)
+              if (typeof area === 'undefined') {
+                return
+              }
+              const clientOriginal = (typeof area.dataset.originalWidth === 'undefined') ? area.clientWidth : area.dataset.originalWidth
+              const areaX = (overviewResult * e.meta.position.x) / overviewOriginal
+              const areaY = (overviewResult * e.meta.position.y) / overviewOriginal
+              area.dataset.originalWidth = clientOriginal
+              if (area.classList.contains('bottom-left')) {
+                area.style.top = `${(areaY + (25))}px`
+                area.style.left = `${((areaX) - (area.clientWidth + 90))}px`
+              } else if (area.classList.contains('top-right') && area.classList.contains('large')) {
+                area.style.top = `${(areaY - (165))}px`
+                area.style.left = `${((areaX) + 90)}px`
+              } else if (area.classList.contains('top-left') && area.classList.contains('extra-large')) {
+                area.style.top = `${(areaY - (265))}px`
+                area.style.left = `${((areaX) - 120)}px`
+              } else if (area.classList.contains('top-right')) {
+                area.style.top = `${(areaY - (25))}px`
+                area.style.left = `${((areaX) + 90)}px`
+              }
+            })
+
             // components ui generate pos
             components.forEach((e) => {
               // component
@@ -885,12 +1072,26 @@ export default {
                 panel.style.top = `${panelY}px`
                 panel.style.left = `${panelX}px`
                 panel.dataset.originalWidth = clientOriginal
-                if (panel.classList.contains('top')) {
-                  panel.style.top = `${(panelY - (getOffset(panel).height + 95))}px`
+                if (panel.classList.contains('panel-level')) {
+                  panel.style.top = `${(panelY - (panel.clientHeight))}px`
                   panel.style.left = `${(panelX - (panel.clientWidth / 2))}px`
-                } else if (panel.classList.contains('bottom')) {
-                  panel.style.top = `${(panelY + (panel.clientHeight + 50))}px`
-                  panel.style.left = `${(panelX - (panel.clientWidth / 2))}px`
+                  // if (panel.classList.contains('top')) {
+                  //   panel.style.top = `${(panelY - (panel.clientHeight))}px`
+                  //   panel.style.left = `${(panelX - (panel.clientWidth / 2))}px`
+                  // } else {
+                  //   panel.style.top = `${(panelY)}px`
+                  //   panel.style.left = `${(panelX - (panel.clientWidth / 2))}px`
+                  // }
+                }
+
+                if (panel.classList.contains('panel-default')) {
+                  if (panel.classList.contains('top')) {
+                    panel.style.top = `${(panelY - (getOffset(panel).height + 95))}px`
+                    panel.style.left = `${(panelX - (panel.clientWidth / 2))}px`
+                  } else if (panel.classList.contains('bottom')) {
+                    panel.style.top = `${(panelY + (panel.clientHeight + 50))}px`
+                    panel.style.left = `${(panelX - (panel.clientWidth / 2))}px`
+                  }
                 }
               })
             }
@@ -959,6 +1160,12 @@ export default {
       // componentClicked(components[0])
       if (!controls.showControl) {
         togglePanelLeft(false)
+      } else {
+        saveOption()
+      }
+
+      if (!controls.showDataSwap) {
+        toggleDataSwap()
       } else {
         saveOption()
       }
@@ -1062,6 +1269,17 @@ export default {
     const togglePanelComponent = () => {
       controls.showPanelComponent = !controls.showPanelComponent
     }
+    const toggleDataSwap = () => {
+      const e = document.querySelector('.data-swapantau')
+      if (e.classList.contains('collapsed')) {
+        e.classList.remove('collapsed')
+        controls.showDataSwap = true
+      } else {
+        e.classList.add('collapsed')
+        controls.showDataSwap = false
+      }
+      saveOption()
+    }
     const changeDataSwap = (i) => {
       app.router.push('/input-data')
       // const item = dataSwapantau[i]
@@ -1072,6 +1290,7 @@ export default {
     }
 
     return {
+      areasName,
       activePage,
       showAlarmPanel,
       footerMenu,
@@ -1091,6 +1310,7 @@ export default {
       toggleChLvl,
       togglePanelComponent,
       togglePanelInfo,
+      toggleDataSwap,
       imgClick,
       dataSwapantau,
       changeDataSwap
