@@ -3,7 +3,7 @@
     <div class="navbar">
       <img src="img/logo.png" alt="Logo" class="header tw-inline-block tw-mt-1">
       <div class="page-title">
-        Page 04 - Access Level
+        Page 05 - Access Level
       </div>
       <div class="menu">
         <div class="tw-flex tw-flex-row tw-space-x-2 tw-text-gray-200 tw-h-full tw-self-center tw-pl-4">

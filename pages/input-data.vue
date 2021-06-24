@@ -22,8 +22,71 @@
       </div>
     </div>
     <div class="screen tw-relative tw-flex-1">
-      <div class="tw-bg-gray-200 tw-shadow-lg tw-rounded tw-mx-40 tw-my-20 tw-flex tw-flex-col tw-overflow-hidden">
-        <div style="display: flex; flex: 1 1 0%;overflow-y: auto;">
+      <div class="tw-bg-gray-200 tw-shadow-lg tw-rounded tw-mx-40 tw-my-10 tw-flex tw-flex-col tw-overflow-hidden">
+        <div style="display: flex; flex: 1 1 0%;overflow-y: auto;" class="tw-flex-col">
+          <div class="tw-text-center tw-bg-gray-300 tw-font-semibold tw-py-4">
+            Debit Inlet
+          </div>
+          <table class="shadow-lg tw-w-full tw-mb-12">
+            <tr>
+              <th class="tw-bg-blue-500 tw-text-gray-100 tw-border tw-border-gray-300 tw-text-left tw-px-8 tw-py-4">
+                Flow
+              </th>
+              <th class="tw-bg-blue-500 tw-text-gray-100 tw-border tw-border-gray-300 tw-text-left tw-px-8 tw-py-4">
+                Totalizer
+              </th>
+            </tr>
+            <tr class="hover:tw-text-gray-800 hover:tw-bg-gray-200">
+              <td class="tw-border tw-border-gray-300 tw-px-8 tw-py-4">
+                <input
+                  class="tw-shadow tw-appearance-none tw-border tw-rounded tw-w-full tw-py-2 tw-px-3 tw-text-gray-700 tw-leading-tight focus:tw-outline-none focus:tw-shadow-outline"
+                  type="text"
+                  placeholder="Flow value..."
+                >
+              </td>
+              <td class="tw-border tw-border-gray-300 tw-px-8 tw-py-4">
+                <input
+                  class="tw-shadow tw-appearance-none tw-border tw-rounded tw-w-full tw-py-2 tw-px-3 tw-text-gray-700 tw-leading-tight focus:tw-outline-none focus:tw-shadow-outline"
+                  type="text"
+                  placeholder="Totalizer value..."
+                >
+              </td>
+            </tr>
+          </table>
+
+          <div class="tw-text-center tw-bg-gray-300 tw-font-semibold tw-py-4">
+            Debit Outlet
+          </div>
+          <table class="shadow-lg tw-w-full tw-mb-12">
+            <tr>
+              <th class="tw-bg-blue-500 tw-text-gray-100 tw-border tw-border-gray-300 tw-text-left tw-px-8 tw-py-4">
+                Flow
+              </th>
+              <th class="tw-bg-blue-500 tw-text-gray-100 tw-border tw-border-gray-300 tw-text-left tw-px-8 tw-py-4">
+                Totalizer
+              </th>
+            </tr>
+            <tr class="hover:tw-text-gray-800 hover:tw-bg-gray-200">
+              <td class="tw-border tw-border-gray-300 tw-px-8 tw-py-4">
+                <input
+                  class="tw-shadow tw-appearance-none tw-border tw-rounded tw-w-full tw-py-2 tw-px-3 tw-text-gray-700 tw-leading-tight focus:tw-outline-none focus:tw-shadow-outline"
+                  type="text"
+                  placeholder="Flow value..."
+                >
+              </td>
+              <td class="tw-border tw-border-gray-300 tw-px-8 tw-py-4">
+                <input
+                  class="tw-shadow tw-appearance-none tw-border tw-rounded tw-w-full tw-py-2 tw-px-3 tw-text-gray-700 tw-leading-tight focus:tw-outline-none focus:tw-shadow-outline"
+                  type="text"
+                  placeholder="Totalizer value..."
+                >
+              </td>
+            </tr>
+          </table>
+
+          <div class="tw-text-center tw-bg-gray-300 tw-font-semibold tw-py-4">
+            Data Swapantau Ipal
+          </div>
           <table class="shadow-lg tw-w-full">
             <tr>
               <th class="tw-bg-blue-500 tw-text-gray-100 tw-border tw-border-gray-300 tw-text-left tw-px-8 tw-py-4">
