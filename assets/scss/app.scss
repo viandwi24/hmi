@@ -241,7 +241,6 @@ body .obj-container {
                     // border: none;
                     // background: none;
                     width: auto;
-                    position: relative;
                     color: theme('colors.gray.100');
                     border-color: rgba($color: #f3f4f6, $alpha: .7  );
 
@@ -314,6 +313,15 @@ body .obj-container {
                     height: 25px;
                     top: -15px;
                     right: -90px;
+                }
+              }
+
+              &.large {
+                & > .area-container {
+                  &::before {
+                    height: 125px;
+                    top: -115px;
+                  }
                 }
               }
             }

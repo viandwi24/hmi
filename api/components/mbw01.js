@@ -1,7 +1,7 @@
 export default {
   type: 'motor',
-  id: 'bw01',
-  name: 'BW01',
+  id: 'mbw01',
+  name: 'M.BW01',
   description: 'Motor BLOWER',
   state: {
     active: false,
@@ -10,20 +10,23 @@ export default {
     auto: false
   },
   meta: {
-    defaultImg: 'BW01_Run',
-    img: 'BW01',
+    defaultImg: 'MBW01_Run',
+    img: 'MBW01',
     position: {
       x: 519, y: 131
     },
     componentSpot: {
       position: {
-        x: 1254,
-        y: 749
+        x: 1273,
+        y: 757
       },
       size: {
-        w: 76,
-        h: 76
+        w: 54,
+        h: 68
       }
+    },
+    panel: {
+      position: 'right'
     }
   },
   checkAlarm: (item) => {
@@ -43,7 +46,23 @@ export default {
       {
         name: 'Control',
         child: [
-          { type: 'button', name: 'button_start', class: 'icon green', text: '', icon: ['fas', 'play'], disable: (item.state.active || item.state.auto), onClick: (item) => { item.state.active = !item.state.active } },
+          {
+            type: 'button',
+            name: 'button_start',
+            class: 'icon green',
+            text: '',
+            icon: ['fas', 'play'],
+            disable: ((item.state.active || item.state.auto)),
+            onClick: (item, components) => {
+              const mbw02 = components.find(e => e.id === 'mbw02')
+              if (mbw02) {
+                if (mbw02.state.active) {
+                  return
+                }
+              }
+              item.state.active = !item.state.active
+            }
+          },
           { type: 'button', name: 'button_stop', class: 'icon red', text: '', icon: ['fas', 'stop'], disable: (!item.state.active || item.state.auto), onClick: (item) => { item.state.active = !item.state.active } }
         ]
       },
@@ -80,7 +99,7 @@ export default {
     let name = `${item.meta.img}`
     if (item.state.alarm_1) {
       name += '_Alarm'
-    } else if (item.state.open) {
+    } else if (item.state.active) {
       name += '_Run'
     } else {
       return null

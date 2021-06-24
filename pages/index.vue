@@ -326,25 +326,22 @@
           <div v-if="controls.showPanelInfo" class="panels">
             <div
               v-for="(item, i) in panels"
+              :id="`panel-${item.id}`"
               :key="i"
+              class="panel"
+              :class="`panel-${item.type} ${(typeof item.meta.direction != 'undefined' ? item.meta.direction : '')} ${(typeof item.class != 'undefined' ? item.class : '')}`"
+              :style="`${(typeof item.meta.page !== 'undefined' ? (item.meta.page === activePage ? '' : 'display: none;') : (activePage == 'overview' ? '' : 'display: none;') )}`"
             >
-              <div
-                :id="`panel-${item.id}`"
-                class="panel"
-                :class="`panel-${item.type} ${(typeof item.meta.direction != 'undefined' ? item.meta.direction : '')} ${(typeof item.class != 'undefined' ? item.class : '')}`"
-                :style="`${(typeof item.meta.page !== 'undefined' ? (item.meta.page === activePage ? '' : 'display: none;') : (activePage == 'overview' ? '' : 'display: none;') )}`"
-              >
-                <div v-if="item.type == 'default'" class="panel-container" v-html="item.panel(item, components, this)" />
-                <div v-else-if="item.type == 'level'" class="tw-relative">
-                  <div class="panel-container">
-                    <div class="percentage">
-                      {{ item.state.percent }}%
-                    </div>
-                    <div class="progress">
-                      <div class="progress-bar" :style="{ height: `${item.state.percent}%` }" />
-                    </div>
-                    <div>lvl</div>
+              <div v-if="item.type == 'default'" class="panel-container" v-html="item.panel(item, components, this)" />
+              <div v-else-if="item.type == 'level'" class="tw-relative">
+                <div class="panel-container">
+                  <div class="percentage">
+                    {{ item.state.percent }}%
                   </div>
+                  <div class="progress">
+                    <div class="progress-bar" :style="{ height: `${item.state.percent}%` }" />
+                  </div>
+                  <div>lvl</div>
                 </div>
               </div>
             </div>
@@ -363,12 +360,12 @@
                 </div>
                 <div class="group-content">
                   <div v-for="(item, j) in group.child" :key="j" :class="(typeof group.class == 'undefined' ? '' : group.class)">
-                    <button v-if="item.type == 'button'" :class="item.class" :disabled="item.disable" @click="item.onClick(componentSelected, item)">
+                    <button v-if="item.type == 'button'" :class="item.class" :disabled="item.disable" @click="item.onClick(componentSelected, components)">
                       <font-awesome-icon v-if="item.icon" :icon="item.icon" class="tw-mx-1" />
                       <span>{{ item.text }}</span>
                     </button>
                     <div v-else-if="item.type == 'display'">
-                      <div v-html="item.render(componentSelected)" />
+                      <div v-html="item.render(componentSelected, components)" />
                     </div>
                   </div>
                 </div>
@@ -419,6 +416,8 @@ import {
   useContext
 } from '@nuxtjs/composition-api'
 
+import componentMBW01 from '@/api/components/mbw01.js'
+import componentMBW02 from '@/api/components/mbw02.js'
 import componentMT021 from '@/api/components/mto21.js'
 import componentMT022 from '@/api/components/mto22.js'
 import componentMT023 from '@/api/components/mto23.js'
@@ -594,12 +593,12 @@ export default {
         type: 'level',
         id: 'costic',
         state: {
-          percent: 80
+          percent: 30
         },
         meta: {
           position: {
-            x: 697,
-            y: 152
+            x: 690,
+            y: 146
           },
           direction: 'bottom',
           page: 'overview'
@@ -614,7 +613,37 @@ export default {
         meta: {
           position: {
             x: 1305,
-            y: 335
+            y: 415
+          },
+          direction: 'bottom',
+          page: 'overview'
+        }
+      },
+      {
+        type: 'level',
+        id: 'influent',
+        state: {
+          percent: 80
+        },
+        meta: {
+          position: {
+            x: 559,
+            y: 460
+          },
+          direction: 'top',
+          page: 'overview'
+        }
+      },
+      {
+        type: 'level',
+        id: 'kultur',
+        state: {
+          percent: 50
+        },
+        meta: {
+          position: {
+            x: 1481,
+            y: 580
           },
           direction: 'bottom',
           page: 'overview'
@@ -729,7 +758,7 @@ export default {
         meta: {
           position: {
             x: 560,
-            y: 380
+            y: 460
           },
           direction: 'bottom-left',
           page: 'overview'
@@ -743,7 +772,7 @@ export default {
             x: 647,
             y: 406
           },
-          direction: 'bottom-left',
+          direction: 'bottom-left large',
           page: 'overview'
         }
       },
@@ -764,8 +793,8 @@ export default {
         text: 'Costic',
         meta: {
           position: {
-            x: 697,
-            y: 142
+            x: 690,
+            y: 146
           },
           direction: 'top-right',
           page: 'overview'
@@ -812,6 +841,9 @@ export default {
     // components
     const componentSelected = ref(null)
     const components = reactive([
+      componentMBW02,
+      componentMBW01,
+
       componentVLV01,
       componentVLV02,
 
@@ -971,7 +1003,10 @@ export default {
               const areaX = (overviewResult * e.meta.position.x) / overviewOriginal
               const areaY = (overviewResult * e.meta.position.y) / overviewOriginal
               area.dataset.originalWidth = clientOriginal
-              if (area.classList.contains('bottom-left')) {
+              if (area.classList.contains('bottom-left') && area.classList.contains('large')) {
+                area.style.top = `${(areaY + (125))}px`
+                area.style.left = `${((areaX) - (area.clientWidth + 90))}px`
+              } else if (area.classList.contains('bottom-left')) {
                 area.style.top = `${(areaY + (25))}px`
                 area.style.left = `${((areaX) - (area.clientWidth + 90))}px`
               } else if (area.classList.contains('top-right') && area.classList.contains('large')) {
@@ -994,6 +1029,7 @@ export default {
               const clientResult = (overviewResult * clientOriginal) / overviewOriginal
               const clientX = (overviewResult * e.meta.position.x) / overviewOriginal
               const clientY = (overviewResult * e.meta.position.y) / overviewOriginal
+              const clientH = (overviewResult * clientResult) / overviewOriginal
               a.dataset.originalWidth = clientOriginal
               a.style.width = `${clientResult}px`
               a.style.top = `${clientY}px`
@@ -1039,12 +1075,34 @@ export default {
                 const panel = document.querySelector(`#panel-${e.id}`)
                 let panelY = 0
                 let panelX = 0
-                if (panel.classList.contains('right')) {
-                  panelY = (clientY)
-                  panelX = (clientX + (panelGap))
-                } else {
-                  panelY = (clientY)
-                  panelX = (clientX - (panel.clientWidth + panelGap))
+                if (typeof e.meta.componentSpot === 'undefined') {
+                  if (panel.classList.contains('right')) {
+                    panelY = (clientY - (9) + (clientH / 2))
+                    panelX = (clientX + (panelGap + (clientResult / 2)))
+                  } else {
+                    panelY = (clientY - (9) + (clientH / 2))
+                    panelX = (clientX + (clientResult / 2) - ((panel.clientWidth) + (panelGap)))
+                  }
+                }
+                if (typeof e.meta.componentSpot !== 'undefined') {
+                  const componentSpot = e.meta.componentSpot
+                  const componentDom = document.querySelector(`#component-${e.id}`)
+                  if (componentDom.parentElement.lastElementChild.id === 'spot') {
+                    const spotX = (overviewResult * componentSpot.position.x) / overviewOriginal
+                    const spotY = (overviewResult * componentSpot.position.y) / overviewOriginal
+                    const spotW = (overviewResult * componentSpot.size.w) / overviewOriginal
+                    const spotH = (overviewResult * componentSpot.size.h) / overviewOriginal
+                    // const spotDom = componentDom.parentElement.lastElementChild
+                    // if (panel.classList.contains('right')) {
+                    //   panelY = (spotX)
+                    //   panelX = (spotY + (panelGap))
+                    // } else {
+                    //   panelY = (clientY)
+                    //   panelX = (clientX - (panel.clientWidth + panelGap))
+                    // }
+                    panelY = (spotY + (spotH / 2))
+                    panelX = (spotX + ((spotW / 2) + panelGap))
+                  }
                 }
 
                 // awe
@@ -1066,22 +1124,22 @@ export default {
                 if (typeof panel === 'undefined') {
                   return
                 }
-                const clientOriginal = (typeof panel.dataset.originalWidth === 'undefined') ? panel.clientWidth : panel.dataset.originalWidth
+                const panelOriginalW = (typeof panel.dataset.originalWidth === 'undefined') ? panel.clientWidth : panel.dataset.originalWidth
                 const panelX = (overviewResult * e.meta.position.x) / overviewOriginal
                 const panelY = (overviewResult * e.meta.position.y) / overviewOriginal
+                const panelW = (overviewResult * panelOriginalW) / overviewOriginal
+                // const panelH = (overviewResult * panelW) / overviewOriginal
                 panel.style.top = `${panelY}px`
                 panel.style.left = `${panelX}px`
-                panel.dataset.originalWidth = clientOriginal
+                panel.dataset.originalWidth = panelOriginalW
                 if (panel.classList.contains('panel-level')) {
-                  panel.style.top = `${(panelY - (panel.clientHeight))}px`
-                  panel.style.left = `${(panelX - (panel.clientWidth / 2))}px`
-                  // if (panel.classList.contains('top')) {
-                  //   panel.style.top = `${(panelY - (panel.clientHeight))}px`
-                  //   panel.style.left = `${(panelX - (panel.clientWidth / 2))}px`
-                  // } else {
-                  //   panel.style.top = `${(panelY)}px`
-                  //   panel.style.left = `${(panelX - (panel.clientWidth / 2))}px`
-                  // }
+                  if (panel.classList.contains('top')) {
+                    panel.style.top = `${(panelY - (panel.clientHeight))}px`
+                    panel.style.left = `${(panelX - ((panelW / 2) + 3))}px`
+                  } else {
+                    panel.style.top = `${(panelY + 15)}px`
+                    panel.style.left = `${(panelX - ((panelW / 2) + 3))}px`
+                  }
                 }
 
                 if (panel.classList.contains('panel-default')) {
@@ -1113,6 +1171,7 @@ export default {
               }
             }
           } catch (errTwo) {
+            console.log(errTwo)
           }
         }, 50)
       } catch (errOne) {
