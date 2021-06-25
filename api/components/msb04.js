@@ -1,7 +1,7 @@
 export default {
   type: 'motor',
-  id: 'msb06',
-  name: 'M.SB06',
+  id: 'msb04',
+  name: 'M.SB04',
   description: 'Motor SUMERSIBLE',
   state: {
     active: true,
@@ -10,15 +10,16 @@ export default {
     auto: false
   },
   meta: {
-    defaultImg: 'MSB06_Run',
-    img: 'MSB06',
+    defaultImg: 'MSB04_Run',
+    img: 'MSB04',
     position: {
-      x: 531.13, y: 413
+      x: 1442.6,
+      y: 433.55
     },
     componentSpot: {
       position: {
-        x: 1710,
-        y: 434
+        x: 1442,
+        y: 432
       },
       size: {
         w: 30,

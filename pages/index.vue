@@ -426,6 +426,11 @@ import componentMDC01 from '@/api/components/mdc01.js'
 import componentMCT01 from '@/api/components/mct01.js'
 import componentVLV01 from '@/api/components/vlv01.js'
 import componentVLV02 from '@/api/components/vlv02.js'
+import componentMSB01 from '@/api/components/msb01.js'
+import componentMSB02 from '@/api/components/msb02.js'
+import componentMSB03 from '@/api/components/msb03.js'
+import componentMSB04 from '@/api/components/msb04.js'
+import componentMSB05 from '@/api/components/msb05.js'
 import componentMSB06 from '@/api/components/msb06.js'
 
 export default {
@@ -870,6 +875,11 @@ export default {
       componentMDC01,
       componentMCT01,
 
+      componentMSB01,
+      componentMSB02,
+      componentMSB03,
+      componentMSB04,
+      componentMSB05,
       componentMSB06
     ])
     const componentOnClose = (item) => {
