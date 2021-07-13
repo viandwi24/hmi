@@ -124,6 +124,9 @@
           <table class="shadow-lg tw-w-full">
             <tr>
               <th class="tw-bg-blue-500 tw-text-gray-100 tw-border tw-border-gray-300 tw-text-left tw-px-8 tw-py-4">
+                Action
+              </th>
+              <th class="tw-bg-blue-500 tw-text-gray-100 tw-border tw-border-gray-300 tw-text-left tw-px-8 tw-py-4">
                 Name
               </th>
               <th class="tw-bg-blue-500 tw-text-gray-100 tw-border tw-border-gray-300 tw-text-left tw-px-8 tw-py-4">
@@ -138,6 +141,18 @@
             </tr>
             <tr v-for="(item, i) in dataSwapantau" :key="i" class="hover:tw-text-gray-800 hover:tw-bg-gray-200">
               <td class="tw-border tw-border-gray-300 tw-px-8 tw-py-4">
+                <div class="tw-relative tw-inline-block tw-w-10 tw-mr-2 tw-align-middle tw-select-none tw-transition tw-duration-200 tw-ease-in">
+                  <input :id="`toggle_${i}`" v-model="toggle.debitInlet" type="checkbox" :name="`toggle_${i}`" class="toggle-checkbox tw-absolute tw-block tw-w-6 tw-h-6 tw-rounded-full tw-bg-white tw-border-4 tw-appearance-none tw-cursor-pointer">
+                  <label :for="`toggle_${i}`" class="toggle-label tw-block tw-overflow-hidden tw-h-6 tw-rounded-full tw-bg-gray-400 tw-cursor-pointer" />
+                </div>
+                <label :for="`toggle_${i}`" class="tw-text-xs tw-text-gray-700">
+                  <span>
+                    <span :class="{ 'tw-font-semibold': (item.auto) }">Auto</span> /
+                    <span :class="{ 'tw-font-semibold': (!item.auto) }">Manual</span>
+                  </span>
+                </label>
+              </td>
+              <td class="tw-border tw-border-gray-300 tw-px-8 tw-py-4">
                 {{ item.text }}
               </td>
               <td class="tw-border tw-border-gray-300 tw-px-8 tw-py-4">
@@ -146,6 +161,7 @@
                   class="tw-shadow tw-appearance-none tw-border tw-rounded tw-w-full tw-py-2 tw-px-3 tw-text-gray-700 tw-leading-tight focus:tw-outline-none focus:tw-shadow-outline"
                   type="text"
                   placeholder="Inlet value..."
+                  :disabled="item.auto"
                 >
               </td>
               <td class="tw-border tw-border-gray-300 tw-px-8 tw-py-4">
@@ -154,6 +170,7 @@
                   class="tw-shadow tw-appearance-none tw-border tw-rounded tw-w-full tw-py-2 tw-px-3 tw-text-gray-700 tw-leading-tight focus:tw-outline-none focus:tw-shadow-outline"
                   type="text"
                   placeholder="Outlet value..."
+                  :disabled="item.auto"
                 >
               </td>
               <td class="tw-border tw-border-gray-300 tw-px-8 tw-py-4">
@@ -162,6 +179,7 @@
                   class="tw-shadow tw-appearance-none tw-border tw-rounded tw-w-full tw-py-2 tw-px-3 tw-text-gray-700 tw-leading-tight focus:tw-outline-none focus:tw-shadow-outline"
                   type="text"
                   placeholder="Unit..."
+                  :disabled="item.auto"
                 >
               </td>
             </tr>
@@ -219,70 +237,80 @@ export default {
         text: 'COD',
         inlet: 0,
         outlet: 100,
-        unit: 'mg/l'
+        unit: 'mg/l',
+        auto: true
       },
       {
         id: 'bod',
         text: 'BOD',
         inlet: 0,
         outlet: 44.54,
-        unit: 'mg/l'
+        unit: 'mg/l',
+        auto: true
       },
       {
         id: 'tss',
         text: 'TSS',
         inlet: 0,
         outlet: 80.84,
-        unit: 'mg/l'
+        unit: 'mg/l',
+        auto: true
       },
       {
         id: 'ph',
         text: 'pH',
         inlet: 0,
         outlet: '6 - 9',
-        unit: '-'
+        unit: '-',
+        auto: true
       },
       {
         id: 'oil',
         text: 'Lemak Minyak',
         inlet: 0,
         outlet: 2.82,
-        unit: 'mg/l'
+        unit: 'mg/l',
+        auto: true
       },
       {
         id: 'amonia',
         text: 'Amonia',
         inlet: 0,
         outlet: 10,
-        unit: 'mg/l'
+        unit: 'mg/l',
+        auto: true
       },
       {
         id: 'fe',
         text: 'Fe',
         inlet: 0,
         outlet: 3,
-        unit: 'mg/l'
+        unit: 'mg/l',
+        auto: true
       },
       {
         id: 'cu',
         text: 'Cu',
         inlet: 0,
         outlet: 1,
-        unit: 'mg/l'
+        unit: 'mg/l',
+        auto: true
       },
       {
         id: 'ce',
         text: 'Suhu',
         inlet: 0,
         outlet: 0,
-        unit: 'c'
+        unit: 'c',
+        auto: true
       },
       {
         id: 'coliform',
         text: 'Total Coliform',
         inlet: 0,
         outlet: 3000,
-        unit: '/100mm'
+        unit: '/100mm',
+        auto: true
       }
     ])
 
