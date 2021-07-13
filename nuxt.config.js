@@ -4,6 +4,11 @@ export default {
     host: '0.0.0.0'
   },
 
+  //
+  generate: {
+    dir: 'docs'
+  },
+
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: 'hmi',
