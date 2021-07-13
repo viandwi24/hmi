@@ -271,6 +271,13 @@ export default {
         unit: 'mg/l'
       },
       {
+        id: 'ce',
+        text: 'Suhu',
+        inlet: 0,
+        outlet: 0,
+        unit: 'c'
+      },
+      {
         id: 'coliform',
         text: 'Total Coliform',
         inlet: 0,
