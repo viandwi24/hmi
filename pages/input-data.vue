@@ -30,6 +30,9 @@
           <table class="shadow-lg tw-w-full tw-mb-12">
             <tr>
               <th class="tw-bg-blue-500 tw-text-gray-100 tw-border tw-border-gray-300 tw-text-left tw-px-8 tw-py-4">
+                Action
+              </th>
+              <th class="tw-bg-blue-500 tw-text-gray-100 tw-border tw-border-gray-300 tw-text-left tw-px-8 tw-py-4">
                 Flow
               </th>
               <th class="tw-bg-blue-500 tw-text-gray-100 tw-border tw-border-gray-300 tw-text-left tw-px-8 tw-py-4">
@@ -38,10 +41,23 @@
             </tr>
             <tr class="hover:tw-text-gray-800 hover:tw-bg-gray-200">
               <td class="tw-border tw-border-gray-300 tw-px-8 tw-py-4">
+                <div class="tw-relative tw-inline-block tw-w-10 tw-mr-2 tw-align-middle tw-select-none tw-transition tw-duration-200 tw-ease-in">
+                  <input id="toggle_1" v-model="toggle.debitInlet" type="checkbox" name="toggle_1" class="toggle-checkbox tw-absolute tw-block tw-w-6 tw-h-6 tw-rounded-full tw-bg-white tw-border-4 tw-appearance-none tw-cursor-pointer">
+                  <label for="toggle_1" class="toggle-label tw-block tw-overflow-hidden tw-h-6 tw-rounded-full tw-bg-gray-400 tw-cursor-pointer" />
+                </div>
+                <label for="toggle_1" class="tw-text-xs tw-text-gray-700">
+                  <span>
+                    <span :class="{ 'tw-font-semibold': (toggle.debitInlet) }">Auto</span> /
+                    <span :class="{ 'tw-font-semibold': (!toggle.debitInlet) }">Manual</span>
+                  </span>
+                </label>
+              </td>
+              <td class="tw-border tw-border-gray-300 tw-px-8 tw-py-4">
                 <input
                   class="tw-shadow tw-appearance-none tw-border tw-rounded tw-w-full tw-py-2 tw-px-3 tw-text-gray-700 tw-leading-tight focus:tw-outline-none focus:tw-shadow-outline"
                   type="text"
                   placeholder="Flow value..."
+                  :disabled="toggle.debitInlet"
                 >
               </td>
               <td class="tw-border tw-border-gray-300 tw-px-8 tw-py-4">
@@ -49,6 +65,7 @@
                   class="tw-shadow tw-appearance-none tw-border tw-rounded tw-w-full tw-py-2 tw-px-3 tw-text-gray-700 tw-leading-tight focus:tw-outline-none focus:tw-shadow-outline"
                   type="text"
                   placeholder="Totalizer value..."
+                  :disabled="toggle.debitInlet"
                 >
               </td>
             </tr>
@@ -60,6 +77,9 @@
           <table class="shadow-lg tw-w-full tw-mb-12">
             <tr>
               <th class="tw-bg-blue-500 tw-text-gray-100 tw-border tw-border-gray-300 tw-text-left tw-px-8 tw-py-4">
+                Action
+              </th>
+              <th class="tw-bg-blue-500 tw-text-gray-100 tw-border tw-border-gray-300 tw-text-left tw-px-8 tw-py-4">
                 Flow
               </th>
               <th class="tw-bg-blue-500 tw-text-gray-100 tw-border tw-border-gray-300 tw-text-left tw-px-8 tw-py-4">
@@ -68,10 +88,23 @@
             </tr>
             <tr class="hover:tw-text-gray-800 hover:tw-bg-gray-200">
               <td class="tw-border tw-border-gray-300 tw-px-8 tw-py-4">
+                <div class="tw-relative tw-inline-block tw-w-10 tw-mr-2 tw-align-middle tw-select-none tw-transition tw-duration-200 tw-ease-in">
+                  <input id="toggle_2" v-model="toggle.debitOutlet" type="checkbox" name="toggle_2" class="toggle-checkbox tw-absolute tw-block tw-w-6 tw-h-6 tw-rounded-full tw-bg-white tw-border-4 tw-appearance-none tw-cursor-pointer">
+                  <label for="toggle_2" class="toggle-label tw-block tw-overflow-hidden tw-h-6 tw-rounded-full tw-bg-gray-400 tw-cursor-pointer" />
+                </div>
+                <label for="toggle_2" class="tw-text-xs tw-text-gray-700">
+                  <span>
+                    <span :class="{ 'tw-font-semibold': (toggle.debitOutlet) }">Auto</span> /
+                    <span :class="{ 'tw-font-semibold': (!toggle.debitOutlet) }">Manual</span>
+                  </span>
+                </label>
+              </td>
+              <td class="tw-border tw-border-gray-300 tw-px-8 tw-py-4">
                 <input
                   class="tw-shadow tw-appearance-none tw-border tw-rounded tw-w-full tw-py-2 tw-px-3 tw-text-gray-700 tw-leading-tight focus:tw-outline-none focus:tw-shadow-outline"
                   type="text"
                   placeholder="Flow value..."
+                  :disabled="toggle.debitOutlet"
                 >
               </td>
               <td class="tw-border tw-border-gray-300 tw-px-8 tw-py-4">
@@ -79,6 +112,7 @@
                   class="tw-shadow tw-appearance-none tw-border tw-rounded tw-w-full tw-py-2 tw-px-3 tw-text-gray-700 tw-leading-tight focus:tw-outline-none focus:tw-shadow-outline"
                   type="text"
                   placeholder="Totalizer value..."
+                  :disabled="toggle.debitOutlet"
                 >
               </td>
             </tr>
@@ -173,6 +207,10 @@ export default {
       app.router.push({ path: '/', query: { page: 'overview' } })
     }
     const footerMenu = reactive(footerMenuList(app.router))
+    const toggle = reactive({
+      debitInlet: true,
+      debitOutlet: true
+    })
 
     // data
     const dataSwapantau = reactive([
@@ -244,7 +282,8 @@ export default {
     return {
       footerMenu,
       goBack,
-      dataSwapantau
+      dataSwapantau,
+      toggle
     }
   }
 }

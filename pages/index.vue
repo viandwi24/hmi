@@ -10,7 +10,7 @@
       </div>
       <div class="menu">
         <div class="actions">
-          <div class="item clicked" :class="`${(controls.showPanelInfo || controls.showPanelComponent) ? 'selected' : ''}`" @click="() => { controls.showPanelInfo = !controls.showPanelInfo; controls.showPanelComponent = !controls.showPanelComponent; }">
+          <div class="item clicked" :class="`${(controls.showPanelInfo || controls.showPanelComponent) ? 'selected' : ''}`" @click="() => { controls.showPanelInfo = !controls.showPanelInfo; controls.showPanelComponent = !controls.showPanelComponent; saveOption(); }">
             <img src="img/menu/Item View.svg" class="tw-mt-2">
             <div>
               Item View
@@ -318,7 +318,10 @@
                 )
               }"
               class="panel"
-              :class="{ 'right': (typeof item.meta.panel != 'undefined' && item.meta.panel.position == 'right') }"
+              :class="`
+                ${((typeof item.meta.panel != 'undefined' && typeof item.meta.panel.position != 'undefined') ? item.meta.panel.position : '')}
+                ${((typeof item.meta.panel != 'undefined' && typeof item.meta.panel.class != 'undefined') ? item.meta.panel.class : '')}
+              `"
             >
               <div class="panel-container" v-html="item.panel(item)" />
             </div>
@@ -1104,6 +1107,9 @@ export default {
                   if (panel.classList.contains('right')) {
                     panelY = (clientY - (9) + (clientH / 2))
                     panelX = (clientX + (panelGap + (clientResult / 2)))
+                  } else if (panel.classList.contains('bottom-left')) {
+                    panelY = (clientY - (9) + (clientH))
+                    panelX = (clientX + (clientResult / 2) - ((panel.clientWidth) + (panelGap)))
                   } else {
                     panelY = (clientY - (9) + (clientH / 2))
                     panelX = (clientX + (clientResult / 2) - ((panel.clientWidth) + (panelGap)))
@@ -1121,6 +1127,9 @@ export default {
                     if (panel.classList.contains('right')) {
                       panelY = (spotY + (spotH / 2))
                       panelX = (spotX + ((spotW / 2) + panelGap))
+                    } else if (panel.classList.contains('bottom-left')) {
+                      panelY = (spotY + (spotH + panelGap))
+                      panelX = (spotX + (clientResult / 2) - ((panel.clientWidth * 2) + (panelGap)))
                     } else {
                       panelY = (spotY + (spotH / 2))
                       panelX = (spotX + ((spotW / 2)) - (panel.clientWidth + panelGap + 10))

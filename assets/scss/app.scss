@@ -1,635 +1,650 @@
 body {
-    background: rgb(50,84,184);
-    background: radial-gradient(circle, rgba(50,84,184,1) 0%, rgba(78,95,201,1) 29%, rgba(72,118,218,1) 81%, rgba(53,135,255,1) 100%);
+  background: rgb(50, 84, 184);
+  background: radial-gradient(
+    circle,
+    rgba(50, 84, 184, 1) 0%,
+    rgba(78, 95, 201, 1) 29%,
+    rgba(72, 118, 218, 1) 81%,
+    rgba(53, 135, 255, 1) 100%
+  );
 }
 
 .btn-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
 }
 
 .page {
-    @apply tw-flex tw-flex-col;
-    height: 100vh;
-    width: 100vw;
-    overflow: hidden;
+  @apply tw-flex tw-flex-col;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
 }
 
 .navbar {
-    height: 74.3px;
-    min-height: 74.3px;
-    @apply tw-bg-blue-800 tw-w-full tw-px-4 tw-py-2 tw-text-center tw-shadow-lg tw-text-gray-800 tw-flex tw-justify-between;
+  height: 74.3px;
+  min-height: 74.3px;
+  @apply tw-bg-blue-800 tw-w-full tw-px-4 tw-py-2 tw-text-center tw-shadow-lg tw-text-gray-800 tw-flex tw-justify-between;
 
-    & > .header {
-      @apply tw-font-semibold tw-text-xl tw-text-gray-100 tw-self-center;
-    }
-    & > .page-title {
-      @apply tw-font-semibold tw-text-xl tw-text-gray-100 tw-self-center;
-    }
+  & > .header {
+    @apply tw-font-semibold tw-text-xl tw-text-gray-100 tw-self-center;
+  }
+  & > .page-title {
+    @apply tw-font-semibold tw-text-xl tw-text-gray-100 tw-self-center;
+  }
 
-    & .menu {
-      @apply tw-flex tw-flex-row tw-space-x-4 tw-divide-x tw-divide-blue-500;
-    }
+  & .menu {
+    @apply tw-flex tw-flex-row tw-space-x-4 tw-divide-x tw-divide-blue-500;
+  }
 
-    & .actions {
-      @apply tw-flex tw-flex-row tw-space-x-4;
-      & > .item {
-        @apply tw-text-center tw-rounded tw-p-2 tw-text-gray-100;
-        background-color: rgba(37, 99, 235, 1);
-        font-size: 10px;
+  & .actions {
+    @apply tw-flex tw-flex-row tw-space-x-4;
+    & > .item {
+      @apply tw-text-center tw-rounded tw-p-2 tw-text-gray-100;
+      background-color: rgba(37, 99, 235, 1);
+      font-size: 10px;
 
-        & > img {
-          display: inline-block;
+      & > img {
+        display: inline-block;
+      }
+      width: 70px;
+      padding: auto;
+
+      &.red {
+        @apply tw-bg-red-500;
+      }
+
+      &.selected {
+        @apply tw-bg-indigo-600;
+      }
+
+      &.clicked {
+        @apply tw-cursor-pointer;
+
+        &:hover {
+          @apply tw-bg-blue-700;
         }
-        width: 70px;
-        padding: auto;
 
         &.red {
-          @apply tw-bg-red-500;
-        }
-
-        &.selected {
-          @apply tw-bg-indigo-600;
-        }
-
-        &.clicked {
-          @apply tw-cursor-pointer;
-
           &:hover {
-            @apply tw-bg-blue-700;
-          }
-
-          &.red {
-            &:hover {
-              @apply tw-bg-red-600;
-            }
+            @apply tw-bg-red-600;
           }
         }
       }
     }
+  }
 }
 
 .screen {
-    width: 100vw;
-    height: 100vh;
-    max-height: 100vh;
-    max-width: 100vw;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  @media only screen and (max-width: 1280px) {
+    zoom: 55%;
+  }
 }
 
 body .obj-container {
-    margin: 0 auto;
-    display: inline-block;
-    position: relative;
-    max-width: 80%;
-    overflow: hidden;
+  margin: 0 auto;
+  display: inline-block;
+  position: relative;
+  max-width: 80%;
+  overflow: hidden;
 
-    img.overview {
-        width: 100%;
-    }
+  img.overview {
+    width: 100%;
+  }
 
-    & > .layer-components {
-        position: absolute;
-        top: 0;
-        display: block;
-        width: 100%;
-        height: 100%;
-
-        & > .components {
-            & .component {
-                position: absolute;
-                z-index: 10;
-            }
-        }
-
-        & > .panels {
-            & .panel {
-                @apply tw-border tw-border-gray-200;
-                background: rgba($color: #000000, $alpha: .8);
-                display: inline-block;
-                position: absolute;
-                z-index: 12;
-                width: 60px;
-                max-width: 60px;
-                border-top-left-radius: 5px;
-                border-bottom-left-radius: 5px;
-                border-bottom-right-radius: 5px;
-
-                &:hover {
-                    @apply tw-z-30;
-                }
-
-                & .panel-container {
-                    & > .header {
-                        @apply tw-bg-yellow-400 tw-text-indigo-800 tw-font-semibold tw-text-center tw-overflow-ellipsis tw-truncate tw-text-xs;
-                        font-size: 8px;
-                        width: 100%;
-                        border-top-left-radius: 5px;
-                    }
-                    & > .content {
-                        @apply tw-text-gray-100 tw-text-center tw-text-xs;;
-                        position: relative;
-                        overflow: hidden;
-                        padding: .1rem .2rem;
-                        font-size: 7px;
-                        & > div {
-                          line-height: 1.2;
-                        }
-                    }
-                    &::after {
-                        @apply tw-bg-gray-200;
-                        content: " ";
-                        display: block;
-                        position: absolute;
-                        width: 40px;
-                        height: 1px;
-                        top: -1px;
-                        right: -40px;
-                    }
-                }
-
-                &.top {
-                  border-top-left-radius: 5px;
-                  border-top-right-radius: 5px;
-                  & .panel-container {
-                    & > .header {
-                      border-top-left-radius: 5px;
-                      border-top-right-radius: 5px;
-                    }
-                    &::after {
-                      content: unset;
-                    }
-                    &::before {
-                        @apply tw-bg-gray-200;
-                        content: " ";
-                        display: block;
-                        position: absolute;
-                        height: 100px;
-                        width: 1px;
-                        bottom: -100px;
-                        left: 50%;
-                    }
-                  }
-                }
-
-                &.bottom {
-                  border-top-left-radius: 5px;
-                  border-top-right-radius: 5px;
-                  & .panel-container {
-                    & > .header {
-                      border-top-left-radius: 5px;
-                      border-top-right-radius: 5px;
-                    }
-                    &::after {
-                      content: unset;
-                    }
-                    &::before {
-                        @apply tw-bg-gray-200;
-                        content: " ";
-                        display: block;
-                        position: absolute;
-                        height: 100px;
-                        width: 1px;
-                        top: -100px;
-                        left: 50%;
-                    }
-                  }
-                }
-
-                &.right {
-                  border-top-left-radius: 0;
-                  border-top-right-radius: 5px;
-                  & .panel-container {
-                    & > .header {
-                      border-top-left-radius: 0;
-                      border-top-right-radius: 5px;
-                    }
-                    &::after {
-                        @apply tw-bg-gray-200;
-                        content: " ";
-                        display: block;
-                        position: absolute;
-                        width: 30px;
-                        height: 1px;
-                        top: -1px;
-                        left: -30px;
-                    }
-                  }
-                }
-
-                &.no-line {
-                  & .panel-container {
-                    &::after {
-                      content: unset;
-                      display: none;
-                    }
-                    &::before {
-                      content: unset;
-                      display: none;
-                    }
-                  }
-                }
-
-                &.panel-level {
-                    border-top-right-radius: 5px;
-                    overflow: hidden;
-                    padding: 2px;
-                    // border: none;
-                    // background: none;
-                    width: auto;
-                    color: theme('colors.gray.100');
-                    border-color: rgba($color: #f3f4f6, $alpha: .7  );
-
-                    & .percentage {
-                        margin: 0 auto;
-                        padding-left: 1px;
-                        font-size: 6px;
-                    }
-
-                    & .panel-container {
-                        display: flex;
-                        flex-direction: column;
-                        font-size: 8px;
-                        text-align: center;
-                    }
-
-                    & .progress {
-                        background: theme('colors.gray.200');
-                        height: 40px;
-                        width: 9px;
-                        position: relative;
-                        overflow: hidden;
-                        border: 1px solid white;
-                        margin: 0 auto;
-                        border-top-left-radius: 2px;
-                        border-bottom-left-radius: 2px;
-                        border-bottom-right-radius: 2px;
-                        border-top-right-radius: 2px;
-
-                        & > .progress-bar {
-                            position: absolute;
-                            bottom: 0;
-                            left: 0;
-                            width: 100%;
-                            background: theme('colors.yellow.500');
-                        }
-                    }
-                }
-            }
-        }
-
-        & > .area-name {
-          & > div {
-            position: absolute;
-            z-index: 8;
-
-            & > .area-container {
-              position: relative;
-            }
-
-            &.bottom-left {
-              & > .area-container {
-                @apply tw-text-gray-200 tw-font-semibold tw-text-sm;
-                &::after {
-                    @apply tw-bg-gray-200;
-                    content: " ";
-                    display: block;
-                    position: absolute;
-                    width: 80px;
-                    height: 1px;
-                    top: 9px;
-                    right: -90px;
-                }
-                &::before {
-                    @apply tw-bg-gray-200;
-                    content: " ";
-                    display: block;
-                    position: absolute;
-                    width: 1px;
-                    height: 25px;
-                    top: -15px;
-                    right: -90px;
-                }
-              }
-
-              &.large {
-                & > .area-container {
-                  &::before {
-                    height: 125px;
-                    top: -115px;
-                  }
-                }
-              }
-            }
-
-            &.top-right {
-              & > .area-container {
-                @apply tw-text-gray-200 tw-font-semibold tw-text-sm;
-                &::after {
-                    @apply tw-bg-gray-200;
-                    content: " ";
-                    display: block;
-                    position: absolute;
-                    width: 80px;
-                    height: 1px;
-                    top: 9px;
-                    left: -90px;
-                }
-                &::before {
-                    @apply tw-bg-gray-200;
-                    content: " ";
-                    display: block;
-                    position: absolute;
-                    width: 1px;
-                    height: 25px;
-                    bottom: -15px;
-                    left: -90px;
-                }
-              }
-
-              &.large {
-                & > .area-container {
-                  &::before {
-                    height: 150px;
-                    bottom: -140px;
-                  }
-                }
-              }
-            }
-
-
-            &.top-left {
-              & > .area-container {
-                @apply tw-text-gray-200 tw-font-semibold tw-text-sm;
-                &::after {
-                    @apply tw-bg-gray-200;
-                    content: " ";
-                    display: block;
-                    position: absolute;
-                    width: 80px;
-                    height: 1px;
-                    top: 9px;
-                    right: -90px;
-                }
-                &::before {
-                    @apply tw-bg-gray-200;
-                    content: " ";
-                    display: block;
-                    position: absolute;
-                    width: 1px;
-                    height: 25px;
-                    bottom: -15px;
-                    right: -90px;
-                }
-              }
-
-              &.extra-large {
-                & > .area-container {
-                  &::before {
-                    height: 250px;
-                    bottom: -240px;
-                  }
-                }
-              }
-            }
-
-          }
-        }
-    }
-}
-
-
-.controls {
-    @apply tw-shadow;
-    z-index: 20;
+  & > .layer-components {
     position: absolute;
     top: 0;
     display: block;
-    width: 200px;
-    margin: .4rem;
-    background: rgba($color: #000000, $alpha: .8);
-    border: 1px solid theme('colors.gray.100');
+    width: 100%;
+    height: 100%;
 
-    &.collapsed {
-      & .controls-container {
-        & > .group {
+    & > .components {
+      & .component {
+        position: absolute;
+        z-index: 10;
+      }
+    }
+
+    & > .panels {
+      & .panel {
+        @apply tw-border tw-border-gray-200;
+        background: rgba($color: #000000, $alpha: 0.8);
+        display: inline-block;
+        position: absolute;
+        z-index: 12;
+        width: 60px;
+        max-width: 60px;
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+
+        &:hover {
+          @apply tw-z-30;
+        }
+
+        & .panel-container {
+          & > .header {
+            @apply tw-bg-yellow-400 tw-text-indigo-800 tw-font-semibold tw-text-center tw-overflow-ellipsis tw-truncate tw-text-xs;
+            font-size: 8px;
+            width: 100%;
+            border-top-left-radius: 5px;
+          }
           & > .content {
-            display: none;
-            height: 0;
+            @apply tw-text-gray-100 tw-text-center tw-text-xs;
+            position: relative;
+            overflow: hidden;
+            padding: 0.1rem 0.2rem;
+            font-size: 7px;
+            & > div {
+              line-height: 1.2;
+            }
+          }
+          &::after {
+            @apply tw-bg-gray-200;
+            content: " ";
+            display: block;
+            position: absolute;
+            width: 40px;
+            height: 1px;
+            top: -1px;
+            right: -40px;
+          }
+        }
+
+        &.top {
+          border-top-left-radius: 5px;
+          border-top-right-radius: 5px;
+          & .panel-container {
+            & > .header {
+              border-top-left-radius: 5px;
+              border-top-right-radius: 5px;
+            }
+            &::after {
+              content: unset;
+            }
+            &::before {
+              @apply tw-bg-gray-200;
+              content: " ";
+              display: block;
+              position: absolute;
+              height: 100px;
+              width: 1px;
+              bottom: -100px;
+              left: 50%;
+            }
+          }
+        }
+
+        &.bottom {
+          border-top-left-radius: 5px;
+          border-top-right-radius: 5px;
+          & .panel-container {
+            & > .header {
+              border-top-left-radius: 5px;
+              border-top-right-radius: 5px;
+            }
+            &::after {
+              content: unset;
+            }
+            &::before {
+              @apply tw-bg-gray-200;
+              content: " ";
+              display: block;
+              position: absolute;
+              height: 100px;
+              width: 1px;
+              top: -100px;
+              left: 50%;
+            }
+          }
+        }
+
+        &.right {
+          border-top-left-radius: 0;
+          border-top-right-radius: 5px;
+          & .panel-container {
+            & > .header {
+              border-top-left-radius: 0;
+              border-top-right-radius: 5px;
+            }
+            &::after {
+              @apply tw-bg-gray-200;
+              content: " ";
+              display: block;
+              position: absolute;
+              width: 30px;
+              height: 1px;
+              top: -1px;
+              left: -30px;
+            }
+          }
+        }
+
+        &.no-line {
+          & .panel-container {
+            &::after {
+              content: unset;
+              display: none;
+            }
+            &::before {
+              content: unset;
+              display: none;
+            }
+          }
+        }
+
+        &.panel-level {
+          border-top-right-radius: 5px;
+          overflow: hidden;
+          padding: 2px;
+          // border: none;
+          // background: none;
+          width: auto;
+          color: theme("colors.gray.100");
+          border-color: rgba($color: #f3f4f6, $alpha: 0.7);
+
+          & .percentage {
+            margin: 0 auto;
+            padding-left: 1px;
+            font-size: 6px;
+          }
+
+          & .panel-container {
+            display: flex;
+            flex-direction: column;
+            font-size: 8px;
+            text-align: center;
+          }
+
+          & .progress {
+            background: theme("colors.gray.200");
+            height: 40px;
+            width: 9px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid white;
+            margin: 0 auto;
+            border-top-left-radius: 2px;
+            border-bottom-left-radius: 2px;
+            border-bottom-right-radius: 2px;
+            border-top-right-radius: 2px;
+
+            & > .progress-bar {
+              position: absolute;
+              bottom: 0;
+              left: 0;
+              width: 100%;
+              background: theme("colors.yellow.500");
+            }
           }
         }
       }
     }
 
-    &.lg {
-        width: 300px;
-    }
+    & > .area-name {
+      & > div {
+        position: absolute;
+        z-index: 8;
 
-    &.left {
-        left: 0;
-    }
-
-    &.right {
-        right: 0;
-    }
-
-    &.bottom {
-        top: initial;
-        bottom: 0;
-    }
-
-    &.danger {
-        border: 1px solid theme('colors.red.400');
-        .controls-container {
-            & > .group {
-                & > * {
-                    @apply tw-text-sm;
-                }
-                & > .header {
-                    border-top: 1px solid theme('colors.red.400');
-                    border-bottom: 2px solid theme('colors.red.600');
-                }
-            }
+        & > .area-container {
+          position: relative;
         }
-    }
 
+        &.bottom-left {
+          & > .area-container {
+            @apply tw-text-gray-200 tw-font-semibold tw-text-sm;
+            &::after {
+              @apply tw-bg-gray-200;
+              content: " ";
+              display: block;
+              position: absolute;
+              width: 80px;
+              height: 1px;
+              top: 9px;
+              right: -90px;
+            }
+            &::before {
+              @apply tw-bg-gray-200;
+              content: " ";
+              display: block;
+              position: absolute;
+              width: 1px;
+              height: 25px;
+              top: -15px;
+              right: -90px;
+            }
+          }
+
+          &.large {
+            & > .area-container {
+              &::before {
+                height: 125px;
+                top: -115px;
+              }
+            }
+          }
+        }
+
+        &.top-right {
+          & > .area-container {
+            @apply tw-text-gray-200 tw-font-semibold tw-text-sm;
+            &::after {
+              @apply tw-bg-gray-200;
+              content: " ";
+              display: block;
+              position: absolute;
+              width: 80px;
+              height: 1px;
+              top: 9px;
+              left: -90px;
+            }
+            &::before {
+              @apply tw-bg-gray-200;
+              content: " ";
+              display: block;
+              position: absolute;
+              width: 1px;
+              height: 25px;
+              bottom: -15px;
+              left: -90px;
+            }
+          }
+
+          &.large {
+            & > .area-container {
+              &::before {
+                height: 150px;
+                bottom: -140px;
+              }
+            }
+          }
+        }
+
+        &.top-left {
+          & > .area-container {
+            @apply tw-text-gray-200 tw-font-semibold tw-text-sm;
+            &::after {
+              @apply tw-bg-gray-200;
+              content: " ";
+              display: block;
+              position: absolute;
+              width: 80px;
+              height: 1px;
+              top: 9px;
+              right: -90px;
+            }
+            &::before {
+              @apply tw-bg-gray-200;
+              content: " ";
+              display: block;
+              position: absolute;
+              width: 1px;
+              height: 25px;
+              bottom: -15px;
+              right: -90px;
+            }
+          }
+
+          &.extra-large {
+            & > .area-container {
+              &::before {
+                height: 250px;
+                bottom: -240px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.controls {
+  @apply tw-shadow;
+  z-index: 20;
+  position: absolute;
+  top: 0;
+  display: block;
+  width: 200px;
+  margin: 0.4rem;
+  background: rgba($color: #000000, $alpha: 0.8);
+  border: 1px solid theme("colors.gray.100");
+
+  &.collapsed {
+    & .controls-container {
+      & > .group {
+        & > .content {
+          display: none;
+          height: 0;
+        }
+      }
+    }
+  }
+
+  &.lg {
+    width: 300px;
+  }
+
+  &.left {
+    left: 0;
+  }
+
+  &.right {
+    right: 0;
+  }
+
+  &.bottom {
+    top: initial;
+    bottom: 0;
+  }
+
+  &.danger {
+    border: 1px solid theme("colors.red.400");
     .controls-container {
-        position: relative;
-
-        & > .group {
-            & > * {
-                @apply tw-text-sm;
-            }
-            & > .header {
-                @apply tw-text-gray-100 tw-bg-gray-800;
-                border-bottom: 2px solid theme('colors.blue.600');
-                border-top: 1px solid theme('colors.gray.100');
-                padding: .2rem .8rem;
-                cursor: pointer;
-
-                &::before {
-                    // content: "⮀";
-                }
-            }
-            & > .content {
-                @apply tw-transition-all tw-duration-100;
-                @apply tw-text-gray-100;
-                padding: .4rem .8rem;
-            }
+      & > .group {
+        & > * {
+          @apply tw-text-sm;
         }
-
-        & > .toggle {
-            @apply tw-text-xs tw-px-2 tw-py-1 tw-cursor-pointer;
-            background: rgba($color: #000000, $alpha: .8);
-            border: 1px solid theme('colors.gray.200');
-            color: theme('colors.gray.200');
-            display: inline-block;
-            position: absolute;
-            right: 0;
-            top: 0;
-            height: 25px;
-            transform: rotate(-90deg) translate(-26px, 52px);
+        & > .header {
+          border-top: 1px solid theme("colors.red.400");
+          border-bottom: 2px solid theme("colors.red.600");
         }
+      }
     }
+  }
+
+  .controls-container {
+    position: relative;
+
+    & > .group {
+      & > * {
+        @apply tw-text-sm;
+      }
+      & > .header {
+        @apply tw-text-gray-100 tw-bg-gray-800;
+        border-bottom: 2px solid theme("colors.blue.600");
+        border-top: 1px solid theme("colors.gray.100");
+        padding: 0.2rem 0.8rem;
+        cursor: pointer;
+
+        &::before {
+          // content: "⮀";
+        }
+      }
+      & > .content {
+        @apply tw-transition-all tw-duration-100;
+        @apply tw-text-gray-100;
+        padding: 0.4rem 0.8rem;
+      }
+    }
+
+    & > .toggle {
+      @apply tw-text-xs tw-px-2 tw-py-1 tw-cursor-pointer;
+      background: rgba($color: #000000, $alpha: 0.8);
+      border: 1px solid theme("colors.gray.200");
+      color: theme("colors.gray.200");
+      display: inline-block;
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 25px;
+      transform: rotate(-90deg) translate(-26px, 52px);
+    }
+  }
 }
 
 .screen .menu {
-    z-index: 20;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    display: flex;
-    @apply tw-justify-center;
+  z-index: 20;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  @apply tw-justify-center;
 }
 
 .footer {
-    @apply tw-bg-blue-800 tw-w-full tw-text-center tw-shadow-lg tw-text-gray-800 tw-flex tw-justify-between;
-    z-index: 21;
-    min-height: 87px;
-    max-height: 87px;
+  @apply tw-bg-blue-800 tw-w-full tw-text-center tw-shadow-lg tw-text-gray-800 tw-flex tw-justify-between;
+  z-index: 21;
+  min-height: 87px;
+  max-height: 87px;
 
-    & > .footer-container {
-        @apply tw-text-gray-100 tw-self-center;
-        width: 100%;
+  & > .footer-container {
+    @apply tw-text-gray-100 tw-self-center;
+    width: 100%;
 
-        & > .menu-container {
-            @apply tw-px-4 tw-py-2;
-            max-width: 100%;
-            display: flex;
-            justify-content: center;
+    & > .menu-container {
+      @apply tw-px-4 tw-py-2;
+      max-width: 100%;
+      display: flex;
+      justify-content: center;
 
-            & > .header {
-                @apply tw-bg-gray-800 tw-inline-block tw-rounded-sm tw-text-xs tw-text-gray-100;
-                border: 1px solid theme('colors.gray.100');
-                border-bottom: 3px solid theme('colors.blue.600');
-                padding: .2rem .4rem;
-            }
-            & > .content {
-                @apply tw-space-x-2;
-                padding: .2rem .2rem;
-                max-width: 100%;
-                overflow-x: auto;
+      & > .header {
+        @apply tw-bg-gray-800 tw-inline-block tw-rounded-sm tw-text-xs tw-text-gray-100;
+        border: 1px solid theme("colors.gray.100");
+        border-bottom: 3px solid theme("colors.blue.600");
+        padding: 0.2rem 0.4rem;
+      }
+      & > .content {
+        @apply tw-space-x-2;
+        padding: 0.2rem 0.2rem;
+        max-width: 100%;
+        overflow-x: auto;
 
-                & > div {
-                    @apply tw-flex tw-flex-row tw-space-x-8 tw-divide-x tw-divide-blue-500;
-                }
-
-                & .group {
-                    @apply tw-flex tw-flex-col tw-pl-8 tw-pb-1;
-                    display: inline-block;
-
-                    & > .group-title {
-                        @apply tw-text-gray-100 tw-mb-1 tw-text-xs;
-                        text-align: left;
-                    }
-
-                    & > .group-content {
-                        @apply tw-text-gray-100 tw-flex tw-flex-row tw-text-xs tw-space-x-2 tw-justify-start;
-                        text-align: left;
-                    }
-
-                    &:nth-child(1) {
-                        @apply tw-pl-0;
-                    }
-                }
-
-                & .display {
-                    display: flex;
-                    flex-direction: column;
-
-                    & > .display_text {
-                      font-size: 10px;
-                    }
-                }
-
-                & button {
-                    @apply tw-rounded tw-bg-blue-400 hover:tw-bg-blue-600 tw-text-gray-100 tw-text-xs;
-                    padding: .8rem .4rem;
-
-                    &.icon {
-                      padding: .8rem .8rem;
-                    }
-
-                    &.fixed {
-                      width: 60px;
-                    }
-
-                    &.green {
-                      @apply tw-bg-green-400;
-                    }
-
-                    &.red {
-                      @apply tw-bg-red-400;
-                    }
-
-                    &:disabled {
-                      @apply tw-bg-gray-400 tw-cursor-not-allowed;
-                    }
-                }
-
-                & .badge-box {
-                    display: inline-block;
-                    content: "";
-                    width: 8px;
-                    height: 8px;
-                    border: 1px solid white;
-
-                    &.red {
-                        background: red;
-                    }
-                }
-            }
+        & > div {
+          @apply tw-flex tw-flex-row tw-space-x-8 tw-divide-x tw-divide-blue-500;
         }
 
-        & > .nav-container {
-            @apply tw-flex tw-flex-row tw-justify-center tw-space-x-1 tw-divide-x tw-divide-blue-500;
-              & > .item {
-                  width: 87px;
+        & .group {
+          @apply tw-flex tw-flex-col tw-pl-8 tw-pb-1;
+          display: inline-block;
 
-                  & > .item-content {
-                      @apply tw-ml-1 tw-rounded;
-                      @apply tw-cursor-pointer tw-transition-colors tw-duration-150 tw-px-2 tw-py-2 hover:tw-bg-blue-700;
+          & > .group-title {
+            @apply tw-text-gray-100 tw-mb-1 tw-text-xs;
+            text-align: left;
+          }
 
-                      & > .item-icon {
-                          @apply tw-text-3xl tw-mb-1 tw-text-center;
-                          img {
-                            display: inline-block;
-                          }
-                      }
-                      & > .item-text {
-                          font-size: 10px;
-                      }
-                  }
+          & > .group-content {
+            @apply tw-text-gray-100 tw-flex tw-flex-row tw-text-xs tw-space-x-2 tw-justify-start;
+            text-align: left;
+          }
 
-                  &:nth-child(1) > .item-content {
-                      @apply tw-ml-0;
-                  }
-              }
+          &:nth-child(1) {
+            @apply tw-pl-0;
+          }
         }
+
+        & .display {
+          display: flex;
+          flex-direction: column;
+
+          & > .display_text {
+            font-size: 10px;
+          }
+        }
+
+        & button {
+          @apply tw-rounded tw-bg-blue-400 hover:tw-bg-blue-600 tw-text-gray-100 tw-text-xs;
+          padding: 0.8rem 0.4rem;
+
+          &.icon {
+            padding: 0.8rem 0.8rem;
+          }
+
+          &.fixed {
+            width: 60px;
+          }
+
+          &.green {
+            @apply tw-bg-green-400;
+          }
+
+          &.red {
+            @apply tw-bg-red-400;
+          }
+
+          &:disabled {
+            @apply tw-bg-gray-400 tw-cursor-not-allowed;
+          }
+        }
+
+        & .badge-box {
+          display: inline-block;
+          content: "";
+          width: 8px;
+          height: 8px;
+          border: 1px solid white;
+
+          &.red {
+            background: red;
+          }
+        }
+      }
     }
+
+    & > .nav-container {
+      @apply tw-flex tw-flex-row tw-justify-center tw-space-x-1 tw-divide-x tw-divide-blue-500;
+      & > .item {
+        width: 87px;
+
+        & > .item-content {
+          @apply tw-ml-1 tw-rounded;
+          @apply tw-cursor-pointer tw-transition-colors tw-duration-150 tw-px-2 tw-py-2 hover:tw-bg-blue-700;
+
+          & > .item-icon {
+            @apply tw-text-3xl tw-mb-1 tw-text-center;
+            img {
+              display: inline-block;
+            }
+          }
+          & > .item-text {
+            font-size: 10px;
+          }
+        }
+
+        &:nth-child(1) > .item-content {
+          @apply tw-ml-0;
+        }
+      }
+    }
+  }
+}
+
+
+.toggle-checkbox:checked {
+  @apply tw-right-0 tw-border-green-400;
+  right: 0;
+  border-color: #68D391;
+}
+.toggle-checkbox:checked + .toggle-label {
+  @apply tw-bg-green-400;
+  background-color: #68D391;
 }

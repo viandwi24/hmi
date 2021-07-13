@@ -28,7 +28,8 @@ export default {
     },
     page: 'submersible',
     panel: {
-      position: 'right'
+      position: 'bottom-left',
+      class: 'no-line'
     }
   },
   checkAlarm: (item) => {
