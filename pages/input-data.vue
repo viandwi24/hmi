@@ -142,10 +142,10 @@
             <tr v-for="(item, i) in dataSwapantau" :key="i" class="hover:tw-text-gray-800 hover:tw-bg-gray-200">
               <td class="tw-border tw-border-gray-300 tw-px-8 tw-py-4">
                 <div class="tw-relative tw-inline-block tw-w-10 tw-mr-2 tw-align-middle tw-select-none tw-transition tw-duration-200 tw-ease-in">
-                  <input :id="`toggle_${i}`" v-model="dataSwapantau[i].auto" type="checkbox" :name="`toggle_${i}`" class="toggle-checkbox tw-absolute tw-block tw-w-6 tw-h-6 tw-rounded-full tw-bg-white tw-border-4 tw-appearance-none tw-cursor-pointer">
-                  <label :for="`toggle_${i}`" class="toggle-label tw-block tw-overflow-hidden tw-h-6 tw-rounded-full tw-bg-gray-400 tw-cursor-pointer" />
+                  <input :id="`toggle_dataswapantau_${i}`" v-model="dataSwapantau[i].auto" type="checkbox" :name="`toggle_dataswapantau_${i}`" class="toggle-checkbox tw-absolute tw-block tw-w-6 tw-h-6 tw-rounded-full tw-bg-white tw-border-4 tw-appearance-none tw-cursor-pointer">
+                  <label :for="`toggle_dataswapantau_${i}`" class="toggle-label tw-block tw-overflow-hidden tw-h-6 tw-rounded-full tw-bg-gray-400 tw-cursor-pointer" />
                 </div>
-                <label :for="`toggle_${i}`" class="tw-text-xs tw-text-gray-700">
+                <label :for="`toggle_dataswapantau_${i}`" class="tw-text-xs tw-text-gray-700">
                   <span>
                     <span :class="{ 'tw-font-semibold': (item.auto) }">Auto</span> /
                     <span :class="{ 'tw-font-semibold': (!item.auto) }">Manual</span>
