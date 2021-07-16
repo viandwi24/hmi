@@ -17,6 +17,7 @@
     "node-sass": "^6.0.0",
     "nuxt": "^2.15.3",
     "sass-loader": "^10",
+    "vue-good-table": "^2.21.10",
     "vue2-collapse": "^1.0.15"
   },
   "devDependencies": {
