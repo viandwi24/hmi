@@ -190,6 +190,16 @@
                   </button>
                 </div>
               </div>
+              <div class="tw-flex tw-w-full">
+                <div class="tw-w-1/2">
+                  Test DB
+                </div>
+                <div class="tw-w-1/2 tw-flex">
+                  <button class="tw-bg-gray-200 hover:tw-bg-gray-300 tw-text-gray-800 tw-p-1 tw-rounded-sm tw-text-xs" @click="test">
+                    test
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -354,6 +364,11 @@
     </div>
     <div class="footer">
       <div class="footer-container">
+        <div
+          v-if="notifyLoading.show"
+          style="background: rgba(0, 0, 0, .5);"
+          class="tw-fixed tw-w-full tw-h-full"
+        />
         <div v-if="componentSelected != null" class="menu-container">
           <div class="content">
             <div class="tw-w-full">
@@ -363,12 +378,12 @@
                 </div>
                 <div class="group-content">
                   <div v-for="(item, j) in group.child" :key="j" :class="(typeof group.class == 'undefined' ? '' : group.class)">
-                    <button v-if="item.type == 'button'" :class="item.class" :disabled="item.disable" @click="item.onClick(componentSelected, components)">
+                    <button v-if="item.type == 'button'" :class="item.class" :disabled="item.disable" @click="item.onClick(componentSelected, components, ctx)">
                       <font-awesome-icon v-if="item.icon" :icon="item.icon" class="tw-mx-1" />
                       <span>{{ item.text }}</span>
                     </button>
                     <div v-else-if="item.type == 'display'">
-                      <div v-html="item.render(componentSelected, components)" />
+                      <div v-html="item.render(componentSelected, components, ctx)" />
                     </div>
                   </div>
                 </div>
@@ -416,7 +431,9 @@ import {
   onUnmounted,
   reactive,
   ref,
-  useContext
+  useContext,
+  useStore,
+  watch
 } from '@nuxtjs/composition-api'
 
 import componentMBW01 from '@/api/components/mbw01.js'
@@ -438,7 +455,11 @@ import componentMSB06 from '@/api/components/msb06.js'
 
 export default {
   setup () {
-    const { app, route } = useContext()
+    const ctx = useContext()
+    const { app, route } = ctx
+    const store = useStore()
+    const notifyLoading = computed(() => store.state.notifyLoading)
+
     // menu footer
     const resetUi = () => {
       // components.forEach((e) => {
@@ -1386,7 +1407,44 @@ export default {
       // }
     }
 
+    // component state
+    const componentStateMapping = {
+      INFLUENT_VALVE_VLV01_Status: 'vlv01.open',
+      INFLUENT_VALVE_VLV01_AlarmFbF: 'vlv01.alarm_1',
+      INFLUENT_VALVE_VLV01_ManAut: 'vlv01.auto'
+    }
+    const componentStates = computed(() => store.state.component.states)
+    watch(componentStates, (newValue, oldValue) => {
+      try {
+        newValue.forEach((item, i) => {
+          if (componentStateMapping[item.name] != null) {
+            const destination = `${componentStateMapping[item.name]}`.split('.')
+            const value = item.value
+            const componentIndex = components.findIndex(component => component.id === destination[0])
+            components[componentIndex].state[destination[1]] = value
+          }
+        })
+      } catch (error) {
+      }
+    })
+    const test = () => {
+      store.commit('component/setState', {
+        name: 'INFLUENT_VALVE_VLV01_Status',
+        value: 1
+      })
+      store.commit('component/setState', {
+        name: 'INFLUENT_VALVE_VLV01_AlarmFbF',
+        value: 1
+      })
+      store.commit('component/setState', {
+        name: 'INFLUENT_VALVE_VLV01_ManAut',
+        value: 1
+      })
+    }
+
     return {
+      notifyLoading,
+      ctx,
       areasName,
       activePage,
       showAlarmPanel,
@@ -1410,7 +1468,8 @@ export default {
       toggleDataSwap,
       imgClick,
       dataSwapantau,
-      changeDataSwap
+      changeDataSwap,
+      test
     }
   }
 }

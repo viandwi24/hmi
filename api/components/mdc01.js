@@ -69,7 +69,7 @@ export default {
         ]
       },
       {
-        name: 'Control',
+        name: 'Mode',
         class: 'tw-w-full',
         child: [
           { type: 'button', name: 'button_auto', class: `fixed ${(item.state.auto ? 'green' : 'red')}`, text: (item.state.auto ? 'Auto' : 'Manual'), disable: (false), onClick: (item) => { item.state.auto = !item.state.auto } }
