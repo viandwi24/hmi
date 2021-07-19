@@ -1,20 +1,20 @@
 const start = async function (component, components, ctx) {
-  const { $notifyLoading } = ctx
+  const { $notifyLoading, store } = ctx
   await $notifyLoading.show(ctx, 'Sending Command...', `Turn on ${component.description} / ${component.name}`)
+  await store.dispatch('component/sendCommand', { ctx, name: 'INFLUENT_VALVE_VLV01_Status', value: 1 })
   $notifyLoading.hide()
-  component.state.open = true
 }
 const stop = async function (component, components, ctx) {
-  const { $notifyLoading } = ctx
+  const { $notifyLoading, store } = ctx
   await $notifyLoading.show(ctx, 'Sending Command...', `Turn off ${component.description} / ${component.name}`)
+  await store.dispatch('component/sendCommand', { ctx, name: 'INFLUENT_VALVE_VLV01_Status', value: 0 })
   $notifyLoading.hide()
-  component.state.open = false
 }
 const changemode = async function (component, components, ctx) {
-  const { $notifyLoading } = ctx
+  const { $notifyLoading, store } = ctx
   await $notifyLoading.show(ctx, 'Sending Command...', `Change mode ${component.description} / ${component.name}`)
+  await store.dispatch('component/sendCommand', { ctx, name: 'INFLUENT_VALVE_VLV01_ManAut', value: !component.state.auto })
   $notifyLoading.hide()
-  component.state.auto = !component.state.auto
 }
 
 export default {

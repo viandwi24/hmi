@@ -1,3 +1,28 @@
+const start = async function (component, components, ctx) {
+  const { $notifyLoading, store } = ctx
+  const mbw02 = components.find(e => e.id === 'mbw02')
+  if (mbw02) {
+    if (mbw02.state.active) {
+      return
+    }
+  }
+  await $notifyLoading.show(ctx, 'Sending Command...', `Turn on ${component.description} / ${component.name}`)
+  await store.dispatch('component/sendCommand', { ctx, name: 'BLOWERROOM_MOTOR_MBW01_Status', value: true })
+  $notifyLoading.hide()
+}
+const stop = async function (component, components, ctx) {
+  const { $notifyLoading, store } = ctx
+  await $notifyLoading.show(ctx, 'Sending Command...', `Turn off ${component.description} / ${component.name}`)
+  await store.dispatch('component/sendCommand', { ctx, name: 'BLOWERROOM_MOTOR_MBW01_Status', value: false })
+  $notifyLoading.hide()
+}
+const changemode = async function (component, components, ctx) {
+  const { $notifyLoading, store } = ctx
+  await $notifyLoading.show(ctx, 'Sending Command...', `Change mode ${component.description} / ${component.name}`)
+  await store.dispatch('component/sendCommand', { ctx, name: 'BLOWERROOM_MOTOR_MBW01_ManAut', value: !component.state.auto })
+  $notifyLoading.hide()
+}
+
 export default {
   type: 'motor',
   id: 'mbw01',
@@ -46,24 +71,8 @@ export default {
       {
         name: 'Control',
         child: [
-          {
-            type: 'button',
-            name: 'button_start',
-            class: 'icon green',
-            text: '',
-            icon: ['fas', 'play'],
-            disable: ((item.state.active || item.state.auto)),
-            onClick: (item, components) => {
-              const mbw02 = components.find(e => e.id === 'mbw02')
-              if (mbw02) {
-                if (mbw02.state.active) {
-                  return
-                }
-              }
-              item.state.active = !item.state.active
-            }
-          },
-          { type: 'button', name: 'button_stop', class: 'icon red', text: '', icon: ['fas', 'stop'], disable: (!item.state.active || item.state.auto), onClick: (item) => { item.state.active = !item.state.active } }
+          { type: 'button', name: 'button_start', class: 'icon green', text: '', icon: ['fas', 'play'], disable: (item.state.active || item.state.auto), onClick: start },
+          { type: 'button', name: 'button_stop', class: 'icon red', text: '', icon: ['fas', 'stop'], disable: (!item.state.active || item.state.auto), onClick: stop }
         ]
       },
       {
@@ -90,7 +99,7 @@ export default {
         name: 'Mode',
         class: 'tw-w-full',
         child: [
-          { type: 'button', name: 'button_auto', class: `fixed ${(item.state.auto ? 'green' : 'red')}`, text: (item.state.auto ? 'Auto' : 'Manual'), disable: (false), onClick: (item) => { item.state.auto = !item.state.auto } }
+          { type: 'button', name: 'button_auto', class: `fixed ${(item.state.auto ? 'green' : 'red')}`, text: (item.state.auto ? 'Auto' : 'Manual'), disable: (false), onClick: changemode }
         ]
       }
     ]

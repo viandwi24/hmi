@@ -1,3 +1,22 @@
+const start = async function (component, components, ctx) {
+  const { $notifyLoading, store } = ctx
+  await $notifyLoading.show(ctx, 'Sending Command...', `Turn on ${component.description} / ${component.name}`)
+  await store.dispatch('component/sendCommand', { ctx, name: 'INFLUENT_VALVE_VLV02_Status', value: 1 })
+  $notifyLoading.hide()
+}
+const stop = async function (component, components, ctx) {
+  const { $notifyLoading, store } = ctx
+  await $notifyLoading.show(ctx, 'Sending Command...', `Turn off ${component.description} / ${component.name}`)
+  await store.dispatch('component/sendCommand', { ctx, name: 'INFLUENT_VALVE_VLV02_Status', value: 0 })
+  $notifyLoading.hide()
+}
+const changemode = async function (component, components, ctx) {
+  const { $notifyLoading, store } = ctx
+  await $notifyLoading.show(ctx, 'Sending Command...', `Change mode ${component.description} / ${component.name}`)
+  await store.dispatch('component/sendCommand', { ctx, name: 'INFLUENT_VALVE_VLV02_ManAut', value: !component.state.auto })
+  $notifyLoading.hide()
+}
+
 export default {
   type: 'motor',
   id: 'vlv02',
@@ -32,8 +51,8 @@ export default {
       {
         name: 'Control',
         child: [
-          { type: 'button', name: 'button_start', class: 'icon green', text: '', icon: ['fas', 'play'], disable: (item.state.open || item.state.auto), onClick: (item) => { item.state.open = !item.state.open } },
-          { type: 'button', name: 'button_stop', class: 'icon red', text: '', icon: ['fas', 'stop'], disable: (!item.state.open || item.state.auto), onClick: (item) => { item.state.open = !item.state.open } }
+          { type: 'button', name: 'button_start', class: 'icon green', text: '', icon: ['fas', 'play'], disable: (item.state.open || item.state.auto), onClick: start },
+          { type: 'button', name: 'button_stop', class: 'icon red', text: '', icon: ['fas', 'stop'], disable: (!item.state.open || item.state.auto), onClick: stop }
         ]
       },
       {
@@ -57,7 +76,7 @@ export default {
         name: 'Mode',
         class: 'tw-w-full',
         child: [
-          { type: 'button', name: 'button_auto', class: `fixed ${(item.state.auto ? 'green' : 'red')}`, text: (item.state.auto ? 'Auto' : 'Manual'), disable: (false), onClick: (item) => { item.state.auto = !item.state.auto } }
+          { type: 'button', name: 'button_auto', class: `fixed ${(item.state.auto ? 'green' : 'red')}`, text: (item.state.auto ? 'Auto' : 'Manual'), disable: (false), onClick: changemode }
         ]
       }
     ]

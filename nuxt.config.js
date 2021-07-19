@@ -1,4 +1,11 @@
 export default {
+  // Enviroment Variable
+  env: {
+    API_BASE_URL: 'http://localhost:8000',
+    API_PREFIX: ''
+  },
+
+  // Build Configuration
   target: 'static',
   server: {
     host: '0.0.0.0'

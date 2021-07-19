@@ -13,7 +13,7 @@ export default ({ app }, inject) => {
       app.store.commit('SET_NOTIFY_LOADING', {
         show: true, title, description
       })
-      await $sleep(2000)
+      await $sleep(1500)
     },
     hide: () => {
       app.store.commit('SET_NOTIFY_LOADING', { show: false })

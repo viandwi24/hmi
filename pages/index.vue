@@ -436,6 +436,7 @@ import {
   watch
 } from '@nuxtjs/composition-api'
 
+import componentStateMapping from '@/api/componentStateMapping.js'
 import componentMBW01 from '@/api/components/mbw01.js'
 import componentMBW02 from '@/api/components/mbw02.js'
 import componentMT021 from '@/api/components/mto21.js'
@@ -1291,6 +1292,9 @@ export default {
       if (typeof route.value.query.page !== 'undefined') {
         activePage.value = route.value.query.page
       }
+
+      // get data
+      store.dispatch('component/fetchComponentState', { ctx })
     })
     onUnmounted(() => {
       forceRerender()
@@ -1408,18 +1412,13 @@ export default {
     }
 
     // component state
-    const componentStateMapping = {
-      INFLUENT_VALVE_VLV01_Status: 'vlv01.open',
-      INFLUENT_VALVE_VLV01_AlarmFbF: 'vlv01.alarm_1',
-      INFLUENT_VALVE_VLV01_ManAut: 'vlv01.auto'
-    }
     const componentStates = computed(() => store.state.component.states)
     watch(componentStates, (newValue, oldValue) => {
       try {
         newValue.forEach((item, i) => {
           if (componentStateMapping[item.name] != null) {
             const destination = `${componentStateMapping[item.name]}`.split('.')
-            const value = item.value
+            const value = (item.value === 1)
             const componentIndex = components.findIndex(component => component.id === destination[0])
             components[componentIndex].state[destination[1]] = value
           }
@@ -1428,18 +1427,18 @@ export default {
       }
     })
     const test = () => {
-      store.commit('component/setState', {
-        name: 'INFLUENT_VALVE_VLV01_Status',
-        value: 1
-      })
-      store.commit('component/setState', {
-        name: 'INFLUENT_VALVE_VLV01_AlarmFbF',
-        value: 1
-      })
-      store.commit('component/setState', {
-        name: 'INFLUENT_VALVE_VLV01_ManAut',
-        value: 1
-      })
+      // store.commit('component/setState', {
+      //   name: 'INFLUENT_VALVE_VLV01_Status',
+      //   value: 1
+      // })
+      // store.commit('component/setState', {
+      //   name: 'INFLUENT_VALVE_VLV01_AlarmFbF',
+      //   value: 1
+      // })
+      // store.commit('component/setState', {
+      //   name: 'INFLUENT_VALVE_VLV01_ManAut',
+      //   value: 1
+      // })
     }
 
     return {
