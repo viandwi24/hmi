@@ -16,12 +16,6 @@ const stop = async function (component, components, ctx) {
   await store.dispatch('component/sendCommand', { ctx, name: 'BLOWERROOM_MOTOR_MBW01_Status', value: false })
   $notifyLoading.hide()
 }
-const changemode = async function (component, components, ctx) {
-  const { $notifyLoading, store } = ctx
-  await $notifyLoading.show(ctx, 'Sending Command...', `Change mode ${component.description} / ${component.name}`)
-  await store.dispatch('component/sendCommand', { ctx, name: 'BLOWERROOM_MOTOR_MBW01_ManAut', value: !component.state.auto })
-  $notifyLoading.hide()
-}
 
 export default {
   type: 'motor',
@@ -99,7 +93,7 @@ export default {
         name: 'Mode',
         class: 'tw-w-full',
         child: [
-          { type: 'button', name: 'button_auto', class: `fixed ${(item.state.auto ? 'green' : 'red')}`, text: (item.state.auto ? 'Auto' : 'Manual'), disable: (false), onClick: changemode }
+          { type: 'button', name: 'button_auto', class: `fixed ${(item.state.auto ? 'green' : 'red')}`, text: (item.state.auto ? 'Auto' : 'Manual'), disable: (false) }
         ]
       }
     ]

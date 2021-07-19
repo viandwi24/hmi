@@ -37,5 +37,25 @@ export default {
 
   'OIL SLUDGE_MOTOR_MSB01_Status': 'msb01.active',
   'OIL SLUDGE_MOTOR_MSB01_AlarmCb': 'msb01.alarm_1',
-  'OIL SLUDGE_MOTOR_MSB01_ManAut': 'msb01.auto'
+  'OIL SLUDGE_MOTOR_MSB01_ManAut': 'msb01.auto',
+
+  ICEAS_MOTOR_MSB02_Status: 'msb02.active',
+  ICEAS_MOTOR_MSB02_AlarmCb: 'msb02.alarm_1',
+  ICEAS_MOTOR_MSB02_ManAut: 'msb02.auto',
+
+  DECANBOX_MOTOR_MSB03_Status: 'msb03.active',
+  DECANBOX_MOTOR_MSB03_AlarmCb: 'msb03.alarm_1',
+  DECANBOX_MOTOR_MSB03_ManAut: 'msb03.auto',
+
+  DECANBOX_MOTOR_MSB04_Status: 'msb04.active',
+  DECANBOX_MOTOR_MSB04_AlarmCb: 'msb04.alarm_1',
+  DECANBOX_MOTOR_MSB04_ManAut: 'msb04.auto',
+
+  HOLDING_MOTOR_MSB05_Status: 'msb05.active',
+  HOLDING_MOTOR_MSB05_AlarmCb: 'msb05.alarm_1',
+  HOLDING_MOTOR_MSB05_ManAut: 'msb05.auto',
+
+  KULTUR_MOTOR_MSB06_Status: 'msb06.active',
+  KULTUR_MOTOR_MSB06_AlarmCb: 'msb06.alarm_1',
+  KULTUR_MOTOR_MSB06_ManAut: 'msb06.auto'
 }

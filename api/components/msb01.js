@@ -10,12 +10,6 @@ const stop = async function (component, components, ctx) {
   await store.dispatch('component/sendCommand', { ctx, name: 'OIL SLUDGE_MOTOR_MSB01_Status', value: false })
   $notifyLoading.hide()
 }
-const changemode = async function (component, components, ctx) {
-  const { $notifyLoading, store } = ctx
-  await $notifyLoading.show(ctx, 'Sending Command...', `Change mode ${component.description} / ${component.name}`)
-  await store.dispatch('component/sendCommand', { ctx, name: 'OIL SLUDGE_MOTOR_MSB01_ManAut', value: !component.state.auto })
-  $notifyLoading.hide()
-}
 
 export default {
   type: 'motor',
@@ -23,7 +17,7 @@ export default {
   name: 'M.SB01',
   description: 'Motor SUMERSIBLE',
   state: {
-    active: true,
+    active: false,
     alarm_1: false,
     alarm_2: false,
     auto: false
@@ -95,7 +89,7 @@ export default {
         name: 'Mode',
         class: 'tw-w-full',
         child: [
-          { type: 'button', name: 'button_auto', class: `fixed ${(item.state.auto ? 'green' : 'red')}`, text: (item.state.auto ? 'Auto' : 'Manual'), disable: (false), onClick: changemode }
+          { type: 'button', name: 'button_auto', class: `fixed ${(item.state.auto ? 'green' : 'red')}`, text: (item.state.auto ? 'Auto' : 'Manual'), disable: (false) }
         ]
       }
     ]

@@ -349,10 +349,10 @@
               <div v-else-if="item.type == 'level'" class="tw-relative">
                 <div class="panel-container">
                   <div class="percentage">
-                    {{ item.state.percent }}%
+                    {{ (typeof item.state.percent === 'function') ? item.state.percent(item) : item.state.percent }}%
                   </div>
                   <div class="progress">
-                    <div class="progress-bar" :style="{ height: `${item.state.percent}%` }" />
+                    <div class="progress-bar" :style="{ height: `${(typeof item.state.percent === 'function') ? item.state.percent(item) : item.state.percent}%` }" />
                   </div>
                   <div>lvl</div>
                 </div>
@@ -378,7 +378,7 @@
                 </div>
                 <div class="group-content">
                   <div v-for="(item, j) in group.child" :key="j" :class="(typeof group.class == 'undefined' ? '' : group.class)">
-                    <button v-if="item.type == 'button'" :class="item.class" :disabled="item.disable" @click="item.onClick(componentSelected, components, ctx)">
+                    <button v-if="item.type == 'button'" :class="item.class" :disabled="item.disable" @click="(item.onClick) ? item.onClick(componentSelected, components, ctx) : false">
                       <font-awesome-icon v-if="item.icon" :icon="item.icon" class="tw-mx-1" />
                       <span>{{ item.text }}</span>
                     </button>
@@ -437,6 +437,7 @@ import {
 } from '@nuxtjs/composition-api'
 
 import componentStateMapping from '@/api/componentStateMapping.js'
+import panelStateMapping from '@/api/panelStateMapping.js'
 import componentMBW01 from '@/api/components/mbw01.js'
 import componentMBW02 from '@/api/components/mbw02.js'
 import componentMT021 from '@/api/components/mto21.js'
@@ -610,12 +611,28 @@ export default {
     ])
 
     // panels
+    const buildPercent = (item) => {
+      let res
+      if (item.state.high) {
+        res = 100
+      } else if (item.state.med) {
+        res = 80
+      } else if (item.state.low) {
+        res = 30
+      } else {
+        res = 0
+      }
+      return res
+    }
     const panels = reactive([
       {
         type: 'level',
         id: 'bak',
         state: {
-          percent: 30
+          high: 0,
+          med: 0,
+          low: 0,
+          percent: buildPercent
         },
         meta: {
           position: {
@@ -630,7 +647,10 @@ export default {
         type: 'level',
         id: 'costic',
         state: {
-          percent: 30
+          high: 0,
+          med: 0,
+          low: 0,
+          percent: buildPercent
         },
         meta: {
           position: {
@@ -645,7 +665,10 @@ export default {
         type: 'level',
         id: 'decan-box',
         state: {
-          percent: 80
+          high: 0,
+          med: 0,
+          low: 0,
+          percent: buildPercent
         },
         meta: {
           position: {
@@ -660,7 +683,10 @@ export default {
         type: 'level',
         id: 'influent',
         state: {
-          percent: 80
+          high: 0,
+          med: 0,
+          low: 0,
+          percent: buildPercent
         },
         meta: {
           position: {
@@ -675,7 +701,10 @@ export default {
         type: 'level',
         id: 'kultur',
         state: {
-          percent: 50
+          high: 0,
+          med: 0,
+          low: 0,
+          percent: buildPercent
         },
         meta: {
           position: {
@@ -690,7 +719,10 @@ export default {
         type: 'level',
         id: 'iceas',
         state: {
-          percent: 30
+          high: 0,
+          med: 0,
+          low: 0,
+          percent: buildPercent
         },
         meta: {
           position: {
@@ -1416,11 +1448,20 @@ export default {
     watch(componentStates, (newValue, oldValue) => {
       try {
         newValue.forEach((item, i) => {
+          let value = item.value
+          if (item.tipedata === 'Bool') {
+            value = (item.value === 1)
+          }
           if (componentStateMapping[item.name] != null) {
             const destination = `${componentStateMapping[item.name]}`.split('.')
-            const value = (item.value === 1)
             const componentIndex = components.findIndex(component => component.id === destination[0])
             components[componentIndex].state[destination[1]] = value
+          }
+          if (panelStateMapping[item.name] != null) {
+            const destination = `${panelStateMapping[item.name]}`.split('.')
+            const panelIndex = panels.findIndex(component => component.id === destination[0])
+            panels[panelIndex].state[destination[1]] = value
+            console.log(value)
           }
         })
       } catch (error) {
