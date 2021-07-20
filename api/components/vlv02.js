@@ -1,13 +1,13 @@
 const start = async function (component, components, ctx) {
   const { $notifyLoading, store } = ctx
   await $notifyLoading.show(ctx, 'Sending Command...', `Turn on ${component.description} / ${component.name}`)
-  await store.dispatch('component/sendCommand', { ctx, name: 'INFLUENT_VALVE_VLV02_Status', value: 1 })
+  await store.dispatch('component/sendCommand', { ctx, name: 'INFLUENT_VALVE_VLV02_Open', value: true })
   $notifyLoading.hide()
 }
 const stop = async function (component, components, ctx) {
   const { $notifyLoading, store } = ctx
   await $notifyLoading.show(ctx, 'Sending Command...', `Turn off ${component.description} / ${component.name}`)
-  await store.dispatch('component/sendCommand', { ctx, name: 'INFLUENT_VALVE_VLV02_Status', value: 0 })
+  await store.dispatch('component/sendCommand', { ctx, name: 'INFLUENT_VALVE_VLV02_Close', value: true })
   $notifyLoading.hide()
 }
 

@@ -8,10 +8,10 @@ export default ({ app }, inject) => {
     }
   })
   inject('notifyLoading', {
-    show: async (ctx, title = 'Loading...', description = 'Please wait...') => {
+    show: async (ctx, title = 'Loading...', description = 'Please wait...', background = true) => {
       const { $sleep } = ctx
       app.store.commit('SET_NOTIFY_LOADING', {
-        show: true, title, description
+        show: true, title, description, background
       })
       await $sleep(1500)
     },

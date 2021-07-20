@@ -1,13 +1,13 @@
 const start = async function (component, components, ctx) {
   const { $notifyLoading, store } = ctx
   await $notifyLoading.show(ctx, 'Sending Command...', `Turn on ${component.description} / ${component.name}`)
-  await store.dispatch('component/sendCommand', { ctx, name: 'DECANBOX_MOTOR_MSB03_Status', value: true })
+  await store.dispatch('component/sendCommand', { ctx, name: 'DECANBOX_MOTOR_MSB03_Run', value: true })
   $notifyLoading.hide()
 }
 const stop = async function (component, components, ctx) {
   const { $notifyLoading, store } = ctx
   await $notifyLoading.show(ctx, 'Sending Command...', `Turn off ${component.description} / ${component.name}`)
-  await store.dispatch('component/sendCommand', { ctx, name: 'DECANBOX_MOTOR_MSB03_Status', value: false })
+  await store.dispatch('component/sendCommand', { ctx, name: 'DECANBOX_MOTOR_MSB03_Stop', value: true })
   $notifyLoading.hide()
 }
 

@@ -365,7 +365,7 @@
     <div class="footer">
       <div class="footer-container">
         <div
-          v-if="notifyLoading.show"
+          v-if="notifyLoading.show && notifyLoading.background"
           style="background: rgba(0, 0, 0, .5);"
           class="tw-fixed tw-w-full tw-h-full"
         />
@@ -1297,6 +1297,7 @@ export default {
     }
 
     // life cylce
+    let timerRefreshState = null
     onMounted(() => {
       // ctx = document.createElement('canvas').getContext('2d')
       if (localStorage.getItem('controls') !== null) {
@@ -1326,11 +1327,21 @@ export default {
       }
 
       // get data
-      store.dispatch('component/fetchComponentState', { ctx })
+      let backgroundFetch = true
+      const b = () => {
+        timerRefreshState = setTimeout(a, 5000)
+      }
+      const a = async () => {
+        await store.dispatch('component/fetchComponentState', { ctx, background: backgroundFetch })
+        backgroundFetch = false
+        b()
+      }
+      a()
     })
     onUnmounted(() => {
       forceRerender()
-      clearTimeout(timerRezise)
+      clearInterval(timerRezise)
+      clearTimeout(timerRefreshState)
       document.removeEventListener('mousewheel', onWindowScroll)
       document.removeEventListener('keydown', onWindowKeyDown)
       document.removeEventListener('keyup', onWindowKeyUp)
@@ -1339,6 +1350,8 @@ export default {
       document.addEventListener('mousewheel', onWindowScroll)
       document.addEventListener('keydown', onWindowKeyDown)
       document.addEventListener('keyup', onWindowKeyUp)
+      clearInterval(timerRezise)
+      clearTimeout(timerRefreshState)
     })
 
     // toggle

@@ -25,9 +25,13 @@ export const actions = {
     // $overlayLoading.show()
     // console.log({ app, name, value, $axios })
   },
-  async fetchComponentState ({ commit }, { ctx }) {
-    const { $overlayLoading, $axios } = ctx
-    $overlayLoading.show()
+  async fetchComponentState ({ commit }, params) {
+    const { $overlayLoading, $notifyLoading, $axios } = params.ctx
+    if (params.background) {
+      $overlayLoading.show()
+    } else {
+      await $notifyLoading.show(params.ctx, 'Fetching state...', 'Updating state of all component...', false)
+    }
     let res
     const a = async () => {
       res = await $axios.get('/tags')
@@ -40,7 +44,11 @@ export const actions = {
       await a()
     }
 
-    $overlayLoading.hide()
+    if (params.background) {
+      $overlayLoading.hide()
+    } else {
+      $notifyLoading.hide()
+    }
     return res.data.data
   },
   test ({ commit }, item) {

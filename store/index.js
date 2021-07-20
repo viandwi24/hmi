@@ -3,7 +3,8 @@ export const state = () => ({
   notifyLoading: {
     show: false,
     title: '',
-    description: ''
+    description: '',
+    background: true
   }
 })
 
@@ -15,6 +16,9 @@ export const mutations = {
     state.notifyLoading.show = params.show
     if (params.title) {
       state.notifyLoading.title = params.title
+    }
+    if (params.background === true || params.background === false) {
+      state.notifyLoading.background = params.background
     }
     if (params.description) {
       state.notifyLoading.description = params.description
