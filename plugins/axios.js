@@ -7,7 +7,6 @@ function safeUrl () {
 export default function ({ $axios }) {
   $axios.setBaseURL(safeUrl())
   $axios.interceptors.response.use(function (response) {
-    console.log(response)
     return response
   }, function (error) {
     const res = error.response

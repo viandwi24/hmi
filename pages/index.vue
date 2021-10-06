@@ -1329,7 +1329,7 @@ export default {
       // get data
       let backgroundFetch = true
       const b = () => {
-        timerRefreshState = setTimeout(a, 5000)
+        timerRefreshState = setTimeout(a, 2000)
       }
       const a = async () => {
         await store.dispatch('component/fetchComponentState', { ctx, background: backgroundFetch })
@@ -1474,7 +1474,6 @@ export default {
             const destination = `${panelStateMapping[item.name]}`.split('.')
             const panelIndex = panels.findIndex(component => component.id === destination[0])
             panels[panelIndex].state[destination[1]] = value
-            console.log(value)
           }
         })
       } catch (error) {

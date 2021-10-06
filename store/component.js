@@ -52,6 +52,6 @@ export const actions = {
     return res.data.data
   },
   test ({ commit }, item) {
-    console.log(item)
+    // console.log(item)
   }
 }
