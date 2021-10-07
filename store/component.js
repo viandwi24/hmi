@@ -1,5 +1,6 @@
 export const state = () => ({
-  states: []
+  states: [],
+  sendingCommand: false
 })
 
 export const getters = () => ({
@@ -9,6 +10,9 @@ export const getters = () => ({
 })
 
 export const mutations = {
+  setSendingCommand (state, active = true) {
+    state.sendingCommand = active
+  },
   setStates (state, val = null) {
     state.states = []
     state.states = val
@@ -16,17 +20,29 @@ export const mutations = {
 }
 
 export const actions = {
-  async sendCommand ({ dispatch }, { ctx, name, value }) {
+  async sendCommand ({ commit }, { ctx, name, value }) {
     const { $axios } = ctx
-    const data = await $axios.put('/tags', { name, value })
-    dispatch('fetchComponentState', { ctx })
+    // commit sending command true
+    commit('setSendingCommand', true)
+    let data
+    try {
+      data = await $axios.put('/tags', { name, value })
+    } catch (error) {
+    }
+    // commit sending command false
+    commit('setSendingCommand', false)
+    // dispatch('fetchComponentState', { ctx })
     return data
     // console.log({ $overlayLoading, data })
     // $overlayLoading.show()
     // console.log({ app, name, value, $axios })
   },
-  async fetchComponentState ({ commit }, params) {
+  async fetchComponentState ({ commit, state }, params) {
     const { $overlayLoading, $notifyLoading, $axios } = params.ctx
+    if (state.sendingCommand) {
+      return undefined
+    }
+
     if (params.background) {
       $overlayLoading.show()
     } else {
