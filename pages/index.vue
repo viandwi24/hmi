@@ -165,43 +165,6 @@
               </ul>
             </div>
           </div>
-          <div class="group">
-            <div class="header">
-              Testing
-            </div>
-            <div class="content tw-space-y-1">
-              <div class="tw-flex tw-w-full">
-                <div class="tw-w-1/2">
-                  Send Alarm
-                </div>
-                <div class="tw-w-1/2 tw-flex">
-                  <button class="tw-bg-gray-200 hover:tw-bg-gray-300 tw-text-gray-800 tw-p-1 tw-rounded-sm tw-text-xs" @click="toggleAlarm">
-                    Toggle
-                  </button>
-                </div>
-              </div>
-              <div class="tw-flex tw-w-full">
-                <div class="tw-w-1/2">
-                  Ch. lvl
-                </div>
-                <div class="tw-w-1/2 tw-flex">
-                  <button class="tw-bg-gray-200 hover:tw-bg-gray-300 tw-text-gray-800 tw-p-1 tw-rounded-sm tw-text-xs" @click="toggleChLvl">
-                    Toggle
-                  </button>
-                </div>
-              </div>
-              <div class="tw-flex tw-w-full">
-                <div class="tw-w-1/2">
-                  Test DB
-                </div>
-                <div class="tw-w-1/2 tw-flex">
-                  <button class="tw-bg-gray-200 hover:tw-bg-gray-300 tw-text-gray-800 tw-p-1 tw-rounded-sm tw-text-xs" @click="test">
-                    test
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
       <div v-if="showAlarmPanel" class="controls right danger">
@@ -1329,7 +1292,7 @@ export default {
       // get data
       let backgroundFetch = true
       const b = () => {
-        timerRefreshState = setTimeout(a, 2000)
+        timerRefreshState = setTimeout(a, 5000)
       }
       const a = async () => {
         await store.dispatch('component/fetchComponentState', { ctx, background: backgroundFetch })
@@ -1458,6 +1421,7 @@ export default {
 
     // component state
     const componentStates = computed(() => store.state.component.states)
+    const componentDevices = computed(() => store.state.component.devices)
     watch(componentStates, (newValue, oldValue) => {
       try {
         newValue.forEach((item, i) => {
@@ -1469,6 +1433,14 @@ export default {
             const destination = `${componentStateMapping[item.name]}`.split('.')
             const componentIndex = components.findIndex(component => component.id === destination[0])
             components[componentIndex].state[destination[1]] = value
+            if (typeof components[componentIndex].state.alarm_2 === 'boolean') {
+              if (item.device_id) {
+                const findDevices = componentDevices.value.find(device => device.id === item.device_id)
+                if (findDevices) {
+                  components[componentIndex].state.alarm_2 = (findDevices.status !== 'connected')
+                }
+              }
+            }
           }
           if (panelStateMapping[item.name] != null) {
             const destination = `${panelStateMapping[item.name]}`.split('.')

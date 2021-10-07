@@ -1,5 +1,6 @@
 export const state = () => ({
   states: [],
+  devices: [],
   sendingCommand: false
 })
 
@@ -15,7 +16,9 @@ export const mutations = {
   },
   setStates (state, val = null) {
     state.states = []
-    state.states = val
+    state.devices = []
+    state.states = val.tags
+    state.devices = val.devices
   }
 }
 
