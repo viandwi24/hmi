@@ -1292,7 +1292,7 @@ export default {
       // get data
       let backgroundFetch = true
       const b = () => {
-        timerRefreshState = setTimeout(a, 5000)
+        timerRefreshState = setTimeout(a, 2000)
       }
       const a = async () => {
         await store.dispatch('component/fetchComponentState', { ctx, background: backgroundFetch })
