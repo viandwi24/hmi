@@ -1299,7 +1299,7 @@ export default {
         backgroundFetch = false
         b()
       }
-      a()
+      // a()
     })
     onUnmounted(() => {
       forceRerender()
