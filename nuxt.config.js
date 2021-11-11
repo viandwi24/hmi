@@ -55,7 +55,8 @@ export default {
     '@nuxtjs/eslint-module',
     '@nuxtjs/composition-api/module',
     '@nuxtjs/tailwindcss',
-    '@nuxtjs/fontawesome'
+    '@nuxtjs/fontawesome',
+    '@nuxtjs/moment'
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules

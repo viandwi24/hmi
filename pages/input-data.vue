@@ -21,7 +21,7 @@
         </div>
       </div>
     </div>
-    <div class="screen tw-relative tw-px-40 tw-py-10 tw-bg-red-500">
+    <div class="screen tw-relative tw-px-40 tw-py-10">
       <div class="tw-bg-gray-200 tw-shadow-lg tw-rounded tw-flex tw-flex-col tw-h-full tw-max-h-full">
         <div class="tw-flex">
           <div class="tw-flex-1 tw-flex tw-space-x-4 tw-px-4 tw-py-4">

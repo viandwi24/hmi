@@ -35,21 +35,23 @@
           </button>
         </div>
         <div class="tw-shadow-lg tw-bg-gray-200 tw-rounded" style="flex: 1 1 0%;overflow-y: auto;">
-          <div class="tw-flex">
+          <div class="tw-flex tw-justify-between">
             <div class="tw-self-center tw-pl-4 tw-text-xl tw-text-blue-800 tw-font-semibold">
               <span v-if="tabSelected == 1">Data Outlet /Hari</span>
               <span v-if="tabSelected == 2">Data Inlet /Hari</span>
               <span v-if="tabSelected == 3">Data Kinerja Ipal /Hari</span>
             </div>
-            <div class="tw-flex-1 tw-text-right tw-px-4 tw-py-4">
+            <div class="tw-flex tw-space-x-4 tw-text-right tw-px-4 tw-py-4">
               <button class="tw-bg-blue-500 hover:tw-bg-blue-700 tw-text-xs tw-text-white tw-font-bold tw-py-2 tw-px-4 tw-rounded">
                 Export
                 <font-awesome-icon :icon="['fas', 'file-excel']" class="tw-ml-1 tw-self-center" />
               </button>
-              <button class="tw-bg-blue-500 hover:tw-bg-blue-700 tw-text-xs tw-text-white tw-font-bold tw-py-2 tw-px-4 tw-rounded">
-                2012/04/24 - 2012/04/25
-                <font-awesome-icon :icon="['fas', 'file-excel']" class="tw-ml-1 tw-self-center" />
-              </button>
+              <div class="tw-relative tw-overflow-hidden tw-rounded tw-border tw-border-gray-400">
+                <div class="tw-top-1/2 tw-p-4 tw-self-center tw-inline">
+                  <font-awesome-icon :icon="['fas', 'calendar']" />
+                </div>
+                <input v-model="filterDate" type="date" class="tw-text-xs tw-font-bold tw-py-2 tw-px-4 tw-outline-none">
+              </div>
             </div>
           </div>
           <div v-if="tabSelected == 1">
@@ -119,376 +121,93 @@
 import {
   reactive,
   ref,
-  useContext
+  useContext,
+  useFetch,
+  watch
 } from '@nuxtjs/composition-api'
 import { footerMenu as footerMenuList } from '@/api/footerMenu.js'
 
 export default {
   setup () {
-    const { app } = useContext()
-    const goBack = () => {
-      app.router.push({ path: '/', query: { page: 'overview' } })
-    }
+    const { app, $axios, $overlayLoading, $moment } = useContext()
+    const goBack = () => app.router.push({ path: '/', query: { page: 'overview' } })
     const footerMenu = reactive(footerMenuList(app.router))
     const tabSelected = ref(1)
     const dataInlet = reactive({
-      columns: [
-        {
-          label: 'Date Time',
-          field: 'created_at'
-        },
-        {
-          label: 'COD',
-          field: 'cod'
-        },
-        {
-          label: 'BOD',
-          field: 'bod'
-        },
-        {
-          label: 'TSS',
-          field: 'tss'
-        },
-        {
-          label: 'pH',
-          field: 'ph'
-        },
-        {
-          label: 'L&M',
-          field: 'lam'
-        },
-        {
-          label: 'NH3',
-          field: 'nh3'
-        },
-        {
-          label: 'FE',
-          field: 'fe'
-        },
-        {
-          label: 'CU',
-          field: 'cu'
-        },
-        {
-          label: 'Temperature',
-          field: 'temp'
-        },
-        {
-          label: 'Debit',
-          field: 'debit'
-        }
-      ],
-      rows: [
-        {
-          created_at: '2020-04-24 24:10:10',
-          cod: 100,
-          bod: 44.53,
-          tss: 80.84,
-          ph: '6 - 9',
-          lam: 2.82,
-          nh3: 10,
-          fe: 3,
-          cu: 1,
-          temp: 32,
-          debit: 58.2
-        },
-        {
-          created_at: '2020-04-24 24:10:10',
-          cod: 100,
-          bod: 44.53,
-          tss: 80.84,
-          ph: '6 - 9',
-          lam: 2.82,
-          nh3: 10,
-          fe: 3,
-          cu: 1,
-          temp: 32,
-          debit: 58.2
-        },
-        {
-          created_at: '2020-04-24 24:10:10',
-          cod: 100,
-          bod: 44.53,
-          tss: 80.84,
-          ph: '6 - 9',
-          lam: 2.82,
-          nh3: 10,
-          fe: 3,
-          cu: 1,
-          temp: 32,
-          debit: 58.2
-        },
-        {
-          created_at: '2020-04-24 24:10:10',
-          cod: 100,
-          bod: 44.53,
-          tss: 80.84,
-          ph: '6 - 9',
-          lam: 2.82,
-          nh3: 10,
-          fe: 3,
-          cu: 1,
-          temp: 32,
-          debit: 58.2
-        },
-        {
-          created_at: '2020-04-24 24:10:10',
-          cod: 100,
-          bod: 44.53,
-          tss: 80.84,
-          ph: '6 - 9',
-          lam: 2.82,
-          nh3: 10,
-          fe: 3,
-          cu: 1,
-          temp: 32,
-          debit: 58.2
-        },
-        {
-          created_at: '2020-04-24 24:10:10',
-          cod: 100,
-          bod: 44.53,
-          tss: 80.84,
-          ph: '6 - 9',
-          lam: 2.82,
-          nh3: 10,
-          fe: 3,
-          cu: 1,
-          temp: 32,
-          debit: 58.2
-        },
-        {
-          created_at: '2020-04-24 24:10:10',
-          cod: 100,
-          bod: 44.53,
-          tss: 80.84,
-          ph: '6 - 9',
-          lam: 2.82,
-          nh3: 10,
-          fe: 3,
-          cu: 1,
-          temp: 32,
-          debit: 58.2
-        },
-        {
-          created_at: '2020-04-24 24:10:10',
-          cod: 100,
-          bod: 44.53,
-          tss: 80.84,
-          ph: '6 - 9',
-          lam: 2.82,
-          nh3: 10,
-          fe: 3,
-          cu: 1,
-          temp: 32,
-          debit: 58.2
-        },
-        {
-          created_at: '2020-04-24 24:10:10',
-          cod: 100,
-          bod: 44.53,
-          tss: 80.84,
-          ph: '6 - 9',
-          lam: 2.82,
-          nh3: 10,
-          fe: 3,
-          cu: 1,
-          temp: 32,
-          debit: 58.2
-        },
-        {
-          created_at: '2020-04-24 24:10:10',
-          cod: 100,
-          bod: 44.53,
-          tss: 80.84,
-          ph: '6 - 9',
-          lam: 2.82,
-          nh3: 10,
-          fe: 3,
-          cu: 1,
-          temp: 32,
-          debit: 58.2
-        },
-        {
-          created_at: '2020-04-24 24:10:10',
-          cod: 100,
-          bod: 44.53,
-          tss: 80.84,
-          ph: '6 - 9',
-          lam: 2.82,
-          nh3: 10,
-          fe: 3,
-          cu: 1,
-          temp: 32,
-          debit: 58.2
-        },
-        {
-          created_at: '2020-04-24 24:10:10',
-          cod: 100,
-          bod: 44.53,
-          tss: 80.84,
-          ph: '6 - 9',
-          lam: 2.82,
-          nh3: 10,
-          fe: 3,
-          cu: 1,
-          temp: 32,
-          debit: 58.2
-        },
-        {
-          created_at: '2020-04-24 24:10:10',
-          cod: 100,
-          bod: 44.53,
-          tss: 80.84,
-          ph: '6 - 9',
-          lam: 2.82,
-          nh3: 10,
-          fe: 3,
-          cu: 1,
-          temp: 32,
-          debit: 58.2
-        },
-        {
-          created_at: '2020-04-24 24:10:10',
-          cod: 100,
-          bod: 44.53,
-          tss: 80.84,
-          ph: '6 - 9',
-          lam: 2.82,
-          nh3: 10,
-          fe: 3,
-          cu: 1,
-          temp: 32,
-          debit: 58.2
-        }
-      ]
+      columns: [],
+      rows: []
     })
     const dataOutlet = reactive({
-      columns: [
-        {
-          label: 'Date Time',
-          field: 'created_at'
-        },
-        {
-          label: 'COD',
-          field: 'cod'
-        },
-        {
-          label: 'BOD',
-          field: 'bod'
-        },
-        {
-          label: 'TSS',
-          field: 'tss'
-        },
-        {
-          label: 'pH',
-          field: 'ph'
-        },
-        {
-          label: 'L&M',
-          field: 'lam'
-        },
-        {
-          label: 'NH3',
-          field: 'nh3'
-        },
-        {
-          label: 'FE',
-          field: 'fe'
-        },
-        {
-          label: 'CU',
-          field: 'cu'
-        },
-        {
-          label: 'Temperature',
-          field: 'temp'
-        },
-        {
-          label: 'Debit',
-          field: 'debit'
-        }
-      ],
-      rows: [
-        {
-          created_at: '2020-04-24 24:10:10',
-          cod: 100,
-          bod: 44.53,
-          tss: 80.84,
-          ph: '6 - 9',
-          lam: 2.82,
-          nh3: 10,
-          fe: 3,
-          cu: 1,
-          temp: 32,
-          debit: 58.2
-        }
-      ]
+      columns: [],
+      rows: []
     })
     const dataIpal = reactive({
-      columns: [
-        {
-          label: 'Date Time',
-          field: 'created_at'
-        },
-        {
-          label: 'COD',
-          field: 'cod'
-        },
-        {
-          label: 'BOD',
-          field: 'bod'
-        },
-        {
-          label: 'TSS',
-          field: 'tss'
-        },
-        {
-          label: 'pH',
-          field: 'ph'
-        },
-        {
-          label: 'L&M',
-          field: 'lam'
-        },
-        {
-          label: 'NH3',
-          field: 'nh3'
-        },
-        {
-          label: 'FE',
-          field: 'fe'
-        },
-        {
-          label: 'CU',
-          field: 'cu'
-        },
-        {
-          label: 'Temperature',
-          field: 'temp'
-        },
-        {
-          label: 'Debit',
-          field: 'debit'
-        }
-      ],
-      rows: [
-        {
-          created_at: '2020-04-24 24:10:10',
-          cod: 100,
-          bod: 44.53,
-          tss: 80.84,
-          ph: '6 - 9',
-          lam: 2.82,
-          nh3: 10,
-          fe: 3,
-          cu: 1,
-          temp: 32,
-          debit: 58.2
-        }
-      ]
+      columns: [],
+      rows: []
     })
+
+    // filters
+    const labels = reactive([])
+    const filterDate = ref($moment(Date.now()).format('YYYY-MM-DD'))
+    watch(filterDate, e => fetch())
+
+    // fetch labels for reports
+    const { fetch } = useFetch(async () => {
+      try {
+        $overlayLoading.show()
+        const labelsResponse = await $axios({
+          method: 'get',
+          url: '/reports-label'
+        })
+        if (labelsResponse.status === 200 && labelsResponse.data.status === true) {
+          // columns
+          const data = [...labelsResponse.data.data]
+          const columns = [{
+            label: 'Date',
+            field: 'reportDate'
+          }]
+          data.forEach((e) => {
+            columns.push({
+              label: e.name,
+              field: e.name
+            })
+          })
+          dataInlet.columns = [...columns]
+          dataOutlet.columns = [...columns]
+          dataIpal.columns = [...columns]
+
+          // rows
+          const rowsReport = await $axios({
+            method: 'get',
+            url: '/reports',
+            params: {
+              date: filterDate.value
+            }
+          })
+          if (rowsReport.status === 200 && rowsReport.data.status === true) {
+            const data = [...rowsReport.data.data]
+            const rows = []
+            data.forEach((e) => {
+              const dateFormated = e => $moment(e).format('DD/MM/YYYY')
+              const rowsIndexSearchDate = rows.findIndex(row => (dateFormated(row.reportDate) === dateFormated(e.reportDate)) || row.tipe === e.tipe)
+              if (rowsIndexSearchDate === -1) {
+                const row = { reportDate: dateFormated(e.reportDate), tipe: e.tipe }
+                row[e.label_name] = e.value
+                rows.push(row)
+              } else {
+                rows[rowsIndexSearchDate][e.label_name] = e.value
+              }
+            })
+            dataInlet.rows = [...rows.filter(row => row.tipe === 1)]
+            dataOutlet.rows = [...rows.filter(row => row.tipe === 0)]
+          }
+        }
+      } catch (error) {
+        console.log(error)
+      }
+      $overlayLoading.hide()
+    })
+    fetch()
 
     return {
       footerMenu,
@@ -496,7 +215,10 @@ export default {
       goBack,
       dataInlet,
       dataOutlet,
-      dataIpal
+      dataIpal,
+
+      labels,
+      filterDate
     }
   }
 }
