@@ -122,7 +122,6 @@
 
 <script>
 import {
-  computed,
   reactive,
   ref,
   useContext,
@@ -134,21 +133,21 @@ import { footerMenu as footerMenuList } from '@/api/footerMenu.js'
 export default {
   setup () {
     const { app, $axios, $overlayLoading, $moment } = useContext()
-    const apibaseurl = computed(() => $axios.defaults.baseURL)
+    const apibaseurl = $axios.defaults.baseURL
     const goBack = () => {
       app.router.push({ path: '/', query: { page: 'overview' } })
     }
     const footerMenu = reactive(footerMenuList(app.router))
     const tabSelected = ref(1)
-    const dataInlet = reactive({
+    const dataInlet = ref({
       columns: [],
       rows: []
     })
-    const dataOutlet = reactive({
+    const dataOutlet = ref({
       columns: [],
       rows: []
     })
-    const dataIpal = reactive({
+    const dataIpal = ref({
       columns: [],
       rows: []
     })
@@ -180,9 +179,9 @@ export default {
               field: e.name
             })
           })
-          dataInlet.columns = [...columns]
-          dataOutlet.columns = [...columns]
-          dataIpal.columns = [...columns]
+          dataInlet.value.columns = [...columns]
+          dataOutlet.value.columns = [...columns]
+          dataIpal.value.columns = [...columns]
 
           // rows
           const rowsReport = await $axios({
@@ -224,8 +223,8 @@ export default {
               }
               return 0
             })
-            dataInlet.rows = [...sortedRows.filter(row => row.tipe === 1)]
-            dataOutlet.rows = [...sortedRows.filter(row => row.tipe === 0)]
+            dataInlet.value.rows = [...sortedRows.filter(row => row.tipe === 1)]
+            dataOutlet.value.rows = [...sortedRows.filter(row => row.tipe === 0)]
           }
         }
       } catch (error) {
