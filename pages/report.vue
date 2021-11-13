@@ -190,12 +190,6 @@ export default {
           dataInlet.value.columns = [...columns]
           dataOutlet.value.columns = [...columns]
 
-          // columns without index 0
-          const ipalCols = columns.slice(1)
-          dataIpalKadar.value.columns = [{ label: 'Tipe', field: 'tipe' }, ...ipalCols]
-          dataIpalPencemaran.value.columns = [{ label: 'Tipe', field: 'tipe' }, ...ipalCols]
-          dataIpalReduksi.value.columns = [...ipalCols]
-
           // rows
           const rowsReport = await $axios({
             method: 'get',
@@ -240,13 +234,15 @@ export default {
             dataOutlet.value.rows = [...sortedRows.filter(row => row.tipe === 0)]
 
             // report ipal
-            const countAvg1Month = (a, b) => {
-              const dataIpalKadarInletAvgIn1Month = b
+            const countAvg1Month = (a, b, c) => {
+              let dataIpalKadarInletAvgIn1Month = b
               const dataIpalKadarInletAvgIn1MonthCount = {}
               a.forEach((e) => {
                 // e is object, foreach key
                 Object.keys(e).forEach((key) => {
-                  if (key === 'reportDate' || key === 'tipe') {
+                  // const onlyKey = ['BOD', 'COD', 'TSS', 'LEMAK & MINYAK', '', 'AMONIAK', 'FE', 'CU']
+                  const exceptKey = ['tipe']
+                  if (exceptKey.includes(key)) {
                     return
                   }
                   if (!dataIpalKadarInletAvgIn1Month[key]) {
@@ -261,6 +257,22 @@ export default {
                   dataIpalKadarInletAvgIn1MonthCount[key] += 1
                 })
               })
+              dataIpalKadarInletAvgIn1Month = c(dataIpalKadarInletAvgIn1Month, dataIpalKadarInletAvgIn1MonthCount)
+              return dataIpalKadarInletAvgIn1Month
+            }
+
+            // columns without index 0
+            const ipalCols = columns.slice(1)
+            const ipalColsIpal = ipalCols.filter((row) => {
+              const onlyKey = ['BOD', 'COD', 'TSS', 'LEMAK & MINYAK', '', 'AMONIAK', 'FE', 'CU']
+              return onlyKey.includes(row.field)
+            })
+            dataIpalKadar.value.columns = [{ label: 'Tipe', field: 'tipe' }, ...ipalColsIpal]
+            dataIpalPencemaran.value.columns = [{ label: 'Tipe', field: 'tipe' }, ...ipalColsIpal]
+            dataIpalReduksi.value.columns = [...ipalColsIpal]
+
+            // data ipal kadar
+            const functionsIpalKadar = (dataIpalKadarInletAvgIn1Month, dataIpalKadarInletAvgIn1MonthCount) => {
               Object.keys(dataIpalKadarInletAvgIn1Month).forEach((key) => {
                 if (dataIpalKadarInletAvgIn1MonthCount[key] > 0) {
                   dataIpalKadarInletAvgIn1Month[key] = parseFloat(dataIpalKadarInletAvgIn1Month[key] / dataIpalKadarInletAvgIn1MonthCount[key]).toFixed(2)
@@ -268,10 +280,8 @@ export default {
               })
               return dataIpalKadarInletAvgIn1Month
             }
-
-            // data ipal kadar
-            const dataIpalKadarInletAvgIn1Month = countAvg1Month(sortedRows.filter(row => row.tipe === 1), { tipe: 'Inlet' })
-            const dataIpalKadarOutletAvgIn1Month = countAvg1Month(sortedRows.filter(row => row.tipe === 0), { tipe: 'Outlet' })
+            const dataIpalKadarInletAvgIn1Month = countAvg1Month(sortedRows.filter(row => row.tipe === 1), { tipe: 'Inlet' }, functionsIpalKadar)
+            const dataIpalKadarOutletAvgIn1Month = countAvg1Month(sortedRows.filter(row => row.tipe === 0), { tipe: 'Outlet' }, functionsIpalKadar)
             dataIpalKadar.value.rows = [dataIpalKadarInletAvgIn1Month, dataIpalKadarOutletAvgIn1Month]
 
             // data ipal reduksi
@@ -284,7 +294,22 @@ export default {
               }
             })
             dataIpalReduksi.value.rows = [dataIpalReduksiAvgIn1Month]
-            // console.log(dataIpalReduksiAvgIn1Month)
+
+            // beban
+            const functionsIpalBeban = (dataIpalKadarInletAvgIn1Month, dataIpalKadarInletAvgIn1MonthCount) => {
+              Object.keys(dataIpalKadarInletAvgIn1Month).forEach((key) => {
+                if (dataIpalKadarInletAvgIn1MonthCount[key] > 0) {
+                  dataIpalKadarInletAvgIn1Month[key] = parseFloat(
+                    (dataIpalKadarInletAvgIn1Month[key] / dataIpalKadarInletAvgIn1MonthCount[key]) *
+                    (dataIpalKadarInletAvgIn1Month['DEBIT AIR LIMBAH'] / dataIpalKadarInletAvgIn1Month['DEBIT AIR LIMBAH']) * 0.001
+                  ).toFixed(2)
+                }
+              })
+              return dataIpalKadarInletAvgIn1Month
+            }
+            const dataIpalBebanInletAvgIn1Month = countAvg1Month(sortedRows.filter(row => row.tipe === 1), { tipe: 'Inlet' }, functionsIpalBeban)
+            const dataIpalBebanOutletAvgIn1Month = countAvg1Month(sortedRows.filter(row => row.tipe === 0), { tipe: 'Outlet' }, functionsIpalBeban)
+            dataIpalPencemaran.value.rows = [dataIpalBebanInletAvgIn1Month, dataIpalBebanOutletAvgIn1Month]
           }
         }
       } catch (error) {
