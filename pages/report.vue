@@ -275,7 +275,7 @@ export default {
             const functionsIpalKadar = (dataIpalKadarInletAvgIn1Month, dataIpalKadarInletAvgIn1MonthCount) => {
               Object.keys(dataIpalKadarInletAvgIn1Month).forEach((key) => {
                 if (dataIpalKadarInletAvgIn1MonthCount[key] > 0) {
-                  dataIpalKadarInletAvgIn1Month[key] = parseFloat(dataIpalKadarInletAvgIn1Month[key] / dataIpalKadarInletAvgIn1MonthCount[key]).toFixed(2)
+                  dataIpalKadarInletAvgIn1Month[key] = parseFloat(dataIpalKadarInletAvgIn1Month[key] / dataIpalKadarInletAvgIn1MonthCount[key]).toFixed(3)
                 }
               })
               return dataIpalKadarInletAvgIn1Month
@@ -290,7 +290,7 @@ export default {
               if (key !== 'tipe') {
                 dataIpalReduksiAvgIn1Month[key] = parseFloat(
                   (dataIpalKadarInletAvgIn1Month[key] - dataIpalKadarOutletAvgIn1Month[key]) / (dataIpalKadarInletAvgIn1Month[key] * 100)
-                ).toFixed(2)
+                ).toFixed(3)
               }
             })
             dataIpalReduksi.value.rows = [dataIpalReduksiAvgIn1Month]
@@ -302,7 +302,7 @@ export default {
                   dataIpalKadarInletAvgIn1Month[key] = parseFloat(
                     (dataIpalKadarInletAvgIn1Month[key] / dataIpalKadarInletAvgIn1MonthCount[key]) *
                     (dataIpalKadarInletAvgIn1Month['DEBIT AIR LIMBAH'] / dataIpalKadarInletAvgIn1Month['DEBIT AIR LIMBAH']) * 0.001
-                  ).toFixed(2)
+                  ).toFixed(3)
                 }
               })
               return dataIpalKadarInletAvgIn1Month
