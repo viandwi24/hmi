@@ -29,14 +29,14 @@
               <div class="tw-top-1/2 tw-p-4 tw-self-center tw-inline">
                 <font-awesome-icon :icon="['fas', 'calendar']" />
               </div>
-              <input type="date" class="tw-text-xs tw-font-bold tw-py-2 tw-px-4 tw-outline-none">
+              <input v-model="filterDate" type="date" class="tw-text-xs tw-font-bold tw-py-2 tw-px-4 tw-outline-none">
             </div>
             <button class="tw-bg-gray-50 hover:tw-bg-gray-100 tw-text-xs tw-border tw-border-gray-400 tw-text-black tw-font-bold tw-py-2 tw-px-4 tw-rounded">
-              SENIN
+              {{ day }}
             </button>
           </div>
           <div class="tw-text-right tw-self-center tw-pr-4 tw-text-xl tw-text-blue-800 tw-font-semibold">
-            <button class="tw-bg-blue-500 hover:tw-bg-blue-700 tw-text-xs tw-text-white tw-font-bold tw-py-2 tw-px-4 tw-rounded">
+            <button class="tw-bg-blue-500 hover:tw-bg-blue-700 tw-text-xs tw-text-white tw-font-bold tw-py-2 tw-px-4 tw-rounded" @click="save">
               Save
             </button>
           </div>
@@ -62,17 +62,17 @@
               </td>
               <td class="tw-border tw-border-gray-300 tw-px-4 tw-py-2">
                 <input
-                  v-model="item.inlet"
+                  v-model="items[i].inlet"
                   class="tw-text-xs tw-shadow tw-appearance-none tw-border tw-rounded tw-w-full tw-py-2 tw-px-3 tw-text-gray-700 tw-leading-tight focus:tw-outline-none focus:tw-shadow-outline"
-                  type="text"
+                  type="number"
                   placeholder="Flow value..."
                 >
               </td>
               <td class="tw-border tw-border-gray-300 tw-px-4 tw-py-2">
                 <input
-                  v-model="item.outlet"
+                  v-model="items[i].outlet"
                   class="tw-text-xs tw-shadow tw-appearance-none tw-border tw-rounded tw-w-full tw-py-2 tw-px-3 tw-text-gray-700 tw-leading-tight focus:tw-outline-none focus:tw-shadow-outline"
-                  type="text"
+                  type="number"
                   placeholder="Totalizer value..."
                 >
               </td>
@@ -102,14 +102,18 @@
 
 <script>
 import {
+  onMounted,
   reactive,
-  useContext
+  ref,
+  useContext,
+  useFetch,
+  watch
 } from '@nuxtjs/composition-api'
 import { footerMenu as footerMenuList } from '@/api/footerMenu.js'
 
 export default {
   setup () {
-    const { app } = useContext()
+    const { app, $moment, $overlayLoading, $axios } = useContext()
     const goBack = () => {
       app.router.push({ path: '/', query: { page: 'overview' } })
     }
@@ -118,22 +122,107 @@ export default {
       debitInlet: true,
       debitOutlet: true
     })
-    const items = reactive([
-      { name: 'pH', inlet: 7.4, outlet: 7.5 },
-      { name: 'COD', inlet: 0.5, outlet: 0.6 },
-      { name: 'BOD5', inlet: 0.5, outlet: 0.6 },
-      { name: 'TSS', inlet: 0.5, outlet: 0.6 },
-      { name: 'LEMAK & MINYAK', inlet: 0.5, outlet: 0.6 },
-      { name: 'Amoniak', inlet: 0.5, outlet: 0.6 },
-      { name: 'Total Coliform', inlet: 0.5, outlet: 0.6 },
-      { name: 'Fe', inlet: 0.5, outlet: 0.6 },
-      { name: 'Cu', inlet: 0.5, outlet: 0.6 },
-      { name: 'Suhu', inlet: 0.5, outlet: 0.6 },
-      { name: 'Debit Air Limbah', inlet: 0.5, outlet: 0.6 },
-      { name: 'Volume Produksi', inlet: 0.5, outlet: 0.6 }
-    ])
+    const items = ref([])
+
+    const filterDate = ref($moment(Date.now()).format('YYYY-MM-DD'))
+    const day = ref('')
+
+    // fetch labels for reports
+    const updateDay = () => {
+      const dayInIndonesian = [
+        'Minggu',
+        'Senin',
+        'Selasa',
+        'Rabu',
+        'Kamis',
+        'Jumat',
+        'Sabtu'
+      ]
+      day.value = dayInIndonesian[$moment(filterDate.value).day()]
+    }
+    watch(filterDate, () => {
+      updateDay()
+      fetch()
+    })
+    onMounted(() => updateDay())
+    const { fetch } = useFetch(async () => {
+      try {
+        $overlayLoading.show()
+        // delete items
+        items.value = []
+
+        // a
+        const labelsResponse = await $axios({
+          method: 'get',
+          url: '/reports-label'
+        })
+        if (labelsResponse.status === 200 && labelsResponse.data.status === true) {
+          const labels = [...labelsResponse.data.data]
+          labels.forEach((label) => {
+            items.value.push({
+              label_id: label.id,
+              name: label.name,
+              inlet: null,
+              outlet: null
+            })
+          })
+
+          // get data
+          const response = await $axios({
+            method: 'get',
+            url: '/reports',
+            params: {
+              date: filterDate.value
+            }
+          })
+          if (response.status === 200 && response.data.status === true) {
+            // columns
+            const data = [...response.data.data]
+            data.forEach((item) => {
+              const searchItemWithName = items.value.findIndex(i => i.name === item.label_name)
+              if (searchItemWithName !== -1) {
+                if (item.tipe === 1) {
+                  items.value[searchItemWithName].inlet = item.value
+                } else if (item.tipe === 0) {
+                  items.value[searchItemWithName].outlet = item.value
+                }
+              }
+            })
+          }
+        }
+      } catch (e) {
+        console.log(e)
+      }
+      $overlayLoading.hide()
+    })
+    fetch()
+
+    // save
+    const save = async () => {
+      $overlayLoading.show()
+      try {
+        const response = await $axios({
+          method: 'post',
+          url: '/reports',
+          data: {
+            date: filterDate.value,
+            items: items.value
+          }
+        })
+        if (response.status === 200 && response.data.status === true) {
+          fetch()
+        }
+      } catch (error) {
+        console.log(error)
+      }
+      $overlayLoading.hide()
+    }
 
     return {
+      filterDate,
+      day,
+      save,
+
       footerMenu,
       goBack,
       toggle,
