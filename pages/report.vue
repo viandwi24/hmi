@@ -1,118 +1,79 @@
 <template>
-  <div class="page">
-    <div class="navbar">
-      <img src="img/logo.png" alt="Logo" class="header tw-inline-block tw-mt-1">
-      <div class="page-title">
-        Page 04 - Report
-      </div>
-      <div class="menu">
-        <div class="tw-flex tw-flex-row tw-space-x-2 tw-text-gray-200 tw-h-full tw-self-center tw-pl-4">
-          <div class="tw-self-center">
-            <font-awesome-icon :icon="['fas', 'user']" class="tw-text-4xl tw-self-center" />
-          </div>
-          <div class="tw-text-left tw-self-center">
-            <div class="tw-text-sm">
-              Username
-            </div>
-            <div class="tw-text-xs">
-              Engineer
-            </div>
-          </div>
-        </div>
-      </div>
+  <div class="screen tw-relative tw-px-40 tw-py-10">
+    <div>
+      <button class="tab-btn" :class="{ 'active': (tabSelected == 1) }" @click="tabSelected = 1">
+        Data Inlet
+      </button>
+      <button class="tab-btn" :class="{ 'active': (tabSelected == 2) }" @click="tabSelected = 2">
+        Data Outlet
+      </button>
+      <button class="tab-btn" :class="{ 'active': (tabSelected == 3) }" @click="tabSelected = 3">
+        Data Kinerja Ipal
+      </button>
     </div>
-    <div class="screen tw-relative tw-px-40 tw-py-10">
-      <div>
-        <button class="tab-btn" :class="{ 'active': (tabSelected == 1) }" @click="tabSelected = 1">
-          Data Inlet
-        </button>
-        <button class="tab-btn" :class="{ 'active': (tabSelected == 2) }" @click="tabSelected = 2">
-          Data Outlet
-        </button>
-        <button class="tab-btn" :class="{ 'active': (tabSelected == 3) }" @click="tabSelected = 3">
-          Data Kinerja Ipal
-        </button>
-      </div>
-      <div class="tw-bg-gray-200 tw-shadow-lg tw-rounded tw-flex tw-flex-col tw-h-full tw-max-h-full">
-        <div class="tw-flex tw-justify-between">
-          <div class="tw-self-center tw-pl-4 tw-text-xl tw-text-blue-800 tw-font-semibold">
-            <span v-if="tabSelected == 1">Data Outlet /Hari</span>
-            <span v-if="tabSelected == 2">Data Inlet /Hari</span>
-            <span v-if="tabSelected == 3">Data Kinerja Ipal /Hari</span>
-          </div>
-          <div class="tw-flex tw-space-x-4 tw-text-right tw-px-4 tw-py-4">
-            <a :href="`${apibaseurl}download?tipe=${(tabSelected == 1 ? 'inlet' : (tabSelected == 2 ? 'outlet' : (tabSelected == 3 ? 'bpa' : 'unknow') ) )}&month=${$moment(filterDate).format('MM')}&year=${$moment(filterDate).format('YYYY')}`" class="tw-bg-blue-500 hover:tw-bg-blue-700 tw-text-xs tw-text-white tw-font-bold tw-py-2 tw-px-4 tw-rounded">
-              Export
-              <span v-if="tabSelected == 1">Data Outlet</span>
-              <span v-if="tabSelected == 2">Data Inlet</span>
-              <span v-if="tabSelected == 3">Data Kinerja Ipal</span>
-              <font-awesome-icon :icon="['fas', 'file-excel']" class="tw-ml-1 tw-self-center" />
-            </a>
-            <div class="tw-relative tw-overflow-hidden tw-rounded tw-border tw-border-gray-400">
-              <div class="tw-top-1/2 tw-p-4 tw-self-center tw-inline">
-                <font-awesome-icon :icon="['fas', 'calendar']" />
-              </div>
-              <input v-model="filterDate" type="month" class="tw-text-xs tw-font-bold tw-py-2 tw-px-4 tw-outline-none">
+    <div class="tw-bg-gray-200 tw-shadow-lg tw-rounded tw-flex tw-flex-col tw-h-full tw-max-h-full">
+      <div class="tw-flex tw-justify-between">
+        <div class="tw-self-center tw-pl-4 tw-text-xl tw-text-blue-800 tw-font-semibold">
+          <span v-if="tabSelected == 1">Data Outlet /Hari</span>
+          <span v-if="tabSelected == 2">Data Inlet /Hari</span>
+          <span v-if="tabSelected == 3">Data Kinerja Ipal /Hari</span>
+        </div>
+        <div class="tw-flex tw-space-x-4 tw-text-right tw-px-4 tw-py-4">
+          <a :href="`${apibaseurl}download?tipe=${(tabSelected == 1 ? 'inlet' : (tabSelected == 2 ? 'outlet' : (tabSelected == 3 ? 'bpa' : 'unknow') ) )}&month=${$moment(filterDate).format('MM')}&year=${$moment(filterDate).format('YYYY')}`" class="tw-bg-blue-500 hover:tw-bg-blue-700 tw-text-xs tw-text-white tw-font-bold tw-py-2 tw-px-4 tw-rounded">
+            Export
+            <span v-if="tabSelected == 1">Data Outlet</span>
+            <span v-if="tabSelected == 2">Data Inlet</span>
+            <span v-if="tabSelected == 3">Data Kinerja Ipal</span>
+            <font-awesome-icon :icon="['fas', 'file-excel']" class="tw-ml-1 tw-self-center" />
+          </a>
+          <div class="tw-relative tw-overflow-hidden tw-rounded tw-border tw-border-gray-400">
+            <div class="tw-top-1/2 tw-p-4 tw-self-center tw-inline">
+              <font-awesome-icon :icon="['fas', 'calendar']" />
             </div>
+            <input v-model="filterDate" type="month" class="tw-text-xs tw-font-bold tw-py-2 tw-px-4 tw-outline-none">
           </div>
         </div>
-        <div class="tw-flex-1 tw-max-h-full tw-py-4 tw-px-4 tw-bg-gray-300 tw-overflow-y-scroll" style="max-height: 100%;">
-          <div v-if="tabSelected == 1">
+      </div>
+      <div class="tw-flex-1 tw-max-h-full tw-py-4 tw-px-4 tw-bg-gray-300 tw-overflow-y-scroll" style="max-height: 100%;">
+        <div v-if="tabSelected == 1">
+          <vue-good-table
+            :columns="dataInlet.columns"
+            :rows="dataInlet.rows"
+          />
+        </div>
+        <div v-else-if="tabSelected == 2">
+          <vue-good-table
+            :columns="dataOutlet.columns"
+            :rows="dataOutlet.rows"
+          />
+        </div>
+        <div v-else-if="tabSelected == 3">
+          <div class="tw-bg-white tw-rounded tw-mb-4">
+            <div class="tw-px-4 tw-py-4 tw-text-xl tw-text-blue-800 tw-font-semibold tw-border-b-2 tw-border-gray-400">
+              Kadar Unsur Pencemaran Sebenernya (g/m3)
+            </div>
             <vue-good-table
-              :columns="dataInlet.columns"
-              :rows="dataInlet.rows"
+              :columns="dataIpalKadar.columns"
+              :rows="dataIpalKadar.rows"
             />
           </div>
-          <div v-else-if="tabSelected == 2">
+          <div class="tw-bg-white tw-rounded tw-mb-4">
+            <div class="tw-px-4 tw-py-4 tw-text-xl tw-text-blue-800 tw-font-semibold tw-border-b-2 tw-border-gray-400">
+              beban Pencemaran Sebenarnya /Hari (kg/hari)
+            </div>
             <vue-good-table
-              :columns="dataOutlet.columns"
-              :rows="dataOutlet.rows"
+              :columns="dataIpalPencemaran.columns"
+              :rows="dataIpalPencemaran.rows"
             />
           </div>
-          <div v-else-if="tabSelected == 3">
-            <div class="tw-bg-white tw-rounded tw-mb-4">
-              <div class="tw-px-4 tw-py-4 tw-text-xl tw-text-blue-800 tw-font-semibold tw-border-b-2 tw-border-gray-400">
-                Kadar Unsur Pencemaran Sebenernya (g/m3)
-              </div>
-              <vue-good-table
-                :columns="dataIpalKadar.columns"
-                :rows="dataIpalKadar.rows"
-              />
+          <div class="tw-bg-white tw-rounded tw-mb-4">
+            <div class="tw-px-4 tw-py-4 tw-text-xl tw-text-blue-800 tw-font-semibold tw-border-b-2 tw-border-gray-400">
+              Reduksi Beban Pencemaran Sebenarnya /Hari
             </div>
-            <div class="tw-bg-white tw-rounded tw-mb-4">
-              <div class="tw-px-4 tw-py-4 tw-text-xl tw-text-blue-800 tw-font-semibold tw-border-b-2 tw-border-gray-400">
-                beban Pencemaran Sebenarnya /Hari (kg/hari)
-              </div>
-              <vue-good-table
-                :columns="dataIpalPencemaran.columns"
-                :rows="dataIpalPencemaran.rows"
-              />
-            </div>
-            <div class="tw-bg-white tw-rounded tw-mb-4">
-              <div class="tw-px-4 tw-py-4 tw-text-xl tw-text-blue-800 tw-font-semibold tw-border-b-2 tw-border-gray-400">
-                Reduksi Beban Pencemaran Sebenarnya /Hari
-              </div>
-              <vue-good-table
-                :columns="dataIpalReduksi.columns"
-                :rows="dataIpalReduksi.rows"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="footer">
-      <div class="footer-container">
-        <div class="nav-container">
-          <div v-for="(item, i) in footerMenu" :key="i" class="item">
-            <div class="item-content" @click="item.onClick(item)">
-              <div class="item-icon">
-                <img :src="`img/menu/${item.icon}.svg`">
-              </div>
-              <div class="item-text">
-                {{ item.text }}
-              </div>
-            </div>
+            <vue-good-table
+              :columns="dataIpalReduksi.columns"
+              :rows="dataIpalReduksi.rows"
+            />
           </div>
         </div>
       </div>
@@ -131,6 +92,7 @@ import {
 import { footerMenu as footerMenuList } from '@/api/footerMenu.js'
 
 export default {
+  layout: 'page',
   setup () {
     const { app, $axios, $overlayLoading, $moment } = useContext()
     const apibaseurl = $axios.defaults.baseURL
