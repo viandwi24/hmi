@@ -121,12 +121,15 @@ export default {
         if (labelsResponse.status === 200 && labelsResponse.data.status === true) {
           const labels = [...labelsResponse.data.data]
           labels.forEach((label) => {
-            items.value.push({
-              label_id: label.id,
-              name: label.name,
-              inlet: null,
-              outlet: null
-            })
+            const searchInItems = items.value.findIndex(item => item.name === label.name)
+            if (searchInItems === -1) {
+              items.value.push({
+                label_id: label.id,
+                name: label.name,
+                inlet: null,
+                outlet: null
+              })
+            }
           })
 
           // get data
